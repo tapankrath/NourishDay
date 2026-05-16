@@ -221,6 +221,131 @@ html,body{
 [data-t=dinner] .card-type{color:#BA8FFF}
 [data-t=dinner] .ct-dot{background:#9B5DFF}
 [data-t=dinner] .card-kcal{background:rgba(155,93,255,.15);color:#BA8FFF;border:1px solid rgba(155,93,255,.2)}
+[data-t=beverage] .card-accent{background:#F4C430;box-shadow:2px 0 12px rgba(244,196,48,.4)}
+[data-t=beverage] .card-type{color:#F4C430}
+[data-t=beverage] .ct-dot{background:#F4C430}
+[data-t=beverage] .card-kcal{background:rgba(244,196,48,.12);color:#F4C430;border:1px solid rgba(244,196,48,.2)}
+
+/* ── CHECKED STATE ── */
+.card.checked{
+  border-color:var(--green);
+  background:rgba(0,192,107,.08);
+}
+.card.checked .card-name{text-decoration:line-through;opacity:.6}
+.card.checked .card-desc{opacity:.5}
+
+/* ── CHECK BUTTON ── */
+.check-btn{
+  flex-shrink:0;
+  width:28px;height:28px;border-radius:50%;
+  border:2px solid var(--border2);
+  background:transparent;
+  color:var(--green);font-size:14px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .15s;margin-left:6px;
+}
+.check-btn.done{
+  background:var(--green);border-color:var(--green);
+  color:#fff;box-shadow:0 0 10px rgba(0,192,107,.5);
+}
+.check-btn:active{transform:scale(.88)}
+
+/* ── BEVERAGE PICKER ── */
+.bev-card{
+  background:var(--card);border-radius:14px;
+  border:1px solid rgba(244,196,48,.2);
+  overflow:hidden;
+}
+.bev-inner{display:flex;align-items:stretch}
+.bev-accent{width:4px;background:#F4C430;box-shadow:2px 0 12px rgba(244,196,48,.4);flex-shrink:0}
+.bev-body{flex:1;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.bev-label{display:flex;align-items:center;gap:6px}
+.bev-title{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#F4C430}
+.bev-name{font-size:16px;font-weight:900;color:#fff;letter-spacing:-.3px}
+.bev-right{display:flex;align-items:center;gap:6px}
+.bev-pills{display:flex;gap:4px;flex-wrap:wrap}
+.bev-pill{
+  padding:4px 10px;border-radius:20px;border:1.5px solid rgba(244,196,48,.25);
+  background:none;color:rgba(244,196,48,.6);
+  font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
+  cursor:pointer;transition:all .15s;letter-spacing:.04em;
+}
+.bev-pill.on{background:#F4C430;color:#061A12;border-color:#F4C430;box-shadow:0 0 8px rgba(244,196,48,.4)}
+
+/* ── LOG BUTTON ── */
+.log-btn-row{padding:10px 12px 0;display:flex;gap:8px}
+.log-btn{
+  flex:1;padding:11px;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;
+  letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.log-btn.save{background:var(--green);color:#fff;box-shadow:0 3px 14px rgba(0,192,107,.4)}
+.log-btn.save:active{transform:scale(.97)}
+.log-btn.history{background:var(--ink4);color:var(--ink2);border:1px solid var(--border2)}
+.log-btn.history:active{transform:scale(.97)}
+
+/* ── LOG HISTORY PANEL ── */
+.log-panel{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.7);
+  backdrop-filter:blur(6px);
+  z-index:100;display:none;
+  align-items:flex-end;
+  justify-content:center;
+}
+.log-panel.open{display:flex}
+.log-sheet{
+  background:var(--night);
+  border:1px solid var(--frame);
+  border-radius:20px 20px 0 0;
+  width:100%;max-width:420px;
+  max-height:88vh;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.log-sheet-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 16px 12px;border-bottom:1px solid var(--ink4);
+  flex-shrink:0;
+}
+.log-sheet-title{font-size:17px;font-weight:900;color:#fff;letter-spacing:-.4px}
+.log-actions{display:flex;gap:8px;align-items:center}
+.log-export-btn{
+  padding:6px 14px;border-radius:8px;background:var(--lime);
+  border:none;cursor:pointer;font-family:'Nunito',sans-serif;
+  font-size:10px;font-weight:900;color:#061A12;letter-spacing:.05em;text-transform:uppercase;
+}
+.log-close-btn{
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);
+  background:none;color:var(--ink3);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.log-list{overflow-y:auto;flex:1;padding:12px}
+.log-empty{text-align:center;padding:40px 20px;color:var(--ink3);font-size:13px;font-weight:700}
+
+/* Log entry */
+.log-entry{
+  background:var(--card);border-radius:12px;border:1px solid var(--border);
+  margin-bottom:10px;overflow:hidden;
+}
+.log-entry-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px 8px;border-bottom:1px solid var(--ink4);
+}
+.log-date{font-size:13px;font-weight:900;color:#fff;letter-spacing:-.2px}
+.log-kcal{font-size:11px;font-weight:800;color:var(--lime)}
+.log-del-btn{
+  width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,107,43,.3);
+  background:none;color:rgba(255,107,43,.7);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .14s;
+}
+.log-del-btn:active{background:rgba(255,107,43,.2);transform:scale(.88)}
+.log-meals{padding:8px 12px 10px;display:flex;flex-direction:column;gap:4px}
+.log-meal-row{display:flex;align-items:baseline;gap:6px}
+.log-meal-icon{font-size:12px;flex-shrink:0}
+.log-meal-name{font-size:12px;font-weight:700;color:var(--ink2);flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.log-meal-cal{font-size:10px;font-weight:800;color:var(--ink3);flex-shrink:0}
 
 /* ── FOOTER ── */
 .footer{
@@ -293,6 +418,45 @@ html,body{
   <button class="shuffle-btn" onclick="shuffleAll()"><span class="s-ico">⟳</span> Shuffle All Meals</button>
   <div class="mode-note" id="modeNote"></div>
   <div class="meals" id="meals"></div>
+
+  <!-- Beverage picker -->
+  <div style="margin-top:9px" id="bevCard">
+    <div class="bev-card">
+      <div class="bev-inner">
+        <div class="bev-accent"></div>
+        <div class="bev-body">
+          <div>
+            <div class="bev-label"><div class="ct-dot" style="background:#F4C430"></div><span class="bev-title">☕ Beverages</span></div>
+            <div class="bev-name" id="bevName">Masala Chai</div>
+          </div>
+          <div class="bev-right">
+            <div class="bev-pills" id="bevPills"></div>
+            <button class="check-btn" id="bevCheck" onclick="toggleBevCheck()">✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log day buttons -->
+  <div class="log-btn-row">
+    <button class="log-btn save" onclick="logDay()">📋 Log Today</button>
+    <button class="log-btn history" onclick="openLog()">📅 History</button>
+  </div>
+</div>
+
+<!-- Log history panel -->
+<div class="log-panel" id="logPanel" onclick="panelBgClick(event)">
+  <div class="log-sheet">
+    <div class="log-sheet-hdr">
+      <div class="log-sheet-title">📅 Day Log</div>
+      <div class="log-actions">
+        <button class="log-export-btn" onclick="exportLog()">⬇ Export</button>
+        <button class="log-close-btn" onclick="closeLog()">✕</button>
+      </div>
+    </div>
+    <div class="log-list" id="logList"></div>
+  </div>
 </div>
 
 <div class="footer">
@@ -530,43 +694,97 @@ dinner:{
 // LOGIC
 // ─────────────────────────────────────────────────────────────────────
 let dayIdx=new Date().getDay(), diet='veg', mode='R', picks={};
+let checked={}; // which meal slots are checked off
+let bevChecked=false;
+
 const isVegDay=d=>VEG_DAYS.includes(d);
 const vegOn=()=>isVegDay(dayIdx)||diet==='veg';
 
+// ── BEVERAGES ──
+const BEVERAGES={
+  tea:[
+    {n:'Masala Chai (no sugar)',cal:15},
+    {n:'Ginger Lemon Tea',cal:5},
+    {n:'Green Tea',cal:2},
+    {n:'Tulsi Tea',cal:3},
+    {n:'Chamomile Tea',cal:2},
+    {n:'Black Tea + Lemon',cal:5},
+    {n:'Elaichi Chai (no sugar)',cal:15},
+  ],
+  coffee:[
+    {n:'Black Coffee',cal:5},
+    {n:'Americano',cal:10},
+    {n:'Espresso',cal:5},
+    {n:'Filter Coffee (low sugar)',cal:30},
+    {n:'Bulletproof Coffee',cal:120},
+    {n:'Cold Brew',cal:10},
+    {n:'Cappuccino (skim milk)',cal:60},
+  ],
+  other:[
+    {n:'Warm Lemon Water',cal:5},
+    {n:'Jeera Water',cal:5},
+    {n:'Coconut Water',cal:46},
+    {n:'Buttermilk (Chaas)',cal:35},
+    {n:'Nimbu Pani (no sugar)',cal:10},
+    {n:'Sparkling Water + Lime',cal:5},
+  ]
+};
+let bevCat='tea', bevIdx=0;
+
+function renderBev(){
+  const list=BEVERAGES[bevCat];
+  document.getElementById('bevName').textContent=list[bevIdx].n+' · ~'+list[bevCat===list?list[bevIdx].cal:list[bevIdx].cal]+' kcal';
+  document.getElementById('bevName').textContent=list[bevIdx].n+' · ~'+list[bevIdx].cal+' kcal';
+  // pills
+  const pills=document.getElementById('bevPills');
+  pills.innerHTML=['tea','coffee','other'].map(c=>
+    `<button class="bev-pill${bevCat===c?' on':''}" onclick="setBevCat('${c}')">${c==='tea'?'🍵 Tea':c==='coffee'?'☕ Coffee':'💧 Other'}</button>`
+  ).join('');
+  // check button
+  const cb=document.getElementById('bevCheck');
+  cb.className='check-btn'+(bevChecked?' done':'');
+}
+function setBevCat(c){
+  bevCat=c; bevIdx=0; bevChecked=false; renderBev();
+}
+function swapBev(){
+  const list=BEVERAGES[bevCat];
+  const prev=bevIdx;
+  while(bevIdx===prev&&list.length>1) bevIdx=Math.floor(Math.random()*list.length);
+  renderBev();
+}
+function toggleBevCheck(){bevChecked=!bevChecked;renderBev();}
+// tap beverage name to swap
+document.getElementById('bevName').style.cursor='pointer';
+document.getElementById('bevName').addEventListener('click',swapBev);
+
+// ── MEAL POOL & PICK ──
 function pool(t){
   const src=vegOn()?DB[t].veg:[...DB[t].veg,...DB[t].nonveg];
   const f=src.filter(m=>m.m.includes(mode));
-  return f.length?f:src; // always fallback to full src so pool never empty
+  return f.length?f:src;
 }
-
 function rnd(arr){return arr[Math.floor(Math.random()*arr.length)]}
 
-// Pick a random item different from cur.
-// For lunch & dinner: 70% chance to pick from Indian slice (first 40% of pool)
 function pickDiff(t, cur){
   const p=pool(t);
   if(p.length<2) return p[0];
-
   let slice=p;
   if(t==='lunch'||t==='dinner'){
     const indianSlice=Math.max(4,Math.floor(p.length*0.4));
     slice=(Math.random()<0.70)?p.slice(0,indianSlice):p;
-    // if Indian slice only has cur, fall back to full pool
     if(slice.length===1&&slice[0].n===cur?.n) slice=p;
   }
-
-  // pick different from cur
   const candidates=slice.filter(m=>m.n!==cur?.n);
   if(candidates.length) return candidates[Math.floor(Math.random()*candidates.length)];
-  return rnd(p); // ultimate fallback
+  return rnd(p);
 }
 
 function seed(){
-  picks={};
+  picks={}; checked={};
   const base=dayIdx*137+new Date().getDate()*31+(vegOn()?0:500)+(mode==='R'?0:mode==='D'?200:400);
   TYPES.forEach((t,i)=>{
     const p=pool(t);
-    // For lunch & dinner: bias toward first 40% of pool (Indian items) ~60% of the time
     let candidate;
     if(t==='lunch'||t==='dinner'){
       const indianSlice=Math.max(4,Math.floor(p.length*0.4));
@@ -581,11 +799,15 @@ function seed(){
 }
 
 function shuffleAll(){
-  picks={};
+  picks={}; checked={};
   TYPES.forEach(t=>{picks[t]=pickDiff(t,null)});
   render();
 }
-function swap(t){picks[t]=pickDiff(t,picks[t]);render()}
+function swap(t){picks[t]=pickDiff(t,picks[t]);delete checked[t];render()}
+function toggleCheck(t){
+  checked[t]=!checked[t];
+  render();
+}
 function chgDay(d){dayIdx=(dayIdx+d+7)%7;seed();render()}
 function setMode(m){
   mode=m;
@@ -599,6 +821,7 @@ function setDiet(d){
   seed();render();
 }
 
+// ── RENDER ──
 function render(){
   document.getElementById('dayLbl').textContent=DAYS[dayIdx];
   document.getElementById('vegDot').style.display=isVegDay(dayIdx)?'flex':'none';
@@ -623,6 +846,7 @@ function render(){
   TYPES.forEach(t=>{
     const m=picks[t];if(!m)return;
     const isNV=(DB[t].nonveg||[]).includes(m);
+    const isDone=!!checked[t];
     let tags='';
     if(m.p>=20)tags+='<span class="tag t-pro">High Protein</span>';
     if(m.c<20)tags+='<span class="tag t-lc">Low Carb</span>';
@@ -630,7 +854,8 @@ function render(){
     if(mode==='C')tags+='<span class="tag t-cheat">Cheat Day</span>';
     tags+=`<span class="tag ${isNV?'t-nv':'t-veg'}">${isNV?'Non-Veg':'Veg'}</span>`;
     const c=document.createElement('div');
-    c.className='card';c.setAttribute('data-t',t);
+    c.className='card'+(isDone?' checked':'');
+    c.setAttribute('data-t',t);
     c.innerHTML=`
 <div class="card-inner">
   <div class="card-accent"></div>
@@ -644,7 +869,10 @@ function render(){
       <div class="card-desc">${m.d}</div>
       <div class="card-ft">
         <div class="tags">${tags}</div>
-        <button class="swap-btn" onclick="swap('${t}')">⟳ Swap</button>
+        <div style="display:flex;gap:5px;flex-shrink:0;margin-left:6px">
+          ${isDone?'':` <button class="swap-btn" onclick="swap('${t}')">⟳ Swap</button>`}
+          <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')">${isDone?'✓':'✓'}</button>
+        </div>
       </div>
     </div>
     <div class="card-macros">
@@ -656,9 +884,123 @@ function render(){
 </div>`;
     wrap.appendChild(c);
   });
+  renderBev();
+}
+
+// ── DAY LOGGING ──
+const LOG_KEY='eatright_log';
+
+function getLog(){
+  try{return JSON.parse(localStorage.getItem(LOG_KEY)||'[]')}catch{return[]}
+}
+function saveLog(entries){
+  localStorage.setItem(LOG_KEY,JSON.stringify(entries));
+}
+
+function logDay(){
+  const today=new Date();
+  const dateStr=today.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+  const meals=TYPES.map(t=>({
+    type:t,
+    icon:T_ICON[t],
+    name:picks[t]?.n||'—',
+    cal:picks[t]?.cal||0,
+    done:!!checked[t]
+  }));
+  const bev=BEVERAGES[bevCat][bevIdx];
+  meals.push({type:'beverage',icon:'☕',name:bev.n,cal:bev.cal,done:bevChecked});
+  const totalCal=meals.reduce((s,m)=>s+m.cal,0);
+  const entry={
+    id:Date.now(),
+    date:dateStr,
+    mode,diet,
+    totalCal,
+    meals
+  };
+  const log=getLog();
+  // replace if same date already logged
+  const idx=log.findIndex(e=>e.date===dateStr);
+  if(idx>=0) log[idx]=entry; else log.unshift(entry);
+  saveLog(log);
+  // visual feedback
+  const btn=document.querySelector('.log-btn.save');
+  const orig=btn.innerHTML;
+  btn.innerHTML='✅ Logged!';btn.style.background='#00C06B';
+  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},1800);
+}
+
+function openLog(){
+  renderLogList();
+  document.getElementById('logPanel').classList.add('open');
+}
+function closeLog(){
+  document.getElementById('logPanel').classList.remove('open');
+}
+function panelBgClick(e){
+  if(e.target===document.getElementById('logPanel')) closeLog();
+}
+
+function deleteEntry(id){
+  const log=getLog().filter(e=>e.id!==id);
+  saveLog(log);
+  renderLogList();
+}
+
+function renderLogList(){
+  const log=getLog();
+  const el=document.getElementById('logList');
+  if(!log.length){
+    el.innerHTML='<div class="log-empty">No days logged yet.<br>Hit "Log Today" after your meals!</div>';
+    return;
+  }
+  el.innerHTML=log.map(e=>`
+<div class="log-entry">
+  <div class="log-entry-hdr">
+    <div>
+      <div class="log-date">${e.date}</div>
+      <div style="font-size:10px;color:var(--ink3);font-weight:700;margin-top:2px">${e.mode==='R'?'Regular':e.mode==='D'?'Diabetic':'Cheat'} · ${e.diet==='veg'?'🌿 Veg':'🍗 Non-Veg'}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="log-kcal">${e.totalCal} kcal</span>
+      <button class="log-del-btn" onclick="deleteEntry(${e.id})">✕</button>
+    </div>
+  </div>
+  <div class="log-meals">
+    ${e.meals.map(m=>`
+      <div class="log-meal-row">
+        <span class="log-meal-icon">${m.done?'✅':m.icon}</span>
+        <span class="log-meal-name">${m.name}</span>
+        <span class="log-meal-cal">${m.cal} kcal</span>
+      </div>`).join('')}
+  </div>
+</div>`).join('');
+}
+
+function exportLog(){
+  const log=getLog();
+  if(!log.length){alert('No log entries yet!');return;}
+  let txt='EatRight — Day Log Export\n';
+  txt+='='.repeat(40)+'\n\n';
+  log.forEach(e=>{
+    txt+=`📅 ${e.date}  [${e.mode==='R'?'Regular':e.mode==='D'?'Diabetic':'Cheat'} · ${e.diet==='veg'?'Veg':'Non-Veg'}]\n`;
+    txt+=`Total: ${e.totalCal} kcal\n`;
+    e.meals.forEach(m=>{
+      txt+=`  ${m.done?'✓':' '} ${m.icon} ${m.name}  (${m.cal} kcal)\n`;
+    });
+    txt+='\n';
+  });
+  const blob=new Blob([txt],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='eatright-log.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 window.shuffleAll=shuffleAll;window.swap=swap;window.chgDay=chgDay;window.setMode=setMode;window.setDiet=setDiet;
+window.toggleCheck=toggleCheck;window.setBevCat=setBevCat;window.toggleBevCheck=toggleBevCheck;
+window.logDay=logDay;window.openLog=openLog;window.closeLog=closeLog;
+window.panelBgClick=panelBgClick;window.deleteEntry=deleteEntry;window.exportLog=exportLog;
 seed();render();
 
 if('serviceWorker' in navigator){
