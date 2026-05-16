@@ -251,7 +251,7 @@ html,body{
       </div>
       <div>
         <div class="logo-name">EatRight</div>
-        <div class="logo-sub">High Protein · Low Carb · Global</div>
+        <div class="logo-sub">High Protein · Low Carb · 1800 kcal</div>
       </div>
     </div>
     <div class="mode-tabs">
@@ -307,9 +307,10 @@ const VEG_DAYS=[1,4];
 const TYPES=['breakfast','lunch','snacks','dinner'];
 const T_ICON={breakfast:'🌅',lunch:'☀️',snacks:'🍊',dinner:'🌙'};
 const T_LBL={breakfast:'Breakfast',lunch:'Lunch',snacks:'Snack',dinner:'Dinner'};
-const CARB_CAP=100;
+const CARB_CAP=130; // daily soft target — shown in stats, turns orange if exceeded
+                    // not used to restrict swaps (would leave only 1 dinner option)
 const MODE_NOTE={
-  R:'Balanced global diet · high protein · moderate carbs · healthy fats',
+  R:'Balanced diet · high protein · moderate carbs · healthy fats',
   D:'Low-GI meals · controlled carbs · high fibre · no refined sugar',
   C:'Enjoy your cheat day! Back on track tomorrow 💪'
 };
@@ -370,11 +371,15 @@ breakfast:{
 // ══════════════════ LUNCH (carbs ≤45g) ══════════════════
 lunch:{
  veg:[
-  // Indian-style
+  // Indian-style (prioritized — stays at front of array)
   {n:'Chickpea Curry + 1 Roti + Salad',         d:'1 cup chickpea curry + 1 small wholegrain roti (60g) + 1 cup cucumber-tomato salad + 2 tbsp yogurt', cal:430,p:20,c:44,f:10,m:'RDC'},
   {n:'Cottage Cheese + Big Salad + Roti',        d:'120g grilled cottage cheese + large leafy salad (200g) with lemon-olive oil + 1 wholegrain roti',    cal:460,p:28,c:30,f:20,m:'RDC'},
   {n:'Lentil Soup + Quinoa + Roasted Veg',       d:'1.5 cups lentil soup + ½ cup quinoa + 150g oven-roasted mixed veg + 2 tbsp yogurt',                  cal:420,p:22,c:42,f:9,m:'RDC'},
-  {n:'Spinach Dal + Brown Rice (small) + Raita', d:'1 cup spinach dal + ½ cup brown rice + ½ cup yogurt-cucumber raita',                                  cal:440,p:20,c:44,f:8,m:'RDC'},
+  {n:'Spinach Dal + Brown Rice + Raita',         d:'1 cup spinach dal + ½ cup brown rice + ½ cup yogurt-cucumber raita',                                  cal:440,p:20,c:44,f:8,m:'RDC'},
+  {n:'Rajma + ½ Cup Rice + Cucumber Salad',      d:'1 cup kidney bean curry + ½ cup brown rice + 1 cup cucumber-tomato salad + 2 tbsp curd',              cal:450,p:18,c:44,f:8,m:'RDC'},
+  {n:'Palak Paneer + 1 Roti + Salad',           d:'150g spinach-cottage cheese curry + 1 wholegrain roti + 1 cup mixed salad + 2 tbsp plain curd',        cal:440,p:22,c:28,f:20,m:'RDC'},
+  {n:'Chole + 1 Roti + Onion Salad',            d:'1 cup spiced chickpea masala + 1 wholegrain roti + raw onion, tomato & cucumber salad',                cal:420,p:18,c:42,f:10,m:'RDC'},
+  {n:'Moong Dal + Jeera Rice + Papad',          d:'1 cup yellow moong dal tadka + ½ cup jeera rice + 1 roasted papad + raw salad',                        cal:410,p:18,c:44,f:6,m:'RDC'},
   // Chinese-style
   {n:'Tofu Stir-Fry + Brown Rice + Miso Soup',  d:'150g firm tofu + broccoli & snap peas + ½ cup brown rice + 1 cup miso soup',                         cal:400,p:22,c:40,f:12,m:'RDC'},
   {n:'Mapo Tofu + ½ Cup Steamed Rice + Bok Choy',d:'150g silken tofu in chilli-bean sauce + ½ cup steamed rice + 1 cup stir-fried bok choy',            cal:420,p:20,c:42,f:14,m:'RC'},
@@ -394,11 +399,14 @@ lunch:{
   {n:'Cauliflower Bowl + Chickpeas + Tahini',    d:'200g roasted cauliflower + ½ cup chickpeas + mixed greens + 2 tbsp tahini dressing',                  cal:380,p:14,c:34,f:16,m:'RDC'},
  ],
  nonveg:[
-  // Indian-style
+  // Indian-style (prioritized)
   {n:'Grilled Chicken + ½ Cup Brown Rice + Raita',d:'150g marinated grilled chicken + ½ cup brown rice + ½ cup yogurt-cucumber raita + salad',           cal:450,p:38,c:36,f:12,m:'RDC'},
   {n:'Fish Curry + ½ Cup Rice + Salad',          d:'150g fish curry + ½ cup steamed rice + 1 cup mixed green salad with lemon dressing',                  cal:440,p:34,c:38,f:12,m:'RDC'},
-  {n:'Prawn Stir-Fry + Brown Rice + Yogurt',     d:'150g prawns stir-fried with veg + ½ cup brown rice + 3 tbsp cucumber yogurt on the side',            cal:430,p:32,c:36,f:12,m:'RDC'},
-  {n:'Egg Curry + 1 Roti + Salad',               d:'3 eggs in spiced tomato sauce + 1 small wholegrain roti + 1 cup cucumber-tomato salad',              cal:400,p:24,c:30,f:18,m:'RDC'},
+  {n:'Prawn Masala + Brown Rice + Yogurt',       d:'150g prawns in spiced masala + ½ cup brown rice + 3 tbsp cucumber yogurt on the side',               cal:430,p:32,c:36,f:12,m:'RDC'},
+  {n:'Egg Curry + 1 Roti + Salad',               d:'3 eggs in spiced tomato-onion sauce + 1 small wholegrain roti + 1 cup cucumber-tomato salad',         cal:400,p:24,c:30,f:18,m:'RDC'},
+  {n:'Chicken Curry + ½ Cup Rice + Raita',       d:'150g home-style chicken curry + ½ cup basmati rice + ½ cup yogurt raita + raw onion salad',           cal:460,p:36,c:38,f:14,m:'RDC'},
+  {n:'Mutton Keema + 1 Roti + Salad',            d:'½ cup spiced minced mutton with peas + 1 wholegrain roti + 1 cup cucumber-tomato salad',              cal:440,p:32,c:26,f:20,m:'RC'},
+  {n:'Tandoori Chicken + Salad + Roti',          d:'2 pieces tandoori chicken (200g) + large green salad + 1 wholegrain roti + mint chutney',             cal:450,p:40,c:24,f:16,m:'RDC'},
   // Chinese-style
   {n:'Kung Pao Chicken + ½ Cup Brown Rice',      d:'150g chicken with peanuts, chilli & zucchini in hoisin + ½ cup brown rice + 1 cup broth',            cal:450,p:36,c:36,f:14,m:'RC'},
   {n:'Steamed Fish + Bok Choy + ½ Cup Rice',     d:'180g ginger-soy steamed fish + 1 cup stir-fried bok choy + ½ cup jasmine rice',                      cal:400,p:36,c:32,f:10,m:'RDC'},
@@ -460,10 +468,14 @@ snacks:{
 // ══════════════════ DINNER (protein-led, carbs ≤28g) ══════════════════
 dinner:{
  veg:[
-  // Indian-style
-  {n:'Spinach Lentil Soup + 1 Slice Bread',     d:'1.5 cups spinach-lentil soup with garlic & cumin + 1 slice wholegrain bread + green side salad',       cal:360,p:18,c:40,f:8,m:'RDC'},
+  // Indian-style (prioritized)
+  {n:'Dal + 1 Roti + Salad + Yogurt',           d:'1 cup mixed lentil dal + 1 small wholegrain roti + cucumber-tomato salad + 100g plain yogurt',         cal:380,p:18,c:38,f:8,m:'RDC'},
   {n:'Grilled Cottage Cheese + Roasted Veg',    d:'150g grilled marinated cottage cheese + 200g oven-roasted zucchini, peppers & broccoli',               cal:370,p:26,c:16,f:20,m:'RDC'},
   {n:'Soy Mince Curry + 1 Roti + Salad',        d:'½ cup soy mince curry + 1 small wholegrain roti + large cucumber-tomato salad',                        cal:380,p:28,c:28,f:12,m:'RDC'},
+  {n:'Spinach Lentil Soup + 1 Slice Bread',     d:'1.5 cups spinach-lentil soup with garlic & cumin + 1 slice wholegrain bread + green side salad',       cal:360,p:18,c:40,f:8,m:'RDC'},
+  {n:'Palak Tofu + 1 Roti',                     d:'150g tofu in spinach-spiced gravy + 1 small wholegrain roti + raw onion & cucumber salad',              cal:360,p:24,c:26,f:16,m:'RDC'},
+  {n:'Moong Dal Khichdi + Raita',               d:'1 cup moong dal khichdi (rice-lentil) + ½ cup yogurt raita + sliced cucumber',                         cal:370,p:16,c:44,f:6,m:'RDC'},
+  {n:'Paneer Bhurji + 1 Roti + Salad',          d:'100g scrambled paneer with onion, tomato & spices + 1 wholegrain roti + mixed salad',                  cal:380,p:22,c:22,f:20,m:'RDC'},
   {n:'Lentil & Veggie Stew + Side Salad',       d:'1.5 cups mixed lentil & vegetable stew + large green side salad with lemon-olive oil dressing',         cal:340,p:16,c:36,f:6,m:'RDC'},
   // Chinese-style
   {n:'Tofu Stir-Fry + Cauliflower Rice',        d:'150g firm tofu + broccoli, snap peas & mushrooms stir-fried in soy-ginger + 1 cup cauliflower rice',   cal:320,p:22,c:18,f:12,m:'RDC'},
@@ -483,11 +495,14 @@ dinner:{
   {n:'Egg Fried Cauliflower Rice',              d:'2 eggs scrambled into 200g cauliflower rice with spring onion, soy & sesame + side salad',              cal:290,p:18,c:14,f:16,m:'RDC'},
  ],
  nonveg:[
-  // Indian-style
+  // Indian-style (prioritized)
   {n:'Grilled Chicken + Salad + Yogurt',        d:'150g marinated grilled chicken breast + large cucumber-tomato salad + 100g plain yogurt',               cal:390,p:40,c:10,f:14,m:'RDC'},
   {n:'Fish Curry + ½ Cup Brown Rice + Salad',   d:'150g light fish curry + ½ cup brown rice + 1 cup green salad with lemon',                              cal:400,p:34,c:34,f:12,m:'RDC'},
   {n:'Egg Curry + 1 Roti + Salad',              d:'2 eggs in spiced tomato sauce + 1 small wholegrain roti + cucumber & onion salad',                     cal:370,p:22,c:28,f:16,m:'RDC'},
   {n:'Baked Fish + Lentils + Sautéed Spinach',  d:'180g oven-baked spiced fish + ½ cup red lentils + 1 cup sautéed spinach with garlic & lemon',          cal:400,p:36,c:24,f:12,m:'RDC'},
+  {n:'Chicken Tikka + Salad + Mint Chutney',    d:'200g grilled chicken tikka + large mixed salad + mint-coriander chutney + 2 tbsp yogurt dip',          cal:380,p:40,c:8,f:14,m:'RDC'},
+  {n:'Mutton Keema + Salad',                    d:'½ cup dry spiced minced mutton with peas + large cucumber-onion salad + 1 wholegrain roti',             cal:410,p:32,c:22,f:20,m:'RC'},
+  {n:'Tandoori Fish + Stir-Fried Greens',       d:'180g tandoori baked fish + 200g stir-fried spinach & beans with garlic + lemon wedge',                 cal:360,p:36,c:10,f:14,m:'RDC'},
   // Chinese-style
   {n:'Steamed Chicken + Bok Choy + Cauli Rice', d:'150g ginger-soy steamed chicken + 200g bok choy + 1 cup cauliflower rice',                             cal:330,p:36,c:14,f:10,m:'RDC'},
   {n:'Kung Pao Shrimp + Stir-Fried Veg',        d:'150g shrimp with peanuts & chilli + 200g stir-fried mixed veg — no rice',                              cal:310,p:28,c:14,f:14,m:'RDC'},
@@ -523,22 +538,24 @@ function pool(t){
 
 function rnd(arr){return arr[Math.floor(Math.random()*arr.length)]}
 
-// Remaining carb budget for slot t
-function carbBudget(t){
-  return CARB_CAP - TYPES.filter(x=>x!==t).reduce((s,x)=>s+(picks[x]?.c||0),0);
-}
-
-// Pick a random item within carb budget, different from cur
-// Falls back to lowest-carb if budget is too tight
-function pickBudgeted(t,cur){
+// Pick a random item different from cur.
+// For lunch & dinner: 70% chance to pick from Indian slice (first 40% of pool)
+function pickDiff(t, cur){
   const p=pool(t);
-  const budget=carbBudget(t);
-  const fits=p.filter(m=>m.c<=budget&&m.n!==cur?.n);
-  if(fits.length) return fits[Math.floor(Math.random()*fits.length)];
-  // fallback: any item that's different from cur, lowest carb first
-  const diff=p.filter(m=>m.n!==cur?.n);
-  if(diff.length) return diff.slice().sort((a,b)=>a.c-b.c)[0];
-  return p[0];
+  if(p.length<2) return p[0];
+
+  let slice=p;
+  if(t==='lunch'||t==='dinner'){
+    const indianSlice=Math.max(4,Math.floor(p.length*0.4));
+    slice=(Math.random()<0.70)?p.slice(0,indianSlice):p;
+    // if Indian slice only has cur, fall back to full pool
+    if(slice.length===1&&slice[0].n===cur?.n) slice=p;
+  }
+
+  // pick different from cur
+  const candidates=slice.filter(m=>m.n!==cur?.n);
+  if(candidates.length) return candidates[Math.floor(Math.random()*candidates.length)];
+  return rnd(p); // ultimate fallback
 }
 
 function seed(){
@@ -546,22 +563,26 @@ function seed(){
   const base=dayIdx*137+new Date().getDate()*31+(vegOn()?0:500)+(mode==='R'?0:mode==='D'?200:400);
   TYPES.forEach((t,i)=>{
     const p=pool(t);
-    const candidate=p[(base+i*73+i*i*11)%p.length];
-    const budget=carbBudget(t);
-    if(candidate.c<=budget){
-      picks[t]=candidate;
+    // For lunch & dinner: bias toward first 40% of pool (Indian items) ~60% of the time
+    let candidate;
+    if(t==='lunch'||t==='dinner'){
+      const indianSlice=Math.max(4,Math.floor(p.length*0.4));
+      const useIndian=((base+i*73)%10)<6;
+      const slice=useIndian?p.slice(0,indianSlice):p;
+      candidate=slice[(base+i*73+i*i*11)%slice.length];
     } else {
-      picks[t]=pickBudgeted(t,null);
+      candidate=p[(base+i*73+i*i*11)%p.length];
     }
+    picks[t]=candidate;
   });
 }
 
 function shuffleAll(){
   picks={};
-  TYPES.forEach(t=>{picks[t]=pickBudgeted(t,null)});
+  TYPES.forEach(t=>{picks[t]=pickDiff(t,null)});
   render();
 }
-function swap(t){picks[t]=pickBudgeted(t,picks[t]);render()}
+function swap(t){picks[t]=pickDiff(t,picks[t]);render()}
 function chgDay(d){dayIdx=(dayIdx+d+7)%7;seed();render()}
 function setMode(m){
   mode=m;
@@ -636,6 +657,13 @@ function render(){
 
 window.shuffleAll=shuffleAll;window.swap=swap;window.chgDay=chgDay;window.setMode=setMode;window.setDiet=setDiet;
 seed();render();
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js',{scope:'/'})
+      .catch(err=>console.warn('SW reg failed:',err));
+  });
+}
 </script>
 </body>
 </html>
