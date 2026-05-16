@@ -1,0 +1,47 @@
+{
+  "name": "EatRight — Daily Meal Planner",
+  "short_name": "EatRight",
+  "description": "Daily meal plans — high protein, low carb. Regular, diabetic & cheat-day modes.",
+  "start_url": "/NourishDay/index.html",
+  "scope": "/NourishDay/",
+  "display": "standalone",
+  "background_color": "#061A12",
+  "theme_color": "#061A12",
+  "orientation": "portrait-primary",
+  "categories": ["health", "food", "lifestyle"],
+  "icons": [
+    {
+      "src": "/NourishDay/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/NourishDay/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/NourishDay/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/NourishDay/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Today's Plan",
+      "short_name": "Today",
+      "description": "Jump to today's meal plan",
+      "url": "/NourishDay/index.html",
+      "icons": [{ "src": "/NourishDay/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

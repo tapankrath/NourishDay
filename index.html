@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EatRight">
+<meta name="theme-color" content="#061A12">
+<meta name="description" content="Daily meal plans — high protein, low carb. Regular, diabetic & cheat-day modes.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<title>EatRight — Daily Meal Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --night:#061A12;--deep:#0A2B1C;--green:#00C06B;--lime:#ADFF5C;
+  --orange:#FF6B2B;--blue:#2B8EFF;--teal:#00C8A0;--purple:#9B5DFF;
+  --ink:#FFFFFF;--ink2:rgba(255,255,255,.78);--ink3:rgba(255,255,255,.44);--ink4:rgba(255,255,255,.12);
+  --card:#0F2A1D;--border:rgba(0,192,107,.15);--border2:rgba(0,192,107,.28);--bg:#020E08;
+  /* page frame */
+  --frame:rgba(0,192,107,.22);
+}
+html,body{
+  background:var(--bg);
+  font-family:'Nunito',system-ui,sans-serif;
+  color:var(--ink);min-height:100%;
+  overscroll-behavior:none;
+}
+
+/* ── PAGE FRAME ── */
+/* On wider screens the app gets a visible border/glow */
+.app{
+  max-width:420px;
+  margin:0 auto;
+  padding-bottom:56px;
+  position:relative;
+  /* outer glow border */
+  box-shadow:
+    0 0 0 1px var(--frame),
+    0 0 32px rgba(0,192,107,.08),
+    0 0 0 4px rgba(0,192,107,.04);
+  min-height:100vh;
+  background:var(--night);
+}
+/* thin neon top edge */
+.app::before{
+  content:'';
+  position:fixed;
+  top:0;left:50%;
+  transform:translateX(-50%);
+  width:min(420px,100vw);
+  height:2px;
+  background:linear-gradient(90deg,transparent 5%,var(--green) 40%,var(--lime) 60%,transparent 95%);
+  opacity:.7;
+  z-index:10;
+  pointer-events:none;
+}
+
+/* ── HEADER ── */
+.status-bar-spacer{background:var(--night);height:max(env(safe-area-inset-top),44px)}
+.hdr{background:var(--night);padding:10px 14px 0;position:relative}
+.hdr::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:.3;
+}
+
+.logo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-mark{
+  width:38px;height:38px;background:var(--green);border-radius:11px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 0 16px rgba(0,192,107,.5);
+}
+.logo-mark svg{width:22px;height:22px}
+.logo-name{
+  font-size:24px;font-weight:900;color:#fff;
+  letter-spacing:-.8px;line-height:1;
+}
+.logo-sub{
+  font-size:9px;font-weight:800;color:var(--green);
+  margin-top:2px;letter-spacing:.12em;text-transform:uppercase;
+}
+
+/* Mode tabs */
+.mode-tabs{display:flex;background:rgba(255,255,255,.06);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4)}
+.mode-tab{
+  padding:6px 10px;border-radius:7px;border:none;cursor:pointer;
+  font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
+  color:var(--ink3);background:none;transition:all .18s;
+  white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;
+}
+.mode-tab.on{background:var(--green);color:#fff;box-shadow:0 2px 10px rgba(0,192,107,.5)}
+
+/* ── SUBNAV ── */
+.subnav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 10px}
+.diet-row{display:flex;gap:5px}
+.diet-btn{
+  padding:5px 12px;border-radius:30px;border:1.5px solid var(--ink4);
+  cursor:pointer;font-size:11px;font-weight:900;
+  font-family:'Nunito',sans-serif;color:var(--ink3);background:none;
+  transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
+}
+.diet-btn.veg-on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 12px rgba(0,192,107,.4)}
+.diet-btn.nv-on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 12px rgba(255,107,43,.4)}
+
+.day-nav{display:flex;align-items:center;gap:6px}
+.day-arrow{
+  width:28px;height:28px;border-radius:7px;border:1.5px solid var(--border2);
+  background:none;color:var(--green);cursor:pointer;font-size:17px;
+  display:flex;align-items:center;justify-content:center;transition:all .14s;
+}
+.day-arrow:active{background:var(--border);transform:scale(.9)}
+.day-lbl{font-size:15px;font-weight:900;color:#fff;min-width:82px;text-align:center;letter-spacing:-.2px}
+.veg-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 6px var(--lime);display:none;flex-shrink:0;margin-left:-3px}
+
+/* ── STATS ── */
+.stats-zone{background:var(--deep);border-top:1px solid var(--ink4);border-bottom:1px solid var(--ink4)}
+.stats{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;padding:10px 14px 8px}
+.stats-sep{background:var(--ink4);margin:3px 0}
+.stat{padding:2px 6px;text-align:center}
+.stat-val{
+  font-size:22px;font-weight:900;color:#fff;
+  display:block;letter-spacing:-.8px;line-height:1;
+}
+.stat-val.hi{color:var(--lime)}
+.stat-lbl{
+  font-size:8px;font-weight:800;color:var(--ink3);
+  text-transform:uppercase;letter-spacing:.12em;margin-top:2px;display:block;
+}
+
+/* ── CAL BAR ── */
+.cal-bar-zone{background:var(--deep);padding:0 14px 10px}
+.cal-bar-track{height:5px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.cal-bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ── BODY ── */
+.body{padding:10px 12px 0}
+.shuffle-btn{
+  width:100%;padding:12px;background:var(--lime);border:none;border-radius:12px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
+  font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;
+  color:#061A12;letter-spacing:.05em;text-transform:uppercase;
+  box-shadow:0 4px 20px rgba(173,255,92,.35);transition:all .16s;margin-bottom:10px;
+}
+.shuffle-btn:active{transform:scale(.97) translateY(1px);box-shadow:0 2px 8px rgba(173,255,92,.2)}
+.s-ico{font-size:17px;display:inline-block;transition:transform .4s}
+.shuffle-btn:active .s-ico{transform:rotate(180deg)}
+.mode-note{
+  font-size:10.5px;font-weight:700;color:var(--ink3);text-align:center;
+  margin-bottom:10px;letter-spacing:.03em;
+  background:var(--ink4);border-radius:7px;padding:6px 12px;border:1px solid var(--border);
+}
+
+/* ── CARDS ── */
+.meals{display:flex;flex-direction:column;gap:9px}
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;transition:transform .13s}
+.card:active{transform:scale(.99)}
+.card-inner{display:flex;min-height:0}
+.card-accent{width:4px;flex-shrink:0}
+.card-main{flex:1;min-width:0}
+.card-body{padding:11px 12px 10px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.card-type{
+  font-size:9.5px;font-weight:900;letter-spacing:.12em;
+  text-transform:uppercase;display:flex;align-items:center;gap:5px;
+}
+.ct-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.card-kcal{font-size:11.5px;font-weight:900;padding:3px 9px;border-radius:20px;letter-spacing:.02em}
+
+/* BIGGER, BOLDER meal name */
+.card-name{
+  font-size:19px;font-weight:900;color:#fff;
+  line-height:1.15;margin-bottom:4px;letter-spacing:-.5px;
+}
+.card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.5}
+
+.card-ft{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid var(--ink4)}
+.tags{display:flex;gap:3px;flex-wrap:wrap;flex:1;min-width:0}
+.tag{
+  font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;
+  letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;
+}
+.t-pro{background:rgba(43,142,255,.18);color:#6AB8FF;border:1px solid rgba(43,142,255,.25)}
+.t-lc{background:rgba(0,192,107,.15);color:#4DFFAB;border:1px solid rgba(0,192,107,.25)}
+.t-gi{background:rgba(255,107,43,.15);color:#FF9D6B;border:1px solid rgba(255,107,43,.25)}
+.t-cheat{background:rgba(255,205,0,.12);color:#FFD84D;border:1px solid rgba(255,205,0,.25)}
+.t-veg{background:rgba(173,255,92,.12);color:#ADFF5C;border:1px solid rgba(173,255,92,.25)}
+.t-nv{background:rgba(255,107,43,.15);color:#FF9D6B;border:1px solid rgba(255,107,43,.25)}
+.swap-btn{
+  flex-shrink:0;background:transparent;border:1.5px solid var(--border2);
+  color:var(--green);font-size:9.5px;font-weight:900;
+  padding:4px 10px;border-radius:7px;cursor:pointer;
+  font-family:'Nunito',sans-serif;letter-spacing:.05em;text-transform:uppercase;
+  display:flex;align-items:center;gap:3px;transition:all .14s;margin-left:6px;
+}
+.swap-btn:active{transform:scale(.92);background:var(--border)}
+
+/* Macros */
+.card-macros{background:var(--deep);padding:8px 12px;display:flex;border-top:1px solid var(--ink4)}
+.cmac{flex:1;text-align:center;font-size:9px;font-weight:800;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
+.cmac strong{display:block;font-size:15px;font-weight:900;color:#fff;letter-spacing:-.4px;line-height:1.1;margin-bottom:1px}
+.cmac+.cmac{border-left:1px solid var(--ink4)}
+
+/* Meal type themes */
+[data-t=breakfast] .card-accent{background:#FF6B2B;box-shadow:2px 0 12px rgba(255,107,43,.4)}
+[data-t=breakfast] .card-type{color:#FF8D5C}
+[data-t=breakfast] .ct-dot{background:#FF6B2B}
+[data-t=breakfast] .card-kcal{background:rgba(255,107,43,.15);color:#FF8D5C;border:1px solid rgba(255,107,43,.2)}
+[data-t=lunch] .card-accent{background:#2B8EFF;box-shadow:2px 0 12px rgba(43,142,255,.4)}
+[data-t=lunch] .card-type{color:#6AB8FF}
+[data-t=lunch] .ct-dot{background:#2B8EFF}
+[data-t=lunch] .card-kcal{background:rgba(43,142,255,.15);color:#6AB8FF;border:1px solid rgba(43,142,255,.2)}
+[data-t=snacks] .card-accent{background:#00C8A0;box-shadow:2px 0 12px rgba(0,200,160,.4)}
+[data-t=snacks] .card-type{color:#33D9B8}
+[data-t=snacks] .ct-dot{background:#00C8A0}
+[data-t=snacks] .card-kcal{background:rgba(0,200,160,.15);color:#33D9B8;border:1px solid rgba(0,200,160,.2)}
+[data-t=dinner] .card-accent{background:#9B5DFF;box-shadow:2px 0 12px rgba(155,93,255,.4)}
+[data-t=dinner] .card-type{color:#BA8FFF}
+[data-t=dinner] .ct-dot{background:#9B5DFF}
+[data-t=dinner] .card-kcal{background:rgba(155,93,255,.15);color:#BA8FFF;border:1px solid rgba(155,93,255,.2)}
+
+/* ── FOOTER ── */
+.footer{
+  text-align:center;padding:18px 14px 0;
+  font-size:9.5px;font-weight:800;color:var(--ink3);
+  letter-spacing:.07em;line-height:2;text-transform:uppercase;
+}
+.footer span{color:var(--green);font-weight:900}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="status-bar-spacer"></div>
+<div class="hdr">
+  <div class="logo-row">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8"  cy="10" r="5" fill="#061A12"/><circle cx="8"  cy="10" r="3.5" fill="#FDF6E3"/>
+          <circle cx="18" cy="10" r="5" fill="#061A12"/><circle cx="18" cy="10" r="3.5" fill="#FDF6E3"/>
+          <circle cx="13" cy="18" r="5" fill="#061A12"/><circle cx="13" cy="18" r="3.5" fill="#FDF6E3"/>
+          <circle cx="8"  cy="10" r="2.4" fill="#00C8A0"/>
+          <circle cx="18" cy="10" r="2.4" fill="#FF6B2B"/>
+          <circle cx="13" cy="18" r="2.4" fill="#9B5DFF"/>
+          <circle cx="13" cy="13" r="2.8" fill="#061A12"/><circle cx="13" cy="13" r="1.6" fill="#ADFF5C"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-name">EatRight</div>
+        <div class="logo-sub">High Protein · Low Carb · Global</div>
+      </div>
+    </div>
+    <div class="mode-tabs">
+      <button class="mode-tab on" id="tabR" onclick="setMode('R')">Regular</button>
+      <button class="mode-tab"    id="tabD" onclick="setMode('D')">Diabetic</button>
+      <button class="mode-tab"    id="tabC" onclick="setMode('C')">Cheat</button>
+    </div>
+  </div>
+  <div class="subnav">
+    <div class="diet-row">
+      <button class="diet-btn veg-on" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
+      <button class="diet-btn"        id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
+    </div>
+    <div class="day-nav">
+      <button class="day-arrow" onclick="chgDay(-1)">‹</button>
+      <div class="day-lbl" id="dayLbl"></div>
+      <div class="veg-dot" id="vegDot"></div>
+      <button class="day-arrow" onclick="chgDay(1)">›</button>
+    </div>
+  </div>
+</div>
+
+<div class="stats-zone">
+  <div class="stats">
+    <div class="stat"><span class="stat-val hi" id="sKcal">0</span><span class="stat-lbl">kcal</span></div>
+    <div class="stats-sep"></div>
+    <div class="stat"><span class="stat-val" id="sPro">0g</span><span class="stat-lbl">Protein</span></div>
+    <div class="stats-sep"></div>
+    <div class="stat"><span class="stat-val" id="sCarb">0g</span><span class="stat-lbl">Carbs</span></div>
+    <div class="stats-sep"></div>
+    <div class="stat"><span class="stat-val" id="sFat">0g</span><span class="stat-lbl">Fat</span></div>
+  </div>
+  <div class="cal-bar-zone">
+    <div class="cal-bar-track"><div class="cal-bar-fill" id="calBar" style="width:0%"></div></div>
+  </div>
+</div>
+
+<div class="body">
+  <button class="shuffle-btn" onclick="shuffleAll()"><span class="s-ico">⟳</span> Shuffle All Meals</button>
+  <div class="mode-note" id="modeNote"></div>
+  <div class="meals" id="meals"></div>
+</div>
+
+<div class="footer">
+  No beef · pork · cheese · turkey · sausage · pasta<br>
+  Veg enforced Mon &amp; Thu &nbsp;·&nbsp; <span>EatRight</span>
+</div>
+</div>
+
+<script>
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const VEG_DAYS=[1,4];
+const TYPES=['breakfast','lunch','snacks','dinner'];
+const T_ICON={breakfast:'🌅',lunch:'☀️',snacks:'🍊',dinner:'🌙'};
+const T_LBL={breakfast:'Breakfast',lunch:'Lunch',snacks:'Snack',dinner:'Dinner'};
+const CARB_CAP=100;
+const MODE_NOTE={
+  R:'Balanced global diet · high protein · moderate carbs · healthy fats',
+  D:'Low-GI meals · controlled carbs · high fibre · no refined sugar',
+  C:'Enjoy your cheat day! Back on track tomorrow 💪'
+};
+
+// ─────────────────────────────────────────────────────────────────────
+// MEAL DATABASE
+// m flags: R=Regular  D=Diabetic  C=Cheat  (combos: RD RC RDC)
+// Carb targets: breakfast ≤35g | lunch ≤45g | snack ≤25g | dinner ≤28g
+//   → day total stays ≤~133g worst-case; budget logic trims to 100g
+// Breakfast = morning foods ONLY (eggs/oats/toast/yogurt/smoothie/pancakes)
+// No rice at breakfast. No curries at breakfast.
+// ─────────────────────────────────────────────────────────────────────
+const DB={
+
+// ══════════════════ BREAKFAST ══════════════════
+breakfast:{
+ veg:[
+  // Eggs & savoury
+  {n:'Veggie Omelette + Wholegrain Toast',      d:'3 eggs · spinach, mushroom & capsicum omelette + 1 slice wholegrain toast',                         cal:320,p:20,c:18,f:16,m:'RDC'},
+  {n:'Scrambled Tofu + Toast + Orange',          d:'150g silken tofu scrambled with turmeric & spinach + 1 wholegrain toast + 1 medium orange',          cal:310,p:18,c:24,f:10,m:'RDC'},
+  {n:'Shakshuka (Veg)',                          d:'2 eggs poached in 200ml spiced tomato-pepper sauce + 1 slice wholegrain bread',                       cal:330,p:18,c:26,f:14,m:'RDC'},
+  {n:'Avocado Toast + Poached Eggs',            d:'2 slices wholegrain toast + ½ avocado smashed + 2 poached eggs + chilli flakes',                      cal:390,p:20,c:28,f:20,m:'RC'},
+  {n:'Lentil Pancakes + Yogurt + Berries',      d:'2 lentil pancakes (80g batter each) + 3 tbsp plain yogurt + ½ cup mixed berries',                    cal:330,p:18,c:34,f:6,m:'RDC'},
+  {n:'Savoury Oat Porridge + Nuts',             d:'¾ cup rolled oats cooked with veg stock & cumin + 15g mixed nuts on top',                             cal:310,p:11,c:34,f:10,m:'RDC'},
+  {n:'Spinach & Mushroom Egg Cups',             d:'3 eggs baked in muffin cups with wilted spinach, mushroom & herbs — no bread',                        cal:240,p:18,c:6,f:16,m:'RDC'},
+  {n:'Avocado + Boiled Eggs + Cherry Tomatoes', d:'½ avocado sliced + 2 boiled eggs + handful cherry tomatoes + black pepper & lemon',                   cal:300,p:16,c:8,f:22,m:'RDC'},
+  {n:'Cottage Cheese + Fruit + Flaxseeds',      d:'150g low-fat cottage cheese + ½ cup pineapple chunks + 1 tbsp flaxseeds',                             cal:270,p:20,c:22,f:6,m:'RDC'},
+  // Yogurt & smoothie
+  {n:'Greek Yogurt + Berries + Almond Butter',  d:'200g plain Greek yogurt + ¾ cup mixed berries + 1 tbsp almond butter',                                cal:310,p:20,c:24,f:10,m:'RDC'},
+  {n:'Yogurt Parfait + Granola + Kiwi',         d:'180g Greek yogurt + 3 tbsp low-sugar granola + 1 kiwi sliced + 1 tsp chia seeds',                     cal:330,p:16,c:36,f:8,m:'RC'},
+  {n:'Smoothie Bowl',                           d:'1 frozen banana + ½ cup mango + handful spinach blended thick · topped with 2 tbsp granola & berries', cal:340,p:10,c:52,f:6,m:'RC'},
+  {n:'Berry Protein Smoothie',                  d:'1 cup almond milk + 100g Greek yogurt + ½ cup berries + 1 tbsp peanut butter — blended',              cal:310,p:20,c:26,f:10,m:'RDC'},
+  {n:'Chia Pudding + Mango + Almonds',          d:'3 tbsp chia seeds soaked in 250ml almond milk overnight + ½ cup mango + 10g almonds',                  cal:310,p:10,c:30,f:14,m:'RDC'},
+  // Oats & bread
+  {n:'Overnight Oats + Banana + Walnuts',       d:'¾ cup oats soaked overnight in 200ml almond milk + ½ banana + 10g walnuts + 1 tsp honey',             cal:360,p:12,c:46,f:12,m:'RC'},
+  {n:'Whole Wheat Pancakes + Fruit Compote',    d:'3 small whole wheat pancakes (90g batter) + 3 tbsp warm berry compote + 1 tsp honey',                 cal:370,p:12,c:52,f:8,m:'RC'},
+  {n:'Peanut Butter Toast + Banana',            d:'2 slices wholegrain toast + 2 tbsp natural peanut butter + ½ banana',                                  cal:390,p:14,c:42,f:14,m:'RC'},
+  {n:'Muesli + Milk + Fresh Fruit',             d:'60g no-sugar muesli + 200ml low-fat milk + ½ cup chopped seasonal fruit',                              cal:340,p:12,c:46,f:8,m:'RC'},
+ ],
+ nonveg:[
+  {n:'Spiced Scrambled Eggs + Roti + Fruit',    d:'3 eggs scrambled with onion & capsicum + 1 small wholegrain roti + ½ cup sliced fruit',               cal:380,p:24,c:26,f:18,m:'RDC'},
+  {n:'Classic Omelette + Wholegrain Toast',     d:'3-egg omelette with onion, tomato & herbs + 1 slice wholegrain toast',                                 cal:340,p:22,c:20,f:16,m:'RDC'},
+  {n:'Boiled Eggs + Avocado + Cherry Tomatoes', d:'3 hard-boiled eggs + ½ avocado + handful cherry tomatoes + sea salt',                                  cal:340,p:22,c:10,f:22,m:'RDC'},
+  {n:'Smoked Salmon + Avocado Toast + Berries', d:'2 slices wholegrain toast + ½ avocado + 80g smoked salmon + ½ cup mixed berries',                     cal:400,p:26,c:28,f:16,m:'RDC'},
+  {n:'Greek Yogurt + Boiled Eggs + Nuts',       d:'150g plain Greek yogurt + 2 boiled eggs + 15g mixed nuts + ½ cup blueberries',                        cal:380,p:28,c:18,f:18,m:'RDC'},
+  {n:'Egg White Omelette + Spinach + Fruit',    d:'4 egg whites + handful spinach omelette + 1 cup mixed fruit salad on the side',                        cal:260,p:22,c:18,f:4,m:'RDC'},
+  {n:'Tuna + Avocado + Wholegrain Crackers',    d:'80g canned tuna + ½ avocado mashed + 4–5 wholegrain crackers + sliced cucumber',                      cal:360,p:28,c:24,f:14,m:'RDC'},
+  {n:'Shakshuka + Wholegrain Bread',            d:'2 eggs poached in spiced tomato sauce with cumin & coriander + 1 slice wholegrain bread',              cal:330,p:18,c:24,f:14,m:'RDC'},
+  {n:'Grilled Chicken + Eggs + Cucumber',       d:'80g cold grilled chicken sliced + 2 boiled eggs + cucumber sticks + cherry tomatoes',                  cal:360,p:38,c:6,f:14,m:'RDC'},
+  {n:'Prawn & Egg Scramble + Fruit',            d:'80g prawns stir-fried with 2 scrambled eggs & spring onion + ½ cup pineapple',                         cal:350,p:30,c:16,f:14,m:'RDC'},
+  {n:'Smoked Fish Scramble + Toast',            d:'60g smoked fish flaked into 2-egg scramble + 1 slice wholegrain toast + sliced tomato',                cal:350,p:28,c:20,f:14,m:'RDC'},
+  {n:'High-Protein Yogurt Bowl + Berries',      d:'200g Greek yogurt + 2 tbsp hemp seeds + ½ cup berries + 1 boiled egg on the side',                    cal:360,p:30,c:20,f:14,m:'RDC'},
+  {n:'Egg Muffins + Fruit Salad',               d:'3 baked egg muffins with spinach & sun-dried tomato + 1 cup fresh mixed fruit',                        cal:310,p:22,c:18,f:14,m:'RDC'},
+  {n:'Sardines + Wholegrain Toast + Tomato',    d:'1 tin sardines in brine (100g) + 2 slices wholegrain toast + sliced tomato & rocket',                  cal:360,p:30,c:26,f:12,m:'RDC'},
+ ]
+},
+
+// ══════════════════ LUNCH (carbs ≤45g) ══════════════════
+lunch:{
+ veg:[
+  // Indian-style
+  {n:'Chickpea Curry + 1 Roti + Salad',         d:'1 cup chickpea curry + 1 small wholegrain roti (60g) + 1 cup cucumber-tomato salad + 2 tbsp yogurt', cal:430,p:20,c:44,f:10,m:'RDC'},
+  {n:'Cottage Cheese + Big Salad + Roti',        d:'120g grilled cottage cheese + large leafy salad (200g) with lemon-olive oil + 1 wholegrain roti',    cal:460,p:28,c:30,f:20,m:'RDC'},
+  {n:'Lentil Soup + Quinoa + Roasted Veg',       d:'1.5 cups lentil soup + ½ cup quinoa + 150g oven-roasted mixed veg + 2 tbsp yogurt',                  cal:420,p:22,c:42,f:9,m:'RDC'},
+  {n:'Spinach Dal + Brown Rice (small) + Raita', d:'1 cup spinach dal + ½ cup brown rice + ½ cup yogurt-cucumber raita',                                  cal:440,p:20,c:44,f:8,m:'RDC'},
+  // Chinese-style
+  {n:'Tofu Stir-Fry + Brown Rice + Miso Soup',  d:'150g firm tofu + broccoli & snap peas + ½ cup brown rice + 1 cup miso soup',                         cal:400,p:22,c:40,f:12,m:'RDC'},
+  {n:'Mapo Tofu + ½ Cup Steamed Rice + Bok Choy',d:'150g silken tofu in chilli-bean sauce + ½ cup steamed rice + 1 cup stir-fried bok choy',            cal:420,p:20,c:42,f:14,m:'RC'},
+  {n:'Veggie Fried Rice (Brown) + Clear Broth',  d:'1 cup brown fried rice with egg & mixed veg + 1 bowl clear vegetable broth',                         cal:400,p:14,c:44,f:10,m:'RC'},
+  // Thai-style
+  {n:'Som Tam Salad + Grilled Tofu + Sticky Rice',d:'1.5 cups green papaya salad + 100g grilled tofu + ½ cup sticky rice',                               cal:400,p:16,c:44,f:12,m:'RC'},
+  {n:'Thai Green Curry Tofu + ½ Cup Rice',       d:'1.5 cups coconut green curry with tofu & veg + ½ cup jasmine rice',                                   cal:430,p:14,c:42,f:18,m:'RC'},
+  // Mexican-style
+  {n:'Veggie Burrito Bowl (Half Rice)',           d:'¼ cup brown rice + ½ cup black beans + corn + salsa + ¼ avocado + lime — no cheese',                 cal:420,p:16,c:44,f:12,m:'RDC'},
+  {n:'Lentil Taco Bowl + Yogurt Lime Dressing',  d:'½ cup spiced lentils + ¼ cup brown rice + salsa + mixed greens + 3 tbsp yogurt-lime dressing',        cal:400,p:20,c:40,f:10,m:'RDC'},
+  {n:'Black Bean Bowl + Guacamole',              d:'½ cup black beans + corn + salsa + ¼ avocado + large mixed greens + lime — no rice, no cheese',       cal:370,p:16,c:38,f:12,m:'RDC'},
+  // American-style
+  {n:'Quinoa Power Bowl + Nuts',                 d:'¾ cup quinoa + 100g roasted sweet potato + 60g kale + 15g almonds + cranberries + vinaigrette',       cal:430,p:14,c:44,f:14,m:'RDC'},
+  {n:'Big Garden Salad + Hummus + Pita',         d:'2 cups leafy greens + chickpeas + cucumber + cherry tomatoes + 3 tbsp hummus + 1 mini pita',           cal:400,p:16,c:42,f:16,m:'RDC'},
+  {n:'Lentil & Veg Soup + Wholegrain Bread',     d:'2 cups thick lentil-veg soup + 1 slice wholegrain bread + green side salad',                          cal:390,p:18,c:44,f:8,m:'RDC'},
+  {n:'Stuffed Peppers + Quinoa',                 d:'2 peppers stuffed with quinoa, black beans & herbs (baked) + ½ cup yogurt dip on the side',           cal:420,p:16,c:44,f:10,m:'RDC'},
+  {n:'Cauliflower Bowl + Chickpeas + Tahini',    d:'200g roasted cauliflower + ½ cup chickpeas + mixed greens + 2 tbsp tahini dressing',                  cal:380,p:14,c:34,f:16,m:'RDC'},
+ ],
+ nonveg:[
+  // Indian-style
+  {n:'Grilled Chicken + ½ Cup Brown Rice + Raita',d:'150g marinated grilled chicken + ½ cup brown rice + ½ cup yogurt-cucumber raita + salad',           cal:450,p:38,c:36,f:12,m:'RDC'},
+  {n:'Fish Curry + ½ Cup Rice + Salad',          d:'150g fish curry + ½ cup steamed rice + 1 cup mixed green salad with lemon dressing',                  cal:440,p:34,c:38,f:12,m:'RDC'},
+  {n:'Prawn Stir-Fry + Brown Rice + Yogurt',     d:'150g prawns stir-fried with veg + ½ cup brown rice + 3 tbsp cucumber yogurt on the side',            cal:430,p:32,c:36,f:12,m:'RDC'},
+  {n:'Egg Curry + 1 Roti + Salad',               d:'3 eggs in spiced tomato sauce + 1 small wholegrain roti + 1 cup cucumber-tomato salad',              cal:400,p:24,c:30,f:18,m:'RDC'},
+  // Chinese-style
+  {n:'Kung Pao Chicken + ½ Cup Brown Rice',      d:'150g chicken with peanuts, chilli & zucchini in hoisin + ½ cup brown rice + 1 cup broth',            cal:450,p:36,c:36,f:14,m:'RC'},
+  {n:'Steamed Fish + Bok Choy + ½ Cup Rice',     d:'180g ginger-soy steamed fish + 1 cup stir-fried bok choy + ½ cup jasmine rice',                      cal:400,p:36,c:32,f:10,m:'RDC'},
+  {n:'Shrimp Fried Rice + Miso Soup',            d:'150g shrimp + 1 cup brown fried rice with egg & ginger + 1 bowl miso soup',                          cal:440,p:30,c:40,f:12,m:'RC'},
+  {n:'Chicken & Broccoli + Brown Rice',          d:'150g chicken breast + 1 cup broccoli in oyster sauce + ½ cup brown rice',                            cal:420,p:36,c:34,f:10,m:'RDC'},
+  // Thai-style
+  {n:'Thai Basil Chicken + ½ Cup Rice + Salad',  d:'150g chicken with Thai basil & chilli + ½ cup jasmine rice + green papaya salad',                     cal:460,p:36,c:38,f:14,m:'RC'},
+  {n:'Grilled Fish + Thai Herb Salad + ½ Rice',  d:'180g grilled fish fillet + 1.5 cups green mango-herb salad + ½ cup steamed rice',                    cal:420,p:34,c:30,f:12,m:'RDC'},
+  {n:'Green Curry Chicken + ½ Cup Rice',         d:'150g chicken in coconut green curry + ½ cup jasmine rice + 1 cup steamed veg',                        cal:460,p:34,c:40,f:16,m:'RC'},
+  // Mexican-style
+  {n:'Chicken Burrito Bowl (Half Rice)',          d:'150g grilled chicken + ¼ cup brown rice + ½ cup black beans + salsa + ¼ avocado — no cheese',        cal:460,p:38,c:36,f:14,m:'RDC'},
+  {n:'Fish Tacos (2) + Mango Salsa',             d:'2 corn tortillas + 140g grilled fish + shredded cabbage + ¼ avocado + 3 tbsp mango salsa',            cal:440,p:30,c:38,f:14,m:'RDC'},
+  {n:'Chicken Fajita Bowl (No Cheese)',          d:'150g grilled chicken + peppers & onion + ½ cup black beans + salsa + ¼ avocado — no rice',            cal:420,p:36,c:26,f:16,m:'RDC'},
+  // American-style
+  {n:'Grilled Chicken Caesar Salad',             d:'150g grilled chicken + 2 cups romaine + cherry tomatoes + light Caesar dressing (no croutons)',        cal:390,p:36,c:10,f:18,m:'RDC'},
+  {n:'Tuna Salad Bowl + Crackers + Apple',       d:'120g canned tuna + 2 cups mixed greens + yogurt dressing + 4 wholegrain crackers + 1 apple',          cal:400,p:34,c:28,f:12,m:'RDC'},
+  {n:'BBQ Chicken + Roasted Veg + Quinoa',       d:'150g baked BBQ chicken + 150g roasted peppers & zucchini + ½ cup quinoa',                             cal:450,p:38,c:30,f:16,m:'RC'},
+  {n:'Salmon + Greens + Quinoa',                 d:'140g baked salmon + 2 cups mixed greens + ½ cup quinoa + lemon-herb dressing',                        cal:450,p:40,c:28,f:18,m:'RDC'},
+  {n:'Chicken Wrap (Wholegrain)',                d:'1 wholegrain wrap + 120g grilled chicken + lettuce, tomato, avocado + 2 tbsp yogurt sauce',            cal:420,p:34,c:28,f:16,m:'RDC'},
+ ]
+},
+
+// ══════════════════ SNACKS (carbs ≤25g) ══════════════════
+snacks:{
+ veg:[
+  {n:'Mixed Nuts + Fresh Fruit',                d:'20g almonds, walnuts & cashews + 1 medium apple or pear',                                              cal:210,p:5,c:20,f:14,m:'RDC'},
+  {n:'Greek Yogurt + Honey + Berries',          d:'150g plain Greek yogurt + 1 tsp honey + ½ cup mixed berries',                                          cal:180,p:14,c:18,f:4,m:'RDC'},
+  {n:'Apple + Almond Butter',                   d:'1 medium apple sliced + 1 tbsp natural almond butter',                                                 cal:190,p:4,c:22,f:9,m:'RDC'},
+  {n:'Hummus + Veggie Sticks',                  d:'4 tbsp hummus + 1 cup carrot, celery & cucumber sticks',                                               cal:170,p:7,c:16,f:8,m:'RDC'},
+  {n:'Roasted Chickpeas',                       d:'½ cup oven-roasted chickpeas with smoked paprika & cumin',                                             cal:180,p:9,c:20,f:4,m:'RDC'},
+  {n:'Trail Mix',                               d:'20g almonds + 10g pumpkin seeds + 10g sunflower seeds + 10g raisins',                                  cal:200,p:6,c:16,f:12,m:'RDC'},
+  {n:'Edamame + Sea Salt',                      d:'¾ cup steamed edamame pods with sea salt',                                                             cal:150,p:12,c:10,f:5,m:'RDC'},
+  {n:'Banana + Peanut Butter',                  d:'1 medium banana + 1 tbsp natural peanut butter',                                                       cal:200,p:5,c:28,f:8,m:'RC'},
+  {n:'Fresh Fruit Bowl',                        d:'1 cup mixed fruit: mango, papaya, kiwi & pomegranate with a squeeze of lime',                          cal:150,p:2,c:34,f:1,m:'RC'},
+  {n:'Chia Pudding + Berries',                  d:'2 tbsp chia seeds soaked in 150ml almond milk overnight + ½ cup berries on top',                       cal:190,p:6,c:22,f:8,m:'RDC'},
+  {n:'Cottage Cheese + Pineapple',              d:'150g low-fat cottage cheese + ½ cup fresh pineapple chunks',                                           cal:180,p:16,c:16,f:3,m:'RDC'},
+  {n:'Yogurt + Cucumber Dip + Veggie Sticks',   d:'150g thick yogurt with minced cucumber, mint & garlic + 1 cup carrot & cucumber sticks',               cal:155,p:10,c:12,f:4,m:'RDC'},
+  {n:'Rice Cakes + Avocado + Tomato',           d:'2 plain rice cakes + ¼ avocado smashed + sliced cherry tomatoes + lemon & chilli',                    cal:185,p:3,c:22,f:8,m:'RDC'},
+  {n:'Walnuts + Dark Chocolate',                d:'20g walnuts + 2 squares (20g) 70%+ dark chocolate',                                                    cal:200,p:4,c:12,f:16,m:'RDC'},
+  {n:'Pumpkin Seeds + Dried Apricots',          d:'25g pumpkin seeds + 4 dried apricots',                                                                 cal:170,p:6,c:18,f:8,m:'RDC'},
+  {n:'Sliced Apple + Cashew Butter + Cinnamon', d:'1 apple sliced + 1 tbsp cashew butter + a sprinkle of cinnamon',                                      cal:195,p:4,c:26,f:8,m:'RDC'},
+  {n:'Smoothie: Spinach + Banana + Almond Milk',d:'1 cup almond milk + 1 frozen banana + handful spinach + 1 tsp peanut butter — blended',               cal:200,p:5,c:28,f:6,m:'RC'},
+ ],
+ nonveg:[
+  {n:'Boiled Eggs + Almonds + Apple',           d:'2 boiled eggs + 15g almonds + 1 small apple',                                                          cal:230,p:16,c:14,f:14,m:'RDC'},
+  {n:'Greek Yogurt + Berries + Boiled Egg',     d:'150g plain Greek yogurt + ½ cup mixed berries + 1 boiled egg on the side',                             cal:220,p:20,c:16,f:7,m:'RDC'},
+  {n:'Mini Chicken Skewers + Yogurt Dip',       d:'3 mini grilled chicken skewers (90g) + 2 tbsp thick Greek yogurt herb dip',                            cal:200,p:24,c:4,f:7,m:'RDC'},
+  {n:'Tuna + Wholegrain Crackers + Apple',      d:'80g canned tuna in brine + 4 wholegrain crackers + 1 small apple',                                     cal:210,p:22,c:20,f:4,m:'RDC'},
+  {n:'Egg White Cups + Fruit',                  d:'3 baked egg white cups with spinach & capsicum + ½ cup seasonal fruit salad',                          cal:175,p:18,c:14,f:3,m:'RDC'},
+  {n:'Prawn Rice Paper Rolls (2)',              d:'2 fresh rice paper rolls with 80g prawns, cucumber, avocado & mint',                                    cal:175,p:16,c:14,f:4,m:'RDC'},
+  {n:'Smoked Fish + Avocado + Crackers',        d:'60g smoked fish flaked + ¼ avocado + 4 wholegrain crackers + sliced cucumber',                         cal:210,p:18,c:12,f:10,m:'RDC'},
+  {n:'Hard-Boiled Eggs + Fruit Bowl',           d:'2 boiled eggs + 1 cup watermelon, grapes & kiwi',                                                      cal:200,p:14,c:18,f:8,m:'RDC'},
+  {n:'Chicken Lettuce Cups',                    d:'80g shredded grilled chicken in 3 butter lettuce cups with cucumber, carrot & sesame',                  cal:180,p:22,c:6,f:7,m:'RDC'},
+  {n:'Sardines + Tomato + Ryvita',              d:'50g sardines in brine + sliced tomato + 2 Ryvita crispbreads',                                          cal:195,p:18,c:16,f:6,m:'RDC'},
+  {n:'Protein Yogurt Bowl + Nuts',              d:'150g Greek yogurt + 2 tbsp hemp seeds + 1 boiled egg crumbled + 10g almonds',                           cal:250,p:26,c:10,f:12,m:'RDC'},
+ ]
+},
+
+// ══════════════════ DINNER (protein-led, carbs ≤28g) ══════════════════
+dinner:{
+ veg:[
+  // Indian-style
+  {n:'Spinach Lentil Soup + 1 Slice Bread',     d:'1.5 cups spinach-lentil soup with garlic & cumin + 1 slice wholegrain bread + green side salad',       cal:360,p:18,c:40,f:8,m:'RDC'},
+  {n:'Grilled Cottage Cheese + Roasted Veg',    d:'150g grilled marinated cottage cheese + 200g oven-roasted zucchini, peppers & broccoli',               cal:370,p:26,c:16,f:20,m:'RDC'},
+  {n:'Soy Mince Curry + 1 Roti + Salad',        d:'½ cup soy mince curry + 1 small wholegrain roti + large cucumber-tomato salad',                        cal:380,p:28,c:28,f:12,m:'RDC'},
+  {n:'Lentil & Veggie Stew + Side Salad',       d:'1.5 cups mixed lentil & vegetable stew + large green side salad with lemon-olive oil dressing',         cal:340,p:16,c:36,f:6,m:'RDC'},
+  // Chinese-style
+  {n:'Tofu Stir-Fry + Cauliflower Rice',        d:'150g firm tofu + broccoli, snap peas & mushrooms stir-fried in soy-ginger + 1 cup cauliflower rice',   cal:320,p:22,c:18,f:12,m:'RDC'},
+  {n:'Hot & Sour Soup + Steamed Veg',           d:'2 cups hot & sour soup + 200g mixed steamed vegetables + 2 tbsp sesame-soy drizzle',                   cal:280,p:14,c:22,f:8,m:'RDC'},
+  {n:'Tofu & Bok Choy in Ginger Broth',         d:'150g tofu + 200g bok choy simmered in 1.5 cups ginger-miso broth + ¼ cup brown rice',                 cal:320,p:18,c:24,f:10,m:'RDC'},
+  // Thai-style
+  {n:'Thai Veg Curry + Cauliflower Rice',        d:'1.5 cups Thai red/green veg curry (light coconut milk) + 1 cup cauliflower rice',                     cal:340,p:12,c:20,f:18,m:'RDC'},
+  {n:'Tofu Larb Salad',                          d:'150g crumbled tofu with mint, lemongrass, lime, chilli & toasted rice powder on lettuce cups',         cal:290,p:20,c:14,f:14,m:'RDC'},
+  // Mexican-style
+  {n:'Black Bean Bowl (No Tortilla)',            d:'½ cup black beans + corn + salsa + ¼ avocado + mixed greens + yogurt-lime dressing — no tortilla',     cal:330,p:14,c:36,f:12,m:'RDC'},
+  {n:'Veggie Fajita Bowl (No Rice)',             d:'Roasted peppers & onion + ½ cup black beans + salsa + ¼ avocado + mixed greens — no rice',             cal:310,p:12,c:28,f:12,m:'RDC'},
+  // American-style
+  {n:'Lentil Soup + Kale & Apple Salad',        d:'1.5 cups lentil soup + 2 cups kale with 15g walnuts & apple with lemon dressing',                      cal:370,p:18,c:42,f:10,m:'RDC'},
+  {n:'Stuffed Zucchini + Quinoa',               d:'2 zucchini boats stuffed with quinoa, black beans & herbs (baked) + side green salad',                  cal:360,p:16,c:36,f:10,m:'RDC'},
+  {n:'Roasted Veg Platter + Hummus',            d:'300g roasted mixed vegetables + 4 tbsp hummus + ½ mini wholegrain pita',                               cal:340,p:12,c:32,f:14,m:'RDC'},
+  {n:'Cauliflower Steak + Lentils + Greens',    d:'250g roasted cauliflower steak + ½ cup red lentils + 1 cup sautéed spinach with garlic',               cal:340,p:18,c:30,f:8,m:'RDC'},
+  {n:'Egg Fried Cauliflower Rice',              d:'2 eggs scrambled into 200g cauliflower rice with spring onion, soy & sesame + side salad',              cal:290,p:18,c:14,f:16,m:'RDC'},
+ ],
+ nonveg:[
+  // Indian-style
+  {n:'Grilled Chicken + Salad + Yogurt',        d:'150g marinated grilled chicken breast + large cucumber-tomato salad + 100g plain yogurt',               cal:390,p:40,c:10,f:14,m:'RDC'},
+  {n:'Fish Curry + ½ Cup Brown Rice + Salad',   d:'150g light fish curry + ½ cup brown rice + 1 cup green salad with lemon',                              cal:400,p:34,c:34,f:12,m:'RDC'},
+  {n:'Egg Curry + 1 Roti + Salad',              d:'2 eggs in spiced tomato sauce + 1 small wholegrain roti + cucumber & onion salad',                     cal:370,p:22,c:28,f:16,m:'RDC'},
+  {n:'Baked Fish + Lentils + Sautéed Spinach',  d:'180g oven-baked spiced fish + ½ cup red lentils + 1 cup sautéed spinach with garlic & lemon',          cal:400,p:36,c:24,f:12,m:'RDC'},
+  // Chinese-style
+  {n:'Steamed Chicken + Bok Choy + Cauli Rice', d:'150g ginger-soy steamed chicken + 200g bok choy + 1 cup cauliflower rice',                             cal:330,p:36,c:14,f:10,m:'RDC'},
+  {n:'Kung Pao Shrimp + Stir-Fried Veg',        d:'150g shrimp with peanuts & chilli + 200g stir-fried mixed veg — no rice',                              cal:310,p:28,c:14,f:14,m:'RDC'},
+  {n:'Miso Soup + Steamed Fish + Greens',       d:'2 cups miso soup + 180g steamed fish fillet + 200g steamed bok choy & broccoli',                       cal:320,p:36,c:12,f:10,m:'RDC'},
+  // Thai-style
+  {n:'Thai Basil Chicken + Cauliflower Rice',   d:'150g chicken with Thai basil & chilli stir-fry + 1 cup cauliflower rice + side green salad',            cal:340,p:34,c:12,f:14,m:'RDC'},
+  {n:'Grilled Prawns + Mango Salad',            d:'150g grilled whole prawns + 2 cups green mango & herb salad with lime dressing',                        cal:310,p:30,c:18,f:8,m:'RDC'},
+  {n:'Larb Chicken Salad',                      d:'150g minced chicken with mint, lemongrass, lime & chilli served on lettuce cups',                       cal:300,p:32,c:10,f:12,m:'RDC'},
+  // Mexican-style
+  {n:'Chicken Fajita Bowl (No Rice)',            d:'150g grilled chicken strips + peppers & onion + ½ cup black beans + salsa + ¼ avocado — no rice',      cal:390,p:36,c:22,f:16,m:'RDC'},
+  {n:'Fish Taco (1) + Big Salad',               d:'1 corn tortilla + 120g grilled fish + cabbage + ¼ avocado + 2 cups leafy salad with lime dressing',    cal:370,p:28,c:26,f:14,m:'RDC'},
+  // American-style
+  {n:'Grilled Salmon + Roasted Veg',            d:'180g baked salmon + 200g roasted broccoli & asparagus with lemon-garlic + side salad',                 cal:400,p:40,c:10,f:22,m:'RDC'},
+  {n:'Herb Chicken + Kale Salad + Walnuts',     d:'150g herb-baked chicken breast + 2 cups kale with 15g walnuts, cranberries & balsamic dressing',       cal:400,p:38,c:14,f:18,m:'RDC'},
+  {n:'Garlic Shrimp + Zucchini Noodles',        d:'150g garlic shrimp + 200g zucchini noodles + cherry tomatoes + fresh basil',                           cal:320,p:30,c:10,f:16,m:'RDC'},
+  {n:'Tuna Niçoise Salad',                      d:'120g tuna + 2 boiled eggs + green beans + olives + cherry tomatoes + Dijon vinaigrette',               cal:380,p:36,c:12,f:20,m:'RDC'},
+ ]
+}
+};
+
+// ─────────────────────────────────────────────────────────────────────
+// LOGIC
+// ─────────────────────────────────────────────────────────────────────
+let dayIdx=new Date().getDay(), diet='veg', mode='R', picks={};
+const isVegDay=d=>VEG_DAYS.includes(d);
+const vegOn=()=>isVegDay(dayIdx)||diet==='veg';
+
+function pool(t){
+  const src=vegOn()?DB[t].veg:[...DB[t].veg,...DB[t].nonveg];
+  const f=src.filter(m=>m.m.includes(mode));
+  return f.length?f:src; // always fallback to full src so pool never empty
+}
+
+function rnd(arr){return arr[Math.floor(Math.random()*arr.length)]}
+
+// Remaining carb budget for slot t
+function carbBudget(t){
+  return CARB_CAP - TYPES.filter(x=>x!==t).reduce((s,x)=>s+(picks[x]?.c||0),0);
+}
+
+// Pick a random item within carb budget, different from cur
+// Falls back to lowest-carb if budget is too tight
+function pickBudgeted(t,cur){
+  const p=pool(t);
+  const budget=carbBudget(t);
+  const fits=p.filter(m=>m.c<=budget&&m.n!==cur?.n);
+  if(fits.length) return fits[Math.floor(Math.random()*fits.length)];
+  // fallback: any item that's different from cur, lowest carb first
+  const diff=p.filter(m=>m.n!==cur?.n);
+  if(diff.length) return diff.slice().sort((a,b)=>a.c-b.c)[0];
+  return p[0];
+}
+
+function seed(){
+  picks={};
+  const base=dayIdx*137+new Date().getDate()*31+(vegOn()?0:500)+(mode==='R'?0:mode==='D'?200:400);
+  TYPES.forEach((t,i)=>{
+    const p=pool(t);
+    const candidate=p[(base+i*73+i*i*11)%p.length];
+    const budget=carbBudget(t);
+    if(candidate.c<=budget){
+      picks[t]=candidate;
+    } else {
+      picks[t]=pickBudgeted(t,null);
+    }
+  });
+}
+
+function shuffleAll(){
+  picks={};
+  TYPES.forEach(t=>{picks[t]=pickBudgeted(t,null)});
+  render();
+}
+function swap(t){picks[t]=pickBudgeted(t,picks[t]);render()}
+function chgDay(d){dayIdx=(dayIdx+d+7)%7;seed();render()}
+function setMode(m){
+  mode=m;
+  ['R','D','C'].forEach(x=>document.getElementById('tab'+x).className='mode-tab'+(mode===x?' on':''));
+  seed();render();
+}
+function setDiet(d){
+  diet=d;
+  document.getElementById('btnVeg').className='diet-btn'+(d==='veg'?' veg-on':'');
+  document.getElementById('btnNv').className='diet-btn'+(d==='nv'?' nv-on':'');
+  seed();render();
+}
+
+function render(){
+  document.getElementById('dayLbl').textContent=DAYS[dayIdx];
+  document.getElementById('vegDot').style.display=isVegDay(dayIdx)?'flex':'none';
+  const tot=TYPES.reduce((s,t)=>s+(picks[t]?.cal||0),0);
+  const totP=TYPES.reduce((s,t)=>s+(picks[t]?.p||0),0);
+  const totC=TYPES.reduce((s,t)=>s+(picks[t]?.c||0),0);
+  const totF=TYPES.reduce((s,t)=>s+(picks[t]?.f||0),0);
+  document.getElementById('sKcal').textContent=tot;
+  document.getElementById('sPro').textContent=totP+'g';
+  const carbEl=document.getElementById('sCarb');
+  carbEl.textContent=totC+'g';
+  carbEl.style.color=totC>CARB_CAP?'#FF6B2B':'';
+  document.getElementById('sFat').textContent=totF+'g';
+  const pct=Math.min(100,Math.round(tot/1800*100));
+  const b=document.getElementById('calBar');
+  b.style.width=pct+'%';
+  const barCol=tot>1850?'#FF6B2B':tot>1700?'#FFD84D':'#00C06B';
+  b.style.background=barCol;
+  b.style.boxShadow=`0 0 10px ${barCol}80`;
+  document.getElementById('modeNote').textContent=MODE_NOTE[mode];
+  const wrap=document.getElementById('meals');wrap.innerHTML='';
+  TYPES.forEach(t=>{
+    const m=picks[t];if(!m)return;
+    const isNV=(DB[t].nonveg||[]).includes(m);
+    let tags='';
+    if(m.p>=20)tags+='<span class="tag t-pro">High Protein</span>';
+    if(m.c<20)tags+='<span class="tag t-lc">Low Carb</span>';
+    if(mode==='D')tags+='<span class="tag t-gi">Low GI</span>';
+    if(mode==='C')tags+='<span class="tag t-cheat">Cheat Day</span>';
+    tags+=`<span class="tag ${isNV?'t-nv':'t-veg'}">${isNV?'Non-Veg':'Veg'}</span>`;
+    const c=document.createElement('div');
+    c.className='card';c.setAttribute('data-t',t);
+    c.innerHTML=`
+<div class="card-inner">
+  <div class="card-accent"></div>
+  <div class="card-main">
+    <div class="card-body">
+      <div class="card-hd">
+        <div class="card-type"><div class="ct-dot"></div>${T_ICON[t]} ${T_LBL[t]}</div>
+        <span class="card-kcal">${m.cal} kcal</span>
+      </div>
+      <div class="card-name">${m.n}</div>
+      <div class="card-desc">${m.d}</div>
+      <div class="card-ft">
+        <div class="tags">${tags}</div>
+        <button class="swap-btn" onclick="swap('${t}')">⟳ Swap</button>
+      </div>
+    </div>
+    <div class="card-macros">
+      <div class="cmac"><strong>${m.p}g</strong>Protein</div>
+      <div class="cmac"><strong>${m.c}g</strong>Carbs</div>
+      <div class="cmac"><strong>${m.f}g</strong>Fat</div>
+    </div>
+  </div>
+</div>`;
+    wrap.appendChild(c);
+  });
+}
+
+window.shuffleAll=shuffleAll;window.swap=swap;window.chgDay=chgDay;window.setMode=setMode;window.setDiet=setDiet;
+seed();render();
+</script>
+</body>
+</html>
