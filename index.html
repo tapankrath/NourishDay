@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EatRight">
 <meta name="theme-color" content="#16181F">
-<meta name="description" content="Daily meal plans — high protein, low carb. Regular, diabetic & cheat-day modes.">
+<meta name="description" content="Daily meal plans — high protein, low carb. Regular, Low-GI & Treat Day modes.">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
@@ -16,95 +16,55 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  /* Backgrounds — warm off-white / soft stone */
-  --night:#F7F4EF;--deep:#EDE9E2;--card:#FFFFFF;--bg:#F0EDE6;
-
-  /* Primary accent — muted sage green, calm and natural */
-  --accent:#5C7A5C;
-  --accent2:#7A9E7A;
-  --accent-dim:rgba(92,122,92,.12);
-  --accent-border:rgba(92,122,92,.22);
-
-  /* Meal type colors — softened, easy on the eye */
-  --orange:#B5764A;--blue:#4A7BA8;--teal:#3D8C82;--purple:#7A5EA8;
-
-  --ink:#1E2820;--ink2:rgba(30,40,32,.68);--ink3:rgba(30,40,32,.42);--ink4:rgba(30,40,32,.07);
-  --border:rgba(92,122,92,.14);--border2:rgba(92,122,92,.22);
-  --frame:rgba(92,122,92,.18);
-
-  /* backwards compat aliases */
-  --green:#5C7A5C;--lime:#7A9E7A;
+  --night:#141C22;--deep:#1A2530;--card:#182030;--bg:#0F161C;
+  --accent:#0A6E9A;
+  --accent2:#38BDF8;
+  --accent-dim:rgba(56,189,248,.12);
+  --accent-border:rgba(56,189,248,.20);
+  --orange:#C07A4A;--blue:#0A6E9A;--teal:#2A9D8F;--purple:#7B6FC4;
+  --ink:#E2EBF0;--ink2:rgba(226,235,240,.70);--ink3:rgba(226,235,240,.38);--ink4:rgba(226,235,240,.08);
+  --border:rgba(56,189,248,.10);--border2:rgba(56,189,248,.18);
+  --frame:rgba(56,189,248,.14);
+  --green:#0A6E9A;--lime:#38BDF8;
 }
-html,body{
-  background:var(--bg);
-  font-family:'Nunito',system-ui,sans-serif;
-  color:var(--ink);min-height:100%;
-  overscroll-behavior:none;
-}
+html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100%;overscroll-behavior:none}
 
-/* ── PAGE FRAME ── */
-/* On wider screens the app gets a visible border/glow */
 .app{
-  max-width:420px;
-  margin:0 auto;
-  padding-bottom:56px;
-  position:relative;
-  box-shadow:
-    0 0 0 1px var(--frame),
-    0 0 40px rgba(92,122,92,.08);
-  min-height:100vh;
-  background:var(--night);
+  max-width:420px;margin:0 auto;padding-bottom:56px;position:relative;
+  box-shadow:0 0 0 1px var(--frame),0 0 40px rgba(56,189,248,.05);
+  min-height:100vh;background:var(--night);
 }
-/* soft sage top edge */
 .app::before{
-  content:'';
-  position:fixed;
-  top:0;left:50%;
-  transform:translateX(-50%);
-  width:min(420px,100vw);
-  height:2px;
-  background:linear-gradient(90deg,transparent 5%,var(--teal) 30%,var(--accent) 55%,var(--accent2) 75%,transparent 95%);
-  opacity:.6;
-  z-index:10;
-  pointer-events:none;
+  content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
+  width:min(420px,100vw);height:2px;
+  background:linear-gradient(90deg,transparent 5%,var(--teal) 25%,var(--accent2) 55%,rgba(125,211,248,.6) 75%,transparent 95%);
+  opacity:.5;z-index:10;pointer-events:none;
 }
 
-/* ── HEADER ── */
 .status-bar-spacer{background:var(--night);height:max(env(safe-area-inset-top),44px)}
 .hdr{background:var(--night);padding:10px 14px 0;position:relative}
-.hdr::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:.3;
-}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.15;}
 
 .logo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .logo{display:flex;align-items:center;gap:9px}
 .logo-mark{
-  width:38px;height:38px;background:var(--green);border-radius:11px;
+  width:38px;height:38px;background:var(--accent);border-radius:11px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 2px 10px rgba(92,122,92,.35);
+  box-shadow:0 2px 14px rgba(10,110,154,.40);
 }
 .logo-mark svg{width:22px;height:22px}
-.logo-name{
-  font-size:24px;font-weight:900;color:var(--ink);
-  letter-spacing:-.8px;line-height:1;
-}
-.logo-sub{
-  font-size:9px;font-weight:800;color:var(--green);
-  margin-top:2px;letter-spacing:.12em;text-transform:uppercase;
-}
+.logo-name{font-size:24px;font-weight:900;color:var(--ink);letter-spacing:-.8px;line-height:1}
+.logo-sub{font-size:9px;font-weight:800;color:var(--accent2);margin-top:2px;letter-spacing:.12em;text-transform:uppercase}
 
-/* Mode tabs */
-.mode-tabs{display:flex;background:rgba(0,0,0,.06);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4)}
+.mode-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4)}
 .mode-tab{
   padding:6px 10px;border-radius:7px;border:none;cursor:pointer;
   font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
   color:var(--ink3);background:none;transition:all .18s;
   white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;
 }
-.mode-tab.on{background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(92,122,92,.40)}
+.mode-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(10,110,154,.40)}
 
-/* ── SUBNAV ── */
 .subnav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 10px}
 .diet-row{display:flex;gap:5px}
 .diet-btn{
@@ -113,58 +73,48 @@ html,body{
   font-family:'Nunito',sans-serif;color:var(--ink3);background:none;
   transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
 }
-.diet-btn.veg-on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 8px rgba(92,122,92,.35)}
-.diet-btn.nv-on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 8px rgba(181,118,74,.3)}
+.diet-btn.veg-on{background:var(--teal);color:#fff;border-color:var(--teal);box-shadow:0 2px 10px rgba(42,157,143,.35)}
+.diet-btn.nv-on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 10px rgba(192,122,74,.30)}
 
 .day-nav{display:flex;align-items:center;gap:6px}
 .day-arrow{
   width:28px;height:28px;border-radius:7px;border:1.5px solid var(--border2);
-  background:none;color:var(--green);cursor:pointer;font-size:17px;
+  background:none;color:var(--accent2);cursor:pointer;font-size:17px;
   display:flex;align-items:center;justify-content:center;transition:all .14s;
 }
 .day-arrow:active{background:var(--border);transform:scale(.9)}
 .day-lbl{font-size:15px;font-weight:900;color:var(--ink);min-width:82px;text-align:center;letter-spacing:-.2px}
 .veg-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 5px var(--teal);display:none;flex-shrink:0;margin-left:-3px}
 
-/* ── STATS ── */
 .stats-zone{background:var(--deep);border-top:1px solid var(--ink4);border-bottom:1px solid var(--ink4)}
 .stats{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;padding:10px 14px 8px}
 .stats-sep{background:var(--ink4);margin:3px 0}
 .stat{padding:2px 6px;text-align:center}
-.stat-val{
-  font-size:22px;font-weight:900;color:var(--ink);
-  display:block;letter-spacing:-.8px;line-height:1;
-}
-.stat-val.hi{color:var(--green)}
-.stat-lbl{
-  font-size:8px;font-weight:800;color:var(--ink3);
-  text-transform:uppercase;letter-spacing:.12em;margin-top:2px;display:block;
-}
+.stat-val{font-size:22px;font-weight:900;color:var(--ink);display:block;letter-spacing:-.8px;line-height:1}
+.stat-val.hi{color:var(--accent2)}
+.stat-lbl{font-size:8px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-top:2px;display:block}
 
-/* ── CAL BAR ── */
 .cal-bar-zone{background:var(--deep);padding:0 14px 10px}
-.cal-bar-track{height:5px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden}
+.cal-bar-track{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
 .cal-bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
 
-/* ── BODY ── */
 .body{padding:10px 12px 0}
 .shuffle-btn{
-  width:100%;padding:12px;background:var(--green);border:none;border-radius:12px;
+  width:100%;padding:12px;background:var(--accent);border:none;border-radius:12px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
   font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;
   color:#fff;letter-spacing:.05em;text-transform:uppercase;
-  box-shadow:0 3px 12px rgba(92,122,92,.28);transition:all .16s;margin-bottom:10px;
+  box-shadow:0 3px 16px rgba(10,110,154,.35);transition:all .16s;margin-bottom:10px;
 }
-.shuffle-btn:active{transform:scale(.97) translateY(1px);box-shadow:0 1px 6px rgba(92,122,92,.18)}
+.shuffle-btn:active{transform:scale(.97) translateY(1px)}
 .s-ico{font-size:17px;display:inline-block;transition:transform .4s}
 .shuffle-btn:active .s-ico{transform:rotate(180deg)}
 .mode-note{
   font-size:10.5px;font-weight:700;color:var(--ink3);text-align:center;
-  margin-bottom:10px;letter-spacing:.03em;
-  background:var(--ink4);border-radius:7px;padding:6px 12px;border:1px solid var(--border);
+  margin-bottom:10px;background:var(--ink4);border-radius:7px;
+  padding:6px 12px;border:1px solid var(--border);
 }
 
-/* ── CARDS ── */
 .meals{display:flex;flex-direction:column;gap:9px}
 .card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;transition:transform .13s}
 .card:active{transform:scale(.99)}
@@ -173,122 +123,91 @@ html,body{
 .card-main{flex:1;min-width:0}
 .card-body{padding:11px 12px 10px}
 .card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
-.card-type{
-  font-size:9.5px;font-weight:900;letter-spacing:.12em;
-  text-transform:uppercase;display:flex;align-items:center;gap:5px;
-}
+.card-type{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
 .ct-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .card-kcal{font-size:11.5px;font-weight:900;padding:3px 9px;border-radius:20px;letter-spacing:.02em}
-
-/* BIGGER, BOLDER meal name */
-.card-name{
-  font-size:19px;font-weight:900;color:var(--ink);
-  line-height:1.15;margin-bottom:4px;letter-spacing:-.5px;
-}
-.card-desc{font-size:11.5px;font-weight:600;color:var(--ink);opacity:.78;line-height:1.5}
-
+.card-name{font-size:19px;font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:4px;letter-spacing:-.5px}
+.card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.5}
 .card-ft{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid var(--ink4)}
 .tags{display:flex;gap:3px;flex-wrap:wrap;flex:1;min-width:0}
-.tag{
-  font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;
-  letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;
-}
-.t-pro{background:rgba(74,123,168,.10);color:#2E5C82;border:1px solid rgba(74,123,168,.20)}
-.t-lc{background:rgba(92,122,92,.10);color:#3A5C3A;border:1px solid rgba(92,122,92,.20)}
-.t-gi{background:rgba(181,118,74,.10);color:#6A4020;border:1px solid rgba(181,118,74,.20)}
-.t-cheat{background:rgba(181,100,60,.10);color:#7A3A18;border:1px solid rgba(181,100,60,.20)}
-.t-veg{background:rgba(61,140,130,.10);color:#1A5C52;border:1px solid rgba(61,140,130,.20)}
-.t-nv{background:rgba(181,118,74,.10);color:#6A4020;border:1px solid rgba(181,118,74,.20)}
+.tag{font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+.t-pro{background:rgba(56,189,248,.12);color:#7DD3F8;border:1px solid rgba(56,189,248,.20)}
+.t-lc{background:rgba(42,157,143,.13);color:#5BBFB5;border:1px solid rgba(42,157,143,.22)}
+.t-gi{background:rgba(192,122,74,.13);color:#D4A47A;border:1px solid rgba(192,122,74,.22)}
+.t-cheat{background:rgba(123,111,196,.13);color:#A89FD8;border:1px solid rgba(123,111,196,.22)}
+.t-veg{background:rgba(42,157,143,.13);color:#5BBFB5;border:1px solid rgba(42,157,143,.22)}
+.t-nv{background:rgba(192,122,74,.13);color:#D4A47A;border:1px solid rgba(192,122,74,.22)}
 .swap-btn{
   flex-shrink:0;background:transparent;border:1.5px solid var(--border2);
-  color:var(--green);font-size:9.5px;font-weight:900;
+  color:var(--accent2);font-size:9.5px;font-weight:900;
   padding:4px 10px;border-radius:7px;cursor:pointer;
   font-family:'Nunito',sans-serif;letter-spacing:.05em;text-transform:uppercase;
   display:flex;align-items:center;gap:3px;transition:all .14s;margin-left:6px;
 }
 .swap-btn:active{transform:scale(.92);background:var(--border)}
 
-/* Macros */
 .card-macros{background:var(--deep);padding:8px 12px;display:flex;border-top:1px solid var(--ink4)}
 .cmac{flex:1;text-align:center;font-size:9px;font-weight:800;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
 .cmac strong{display:block;font-size:15px;font-weight:900;color:var(--ink);letter-spacing:-.4px;line-height:1.1;margin-bottom:1px}
 .cmac+.cmac{border-left:1px solid var(--ink4)}
 
-/* Meal type themes */
-[data-t=breakfast] .card-accent{background:#B5764A;box-shadow:2px 0 8px rgba(181,118,74,.25)}
-[data-t=breakfast] .card-type{color:#8A5430}
-[data-t=breakfast] .ct-dot{background:#B5764A}
-[data-t=breakfast] .card-kcal{background:rgba(181,118,74,.10);color:#8A5430;border:1px solid rgba(181,118,74,.20)}
-[data-t=lunch] .card-accent{background:#4A7BA8;box-shadow:2px 0 8px rgba(74,123,168,.25)}
-[data-t=lunch] .card-type{color:#2E5C82}
-[data-t=lunch] .ct-dot{background:#4A7BA8}
-[data-t=lunch] .card-kcal{background:rgba(74,123,168,.10);color:#2E5C82;border:1px solid rgba(74,123,168,.20)}
-[data-t=snacks] .card-accent{background:#3D8C82;box-shadow:2px 0 8px rgba(61,140,130,.25)}
-[data-t=snacks] .card-type{color:#266B62}
-[data-t=snacks] .ct-dot{background:#3D8C82}
-[data-t=snacks] .card-kcal{background:rgba(61,140,130,.10);color:#266B62;border:1px solid rgba(61,140,130,.20)}
-[data-t=dinner] .card-accent{background:#7A5EA8;box-shadow:2px 0 8px rgba(122,94,168,.25)}
-[data-t=dinner] .card-type{color:#5A3E88}
-[data-t=dinner] .ct-dot{background:#7A5EA8}
-[data-t=dinner] .card-kcal{background:rgba(122,94,168,.10);color:#5A3E88;border:1px solid rgba(122,94,168,.20)}
-[data-t=beverage] .card-accent{background:#8C7040;box-shadow:2px 0 8px rgba(140,112,64,.25)}
-[data-t=beverage] .card-type{color:#6A5020}
-[data-t=beverage] .ct-dot{background:#8C7040}
-[data-t=beverage] .card-kcal{background:rgba(140,112,64,.10);color:#6A5020;border:1px solid rgba(140,112,64,.20)}
+[data-t=breakfast] .card-accent{background:#C07A4A;box-shadow:2px 0 10px rgba(192,122,74,.28)}
+[data-t=breakfast] .card-type{color:#D4A47A}
+[data-t=breakfast] .ct-dot{background:#C07A4A}
+[data-t=breakfast] .card-kcal{background:rgba(192,122,74,.12);color:#D4A47A;border:1px solid rgba(192,122,74,.20)}
+[data-t=lunch] .card-accent{background:#0A6E9A;box-shadow:2px 0 10px rgba(10,110,154,.35)}
+[data-t=lunch] .card-type{color:#38BDF8}
+[data-t=lunch] .ct-dot{background:#0A6E9A}
+[data-t=lunch] .card-kcal{background:rgba(56,189,248,.12);color:#7DD3F8;border:1px solid rgba(56,189,248,.20)}
+[data-t=snacks] .card-accent{background:#2A9D8F;box-shadow:2px 0 10px rgba(42,157,143,.30)}
+[data-t=snacks] .card-type{color:#5BBFB5}
+[data-t=snacks] .ct-dot{background:#2A9D8F}
+[data-t=snacks] .card-kcal{background:rgba(42,157,143,.12);color:#5BBFB5;border:1px solid rgba(42,157,143,.20)}
+[data-t=dinner] .card-accent{background:#7B6FC4;box-shadow:2px 0 10px rgba(123,111,196,.30)}
+[data-t=dinner] .card-type{color:#A89FD8}
+[data-t=dinner] .ct-dot{background:#7B6FC4}
+[data-t=dinner] .card-kcal{background:rgba(123,111,196,.12);color:#A89FD8;border:1px solid rgba(123,111,196,.20)}
+[data-t=beverage] .card-accent{background:#1A6B8A;box-shadow:2px 0 10px rgba(26,107,138,.28)}
+[data-t=beverage] .card-type{color:#5AAEC4}
+[data-t=beverage] .ct-dot{background:#1A6B8A}
+[data-t=beverage] .card-kcal{background:rgba(26,107,138,.12);color:#5AAEC4;border:1px solid rgba(26,107,138,.20)}
 
-/* ── CHECKED STATE ── */
-.card.checked{
-  border-color:var(--green);
-  background:rgba(92,122,92,.06);
-}
-.card.checked .card-name{text-decoration:line-through;opacity:.5}
-.card.checked .card-desc{opacity:.45}
+.card.checked{border-color:rgba(42,157,143,.45);background:rgba(42,157,143,.06)}
+.card.checked .card-name{text-decoration:line-through;opacity:.45}
+.card.checked .card-desc{opacity:.35}
 
-/* ── CHECK BUTTON — SQUARE ── */
 .check-btn{
-  flex-shrink:0;
-  width:26px;height:26px;border-radius:6px;
-  border:2px solid var(--border2);
-  background:rgba(0,0,0,.03);
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .18s;margin-left:6px;
-  font-size:0;
+  flex-shrink:0;width:26px;height:26px;border-radius:6px;
+  border:2px solid var(--border2);background:rgba(255,255,255,.03);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .18s;margin-left:6px;font-size:0;
 }
 .check-btn.done{
-  background:var(--green);
-  border-color:var(--green);
-  box-shadow:0 2px 8px rgba(92,122,92,.35);
-  font-size:13px;font-weight:900;color:#fff;
-  font-family:'Nunito',sans-serif;
+  background:var(--teal);border-color:var(--teal);
+  box-shadow:0 2px 8px rgba(42,157,143,.40);
+  font-size:13px;font-weight:900;color:#fff;font-family:'Nunito',sans-serif;
 }
 .check-btn.done::after{content:'✓'}
-.check-btn:not(.done):hover{border-color:var(--green);background:rgba(92,122,92,.08)}
+.check-btn:not(.done):hover{border-color:var(--border2);background:rgba(255,255,255,.06)}
 .check-btn:active{transform:scale(.84)}
 
-/* ── BEVERAGE PICKER ── */
-.bev-card{
-  background:var(--card);border-radius:14px;
-  border:1px solid rgba(140,112,64,.20);
-  overflow:hidden;
-}
+.bev-card{background:var(--card);border-radius:14px;border:1px solid rgba(26,107,138,.20);overflow:hidden}
 .bev-inner{display:flex;align-items:stretch}
-.bev-accent{width:4px;background:#8C7040;box-shadow:2px 0 8px rgba(140,112,64,.25);flex-shrink:0}
+.bev-accent{width:4px;background:#1A6B8A;box-shadow:2px 0 8px rgba(26,107,138,.28);flex-shrink:0}
 .bev-body{flex:1;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .bev-label{display:flex;align-items:center;gap:6px}
-.bev-title{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#6A5020}
-.bev-name{font-size:16px;font-weight:900;color:var(--ink);letter-spacing:-.3px}
+.bev-title{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#5AAEC4}
+.bev-name{font-size:16px;font-weight:900;color:var(--ink);letter-spacing:-.3px;cursor:pointer}
 .bev-right{display:flex;align-items:center;gap:6px}
 .bev-pills{display:flex;gap:4px;flex-wrap:wrap}
 .bev-pill{
-  padding:4px 10px;border-radius:20px;border:1.5px solid rgba(140,112,64,.25);
-  background:none;color:rgba(106,80,32,.55);
+  padding:4px 10px;border-radius:20px;border:1.5px solid rgba(56,189,248,.16);
+  background:none;color:var(--ink3);
   font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
   cursor:pointer;transition:all .15s;letter-spacing:.04em;
 }
-.bev-pill.on{background:#8C7040;color:#fff;border-color:#8C7040;box-shadow:0 2px 6px rgba(140,112,64,.30)}
+.bev-pill.on{background:#0A6E9A;color:#fff;border-color:#0A6E9A;box-shadow:0 1px 8px rgba(10,110,154,.30)}
 
-/* ── LOG BUTTON ── */
 .log-btn-row{padding:10px 12px 0;display:flex;gap:8px}
 .log-btn{
   flex:1;padding:11px;border-radius:12px;border:none;cursor:pointer;
@@ -296,80 +215,35 @@ html,body{
   letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
   display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.log-btn.save{background:var(--green);color:#fff;box-shadow:0 3px 10px rgba(92,122,92,.30)}
+.log-btn.save{background:var(--accent);color:#fff;box-shadow:0 3px 14px rgba(10,110,154,.32)}
 .log-btn.save:active{transform:scale(.97)}
 .log-btn.history{background:var(--ink4);color:var(--ink2);border:1px solid var(--border2)}
 .log-btn.history:active{transform:scale(.97)}
 
-/* ── LOG HISTORY PANEL ── */
-.log-panel{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.7);
-  backdrop-filter:blur(6px);
-  z-index:100;display:none;
-  align-items:flex-end;
-  justify-content:center;
-}
+.log-panel{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);z-index:100;display:none;align-items:flex-end;justify-content:center}
 .log-panel.open{display:flex}
-.log-sheet{
-  background:var(--night);
-  border:1px solid var(--frame);
-  border-radius:20px 20px 0 0;
-  width:100%;max-width:420px;
-  max-height:88vh;
-  display:flex;flex-direction:column;
-  overflow:hidden;
-}
-.log-sheet-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 16px 12px;border-bottom:1px solid var(--ink4);
-  flex-shrink:0;
-}
+.log-sheet{background:var(--night);border:1px solid var(--frame);border-radius:20px 20px 0 0;width:100%;max-width:420px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.log-sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0}
 .log-sheet-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
 .log-actions{display:flex;gap:8px;align-items:center}
-.log-export-btn{
-  padding:6px 14px;border-radius:8px;background:var(--green);
-  border:none;cursor:pointer;font-family:'Nunito',sans-serif;
-  font-size:10px;font-weight:900;color:#fff;letter-spacing:.05em;text-transform:uppercase;
-}
-.log-close-btn{
-  width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);
-  background:none;color:var(--ink3);font-size:18px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
+.log-export-btn{padding:6px 14px;border-radius:8px;background:var(--accent);border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:#fff;letter-spacing:.05em;text-transform:uppercase}
+.log-close-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;color:var(--ink3);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .log-list{overflow-y:auto;flex:1;padding:12px}
 .log-empty{text-align:center;padding:40px 20px;color:var(--ink3);font-size:13px;font-weight:700}
-
-/* Log entry */
-.log-entry{
-  background:var(--card);border-radius:12px;border:1px solid var(--border);
-  margin-bottom:10px;overflow:hidden;
-}
-.log-entry-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 12px 8px;border-bottom:1px solid var(--ink4);
-}
+.log-entry{background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden}
+.log-entry-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 8px;border-bottom:1px solid var(--ink4)}
 .log-date{font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.2px}
-.log-kcal{font-size:11px;font-weight:800;color:var(--green)}
-.log-del-btn{
-  width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,107,43,.3);
-  background:none;color:rgba(255,107,43,.7);font-size:14px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all .14s;
-}
-.log-del-btn:active{background:rgba(255,107,43,.2);transform:scale(.88)}
+.log-kcal{font-size:11px;font-weight:800;color:var(--accent2)}
+.log-del-btn{width:26px;height:26px;border-radius:50%;border:1px solid rgba(192,122,74,.28);background:none;color:rgba(192,122,74,.7);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s}
+.log-del-btn:active{background:rgba(192,122,74,.14);transform:scale(.88)}
 .log-meals{padding:8px 12px 10px;display:flex;flex-direction:column;gap:4px}
 .log-meal-row{display:flex;align-items:baseline;gap:6px}
 .log-meal-icon{font-size:12px;flex-shrink:0}
 .log-meal-name{font-size:12px;font-weight:700;color:var(--ink2);flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .log-meal-cal{font-size:10px;font-weight:800;color:var(--ink3);flex-shrink:0}
 
-/* ── FOOTER ── */
-.footer{
-  text-align:center;padding:18px 14px 0;
-  font-size:9.5px;font-weight:800;color:var(--ink3);
-  letter-spacing:.07em;line-height:2;text-transform:uppercase;
-}
-.footer span{color:var(--green);font-weight:900}
+.footer{text-align:center;padding:18px 14px 0;font-size:9.5px;font-weight:800;color:var(--ink3);letter-spacing:.07em;line-height:2;text-transform:uppercase}
+.footer span{color:var(--accent2);font-weight:900}
 </style>
 </head>
 <body>
@@ -381,13 +255,13 @@ html,body{
     <div class="logo">
       <div class="logo-mark">
         <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="8"  cy="10" r="5" fill="rgba(255,255,255,0.3)"/><circle cx="8"  cy="10" r="3.5" fill="rgba(255,255,255,0.9)"/>
-          <circle cx="18" cy="10" r="5" fill="rgba(255,255,255,0.3)"/><circle cx="18" cy="10" r="3.5" fill="rgba(255,255,255,0.9)"/>
-          <circle cx="13" cy="18" r="5" fill="rgba(255,255,255,0.3)"/><circle cx="13" cy="18" r="3.5" fill="rgba(255,255,255,0.9)"/>
-          <circle cx="8"  cy="10" r="2.4" fill="#3D8C82"/>
-          <circle cx="18" cy="10" r="2.4" fill="#B5764A"/>
-          <circle cx="13" cy="18" r="2.4" fill="#7A5EA8"/>
-          <circle cx="13" cy="13" r="2.8" fill="rgba(255,255,255,0.25)"/><circle cx="13" cy="13" r="1.6" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="8"  cy="10" r="5" fill="#141C22"/><circle cx="8"  cy="10" r="3.5" fill="#E2EBF0"/>
+          <circle cx="18" cy="10" r="5" fill="#141C22"/><circle cx="18" cy="10" r="3.5" fill="#E2EBF0"/>
+          <circle cx="13" cy="18" r="5" fill="#141C22"/><circle cx="13" cy="18" r="3.5" fill="#E2EBF0"/>
+          <circle cx="8"  cy="10" r="2.4" fill="#2A9D8F"/>
+          <circle cx="18" cy="10" r="2.4" fill="#C07A4A"/>
+          <circle cx="13" cy="18" r="2.4" fill="#7B6FC4"/>
+          <circle cx="13" cy="13" r="2.8" fill="#141C22"/><circle cx="13" cy="13" r="1.6" fill="#38BDF8"/>
         </svg>
       </div>
       <div>
@@ -397,7 +271,8 @@ html,body{
     </div>
     <div class="mode-tabs">
       <button class="mode-tab on" id="tabR" onclick="setMode('R')">Regular</button>
-      <button class="mode-tab"    id="tabC" onclick="setMode('C')">Cheat Day</button>
+      <button class="mode-tab"    id="tabD" onclick="setMode('D')">Low-GI</button>
+      <button class="mode-tab"    id="tabC" onclick="setMode('C')">Treat Day</button>
     </div>
   </div>
   <div class="subnav">
@@ -484,10 +359,11 @@ const TYPES=['breakfast','lunch','snacks','dinner'];
 const T_ICON={breakfast:'🌅',lunch:'☀️',snacks:'🍊',dinner:'🌙'};
 const T_LBL={breakfast:'Breakfast',lunch:'Lunch',snacks:'Snack',dinner:'Dinner'};
 const CARB_CAP=130; // daily soft target — shown in stats, turns orange if exceeded
-const CAL_TARGET={R:1900, C:2500}; // per-mode calorie targets
+const CAL_TARGET={R:1900, D:1600, C:2500}; // per-mode calorie targets
 const MODE_NOTE={
-  R:'Regular · 1900 kcal target · high protein · moderate carbs · healthy fats',
-  C:'Cheat Day · 2500 kcal · enjoy it — back on track tomorrow 💪'
+  R:'Regular · 1900 kcal · high protein · moderate carbs · healthy fats',
+  D:'Low-GI · 1600 kcal · controlled carbs · high fibre · no refined sugar',
+  C:'Treat Day · 2500 kcal · enjoy it — back on track tomorrow 💪'
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -846,7 +722,7 @@ function toggleCheck(t){
 function chgDay(d){dayIdx=(dayIdx+d+7)%7;seed();render()}
 function setMode(m){
   mode=m;
-  ['R','C'].forEach(x=>document.getElementById('tab'+x).className='mode-tab'+(mode===x?' on':''));
+  ['R','D','C'].forEach(x=>document.getElementById('tab'+x).className='mode-tab'+(mode===x?' on':''));
   seed();render();
 }
 function setDiet(d){
@@ -868,13 +744,13 @@ function render(){
   document.getElementById('sPro').textContent=totP+'g';
   const carbEl=document.getElementById('sCarb');
   carbEl.textContent=totC+'g';
-  carbEl.style.color=totC>CARB_CAP?'#FF6B2B':'';
+  carbEl.style.color=totC>CARB_CAP?'#C05040':'';
   document.getElementById('sFat').textContent=totF+'g';
   const calTarget=CAL_TARGET[mode];
   const pct=Math.min(100,Math.round(tot/calTarget*100));
   const b=document.getElementById('calBar');
   b.style.width=pct+'%';
-  const barCol=tot>calTarget*1.05?'#B5764A':tot>calTarget*0.9?'#8C7040':'#5C7A5C';
+  const barCol=tot>calTarget*1.05?'#C05040':tot>calTarget*0.9?'#8A9A40':'#0A6E9A';
   b.style.background=barCol;
   b.style.boxShadow=`0 0 6px ${barCol}50`;
   document.getElementById('modeNote').textContent=MODE_NOTE[mode];
@@ -887,7 +763,7 @@ function render(){
     if(m.p>=20)tags+='<span class="tag t-pro">High Protein</span>';
     if(m.c<20)tags+='<span class="tag t-lc">Low Carb</span>';
     if(mode==='D')tags+='<span class="tag t-gi">Low GI</span>';
-    if(mode==='C')tags+='<span class="tag t-cheat">Cheat Day</span>';
+    if(mode==='C')tags+='<span class="tag t-cheat">Treat Day</span>';
     tags+=`<span class="tag ${isNV?'t-nv':'t-veg'}">${isNV?'Non-Veg':'Veg'}</span>`;
     const c=document.createElement('div');
     c.className='card'+(isDone?' checked':'');
@@ -961,7 +837,7 @@ function logDay(){
   // visual feedback
   const btn=document.querySelector('.log-btn.save');
   const orig=btn.innerHTML;
-  btn.innerHTML='✅ Logged!';btn.style.background='#5C7A5C';
+  btn.innerHTML='✅ Logged!';btn.style.background='#2A9D8F';
   setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},1800);
 }
 
@@ -994,7 +870,7 @@ function renderLogList(){
   <div class="log-entry-hdr">
     <div>
       <div class="log-date">${e.date}</div>
-      <div style="font-size:10px;color:var(--ink3);font-weight:700;margin-top:2px">${e.mode==='R'?'Regular':e.mode==='D'?'Diabetic':'Cheat'} · ${e.diet==='veg'?'🌿 Veg':'🍗 Non-Veg'}</div>
+      <div style="font-size:10px;color:var(--ink3);font-weight:700;margin-top:2px">${e.mode==='R'?'Regular':e.mode==='D'?'Low-GI':'Treat Day'} · ${e.diet==='veg'?'🌿 Veg':'🍗 Non-Veg'}</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span class="log-kcal">${e.totalCal} kcal</span>
@@ -1018,7 +894,7 @@ function exportLog(){
   let txt='EatRight — Day Log Export\n';
   txt+='='.repeat(40)+'\n\n';
   log.forEach(e=>{
-    txt+=`📅 ${e.date}  [${e.mode==='R'?'Regular':e.mode==='D'?'Diabetic':'Cheat'} · ${e.diet==='veg'?'Veg':'Non-Veg'}]\n`;
+    txt+=`📅 ${e.date}  [${e.mode==='R'?'Regular':e.mode==='D'?'Low-GI':'Treat Day'} · ${e.diet==='veg'?'Veg':'Non-Veg'}]\n`;
     txt+=`Total: ${e.totalCal} kcal\n`;
     e.meals.forEach(m=>{
       txt+=`  ${m.done?'✓':' '} ${m.icon} ${m.name}  (${m.cal} kcal)\n`;
