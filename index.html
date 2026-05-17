@@ -121,15 +121,20 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .card-inner{display:flex;min-height:0}
 .card-accent{width:4px;flex-shrink:0}
 .card-main{flex:1;min-width:0}
-.card-body{padding:11px 12px 10px}
+.card-body{padding:11px 12px 8px}
 .card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
 .card-type{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
 .ct-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .card-kcal{font-size:11.5px;font-weight:900;padding:3px 9px;border-radius:20px;letter-spacing:.02em}
 .card-name{font-size:19px;font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:4px;letter-spacing:-.5px}
 .card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.5}
-.card-ft{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid var(--ink4)}
-.tags{display:flex;gap:3px;flex-wrap:wrap;flex:1;min-width:0}
+.card-ft{
+  display:flex;align-items:center;
+  padding:7px 12px;
+  border-top:1px solid var(--ink4);
+  gap:6px;
+}
+.tags{display:flex;gap:3px;flex-wrap:nowrap;flex-shrink:0;min-width:0;overflow:hidden}
 .tag{font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
 .t-pro{background:rgba(56,189,248,.12);color:#7DD3F8;border:1px solid rgba(56,189,248,.20)}
 .t-lc{background:rgba(42,157,143,.13);color:#5BBFB5;border:1px solid rgba(42,157,143,.22)}
@@ -137,19 +142,25 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .t-cheat{background:rgba(123,111,196,.13);color:#A89FD8;border:1px solid rgba(123,111,196,.22)}
 .t-veg{background:rgba(42,157,143,.13);color:#5BBFB5;border:1px solid rgba(42,157,143,.22)}
 .t-nv{background:rgba(192,122,74,.13);color:#D4A47A;border:1px solid rgba(192,122,74,.22)}
+
+/* Macro pills — inline in the footer bar */
+.macros{display:flex;gap:0;flex:1;justify-content:flex-end;align-items:center}
+.mac{
+  display:flex;align-items:baseline;gap:2px;
+  padding:0 8px;font-size:9px;font-weight:700;
+  color:var(--ink3);letter-spacing:.04em;text-transform:uppercase;
+}
+.mac+.mac{border-left:1px solid var(--ink4)}
+.mac strong{font-size:12px;font-weight:900;color:var(--ink);letter-spacing:-.3px}
+
 .swap-btn{
   flex-shrink:0;background:transparent;border:1.5px solid var(--border2);
   color:var(--accent2);font-size:9.5px;font-weight:900;
-  padding:4px 10px;border-radius:7px;cursor:pointer;
+  padding:3px 9px;border-radius:7px;cursor:pointer;
   font-family:'Nunito',sans-serif;letter-spacing:.05em;text-transform:uppercase;
-  display:flex;align-items:center;gap:3px;transition:all .14s;margin-left:6px;
+  display:flex;align-items:center;gap:3px;transition:all .14s;
 }
 .swap-btn:active{transform:scale(.92);background:var(--border)}
-
-.card-macros{background:var(--deep);padding:8px 12px;display:flex;border-top:1px solid var(--ink4)}
-.cmac{flex:1;text-align:center;font-size:9px;font-weight:800;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
-.cmac strong{display:block;font-size:15px;font-weight:900;color:var(--ink);letter-spacing:-.4px;line-height:1.1;margin-bottom:1px}
-.cmac+.cmac{border-left:1px solid var(--ink4)}
 
 [data-t=breakfast] .card-accent{background:#C07A4A;box-shadow:2px 0 10px rgba(192,122,74,.28)}
 [data-t=breakfast] .card-type{color:#D4A47A}
@@ -668,23 +679,45 @@ document.getElementById('bevName').style.cursor='pointer';
 document.getElementById('bevName').addEventListener('click',swapBev);
 
 // ── MEAL POOL & PICK ──
+// For nonveg: pool = nonveg items only (with veg as fallback if pool too small)
+// This ensures nonveg users always see nonveg meals
 function pool(t){
-  const src=vegOn()?DB[t].veg:[...DB[t].veg,...DB[t].nonveg];
-  const f=src.filter(m=>m.m.includes(mode));
-  return f.length?f:src;
+  if(vegOn()){
+    const f=DB[t].veg.filter(m=>m.m.includes(mode));
+    return f.length?f:DB[t].veg;
+  } else {
+    // Nonveg: use nonveg items primarily, fall back to veg only if nonveg pool too small
+    const nv=DB[t].nonveg.filter(m=>m.m.includes(mode));
+    if(nv.length>=4) return nv;
+    // If nonveg pool thin, mix but put nonveg first
+    const all=[...DB[t].nonveg,...DB[t].veg].filter(m=>m.m.includes(mode));
+    return all.length?all:[...DB[t].nonveg,...DB[t].veg];
+  }
 }
 function rnd(arr){return arr[Math.floor(Math.random()*arr.length)]}
 
+// Indian meal detection by dish name — tag-based not position-based
+function isIndian(name){
+  const n=name.toLowerCase();
+  return /\bdal\b|\broti\b|\bcurry\b|paneer|rajma|\bchole\b|biryani|tikka|masala|\bsabzi\b|raita|paratha|upma|idli|\bdosa\b|sambar|khichdi|keema|tadka|\bpalak\b|bhurji|chutney|jeera|moong|\bchana\b|tandoori|makhani|rogan|korma|pulao|\blassi\b|\bchaas\b|nimbu|dhokla|uttapam|appam|pongal|haleem/.test(n);
+}
+
+// Pick different from cur. Lunch/dinner: 55% Indian, 45% other — balanced
 function pickDiff(t, cur){
   const p=pool(t);
   if(p.length<2) return p[0];
-  let slice=p;
+
   if(t==='lunch'||t==='dinner'){
-    const indianSlice=Math.max(4,Math.floor(p.length*0.4));
-    slice=(Math.random()<0.70)?p.slice(0,indianSlice):p;
-    if(slice.length===1&&slice[0].n===cur?.n) slice=p;
+    const indian=p.filter(m=>isIndian(m.n)&&m.n!==cur?.n);
+    const other=p.filter(m=>!isIndian(m.n)&&m.n!==cur?.n);
+    // Only bias if both groups have options
+    if(indian.length>=1 && other.length>=1){
+      const pool2=(Math.random()<0.55)?indian:other;
+      return pool2[Math.floor(Math.random()*pool2.length)];
+    }
   }
-  const candidates=slice.filter(m=>m.n!==cur?.n);
+
+  const candidates=p.filter(m=>m.n!==cur?.n);
   if(candidates.length) return candidates[Math.floor(Math.random()*candidates.length)];
   return rnd(p);
 }
@@ -696,14 +729,15 @@ function seed(){
     const p=pool(t);
     let candidate;
     if(t==='lunch'||t==='dinner'){
-      const indianSlice=Math.max(4,Math.floor(p.length*0.4));
-      const useIndian=((base+i*73)%10)<6;
-      const slice=useIndian?p.slice(0,indianSlice):p;
+      const indian=p.filter(m=>isIndian(m.n));
+      const other=p.filter(m=>!isIndian(m.n));
+      const useIndian=((base+i*73)%100)<55 && indian.length>0;
+      const slice=(useIndian && indian.length)?indian:(other.length?other:p);
       candidate=slice[(base+i*73+i*i*11)%slice.length];
     } else {
       candidate=p[(base+i*73+i*i*11)%p.length];
     }
-    picks[t]=candidate;
+    picks[t]=candidate||p[0];
   });
 }
 
@@ -755,7 +789,7 @@ function render(){
   const wrap=document.getElementById('meals');wrap.innerHTML='';
   TYPES.forEach(t=>{
     const m=picks[t];if(!m)return;
-    const isNV=(DB[t].nonveg||[]).includes(m);
+    const isNV=!vegOn()&&(DB[t].nonveg||[]).includes(m);
     const isDone=!!checked[t];
     let tags='';
     if(m.p>=20)tags+='<span class="tag t-pro">High Protein</span>';
@@ -776,18 +810,16 @@ function render(){
       </div>
       <div class="card-name">${m.n}</div>
       <div class="card-desc">${m.d}</div>
-      <div class="card-ft">
-        <div class="tags">${tags}</div>
-        <div style="display:flex;gap:5px;flex-shrink:0;margin-left:6px">
-          ${isDone?'':` <button class="swap-btn" onclick="swap('${t}')">⟳ Swap</button>`}
-          <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')"></button>
-        </div>
-      </div>
     </div>
-    <div class="card-macros">
-      <div class="cmac"><strong>${m.p}g</strong>Protein</div>
-      <div class="cmac"><strong>${m.c}g</strong>Carbs</div>
-      <div class="cmac"><strong>${m.f}g</strong>Fat</div>
+    <div class="card-ft">
+      <div class="tags">${tags}</div>
+      <div class="macros">
+        <div class="mac"><strong>${m.p}g</strong>Pro</div>
+        <div class="mac"><strong>${m.c}g</strong>Carb</div>
+        <div class="mac"><strong>${m.f}g</strong>Fat</div>
+      </div>
+      ${isDone?'':` <button class="swap-btn" onclick="swap('${t}')">⟳</button>`}
+      <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')"></button>
     </div>
   </div>
 </div>`;
