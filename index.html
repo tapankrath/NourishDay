@@ -185,7 +185,7 @@ html,body{
   font-size:19px;font-weight:900;color:var(--ink);
   line-height:1.15;margin-bottom:4px;letter-spacing:-.5px;
 }
-.card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.5}
+.card-desc{font-size:11.5px;font-weight:600;color:var(--ink);opacity:.78;line-height:1.5}
 
 .card-ft{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid var(--ink4)}
 .tags{display:flex;gap:3px;flex-wrap:wrap;flex:1;min-width:0}
@@ -397,8 +397,7 @@ html,body{
     </div>
     <div class="mode-tabs">
       <button class="mode-tab on" id="tabR" onclick="setMode('R')">Regular</button>
-      <button class="mode-tab"    id="tabD" onclick="setMode('D')">Diabetic</button>
-      <button class="mode-tab"    id="tabC" onclick="setMode('C')">Cheat</button>
+      <button class="mode-tab"    id="tabC" onclick="setMode('C')">Cheat Day</button>
     </div>
   </div>
   <div class="subnav">
@@ -475,9 +474,7 @@ html,body{
   </div>
 </div>
 
-<div class="footer">
-  Veg enforced Mon &amp; Thu &nbsp;·&nbsp; <span>EatRight</span>
-</div>
+
 </div>
 
 <script>
@@ -487,10 +484,9 @@ const TYPES=['breakfast','lunch','snacks','dinner'];
 const T_ICON={breakfast:'🌅',lunch:'☀️',snacks:'🍊',dinner:'🌙'};
 const T_LBL={breakfast:'Breakfast',lunch:'Lunch',snacks:'Snack',dinner:'Dinner'};
 const CARB_CAP=130; // daily soft target — shown in stats, turns orange if exceeded
-const CAL_TARGET={R:1900, D:1600, C:2500}; // per-mode calorie targets
+const CAL_TARGET={R:1900, C:2500}; // per-mode calorie targets
 const MODE_NOTE={
   R:'Regular · 1900 kcal target · high protein · moderate carbs · healthy fats',
-  D:'Diabetic · 1600 kcal target · low-GI · controlled carbs · high fibre',
   C:'Cheat Day · 2500 kcal · enjoy it — back on track tomorrow 💪'
 };
 
@@ -850,7 +846,7 @@ function toggleCheck(t){
 function chgDay(d){dayIdx=(dayIdx+d+7)%7;seed();render()}
 function setMode(m){
   mode=m;
-  ['R','D','C'].forEach(x=>document.getElementById('tab'+x).className='mode-tab'+(mode===x?' on':''));
+  ['R','C'].forEach(x=>document.getElementById('tab'+x).className='mode-tab'+(mode===x?' on':''));
   seed();render();
 }
 function setDiet(d){
