@@ -172,9 +172,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 [data-t=beverage] .ct-dot{background:#1A6B8A}
 [data-t=beverage] .card-kcal{background:rgba(26,107,138,.12);color:#5AAEC4;border:1px solid rgba(26,107,138,.20)}
 
-.card.checked{border-color:rgba(42,157,143,.45);background:rgba(42,157,143,.06)}
-.card.checked .card-name{text-decoration:line-through;opacity:.45}
-.card.checked .card-desc{opacity:.35}
+.card.checked{border-color:rgba(42,157,143,.30)}
 
 .check-btn{
   flex-shrink:0;width:26px;height:26px;border-radius:6px;
@@ -766,8 +764,7 @@ function render(){
     if(mode==='C')tags+='<span class="tag t-cheat">Treat Day</span>';
     tags+=`<span class="tag ${isNV?'t-nv':'t-veg'}">${isNV?'Non-Veg':'Veg'}</span>`;
     const c=document.createElement('div');
-    c.className='card'+(isDone?' checked':'');
-    c.setAttribute('data-t',t);
+    c.className='card';c.setAttribute('data-t',t);
     c.innerHTML=`
 <div class="card-inner">
   <div class="card-accent"></div>
