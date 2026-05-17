@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EatRight">
-<meta name="theme-color" content="#061A12">
+<meta name="theme-color" content="#16181F">
 <meta name="description" content="Daily meal plans — high protein, low carb. Regular, diabetic & cheat-day modes.">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -16,12 +16,24 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --night:#061A12;--deep:#0A2B1C;--green:#00C06B;--lime:#ADFF5C;
-  --orange:#FF6B2B;--blue:#2B8EFF;--teal:#00C8A0;--purple:#9B5DFF;
-  --ink:#FFFFFF;--ink2:rgba(255,255,255,.78);--ink3:rgba(255,255,255,.44);--ink4:rgba(255,255,255,.12);
-  --card:#0F2A1D;--border:rgba(0,192,107,.15);--border2:rgba(0,192,107,.28);--bg:#020E08;
-  /* page frame */
-  --frame:rgba(0,192,107,.22);
+  /* Backgrounds — warm slate, not green */
+  --night:#16181F;--deep:#1E2130;--card:#1A1D28;--bg:#0F1117;
+
+  /* Primary accent — saffron/amber, warm & vibrant */
+  --accent:#FF9F43;        /* warm saffron orange */
+  --accent2:#FFCA6B;       /* golden yellow highlight */
+  --accent-dim:rgba(255,159,67,.18);
+  --accent-border:rgba(255,159,67,.28);
+
+  /* Meal type colors — kept vivid */
+  --orange:#FF6B2B;--blue:#4D9EFF;--teal:#00D4AA;--purple:#A67AFF;
+
+  --ink:#FFFFFF;--ink2:rgba(255,255,255,.75);--ink3:rgba(255,255,255,.42);--ink4:rgba(255,255,255,.10);
+  --border:rgba(255,159,67,.14);--border2:rgba(255,159,67,.26);
+  --frame:rgba(255,159,67,.20);
+
+  /* Keep these for backwards compat with any --green refs */
+  --green:#FF9F43;--lime:#FFCA6B;
 }
 html,body{
   background:var(--bg);
@@ -37,15 +49,14 @@ html,body{
   margin:0 auto;
   padding-bottom:56px;
   position:relative;
-  /* outer glow border */
   box-shadow:
     0 0 0 1px var(--frame),
-    0 0 32px rgba(0,192,107,.08),
-    0 0 0 4px rgba(0,192,107,.04);
+    0 0 40px rgba(255,159,67,.07),
+    0 0 0 4px rgba(255,159,67,.03);
   min-height:100vh;
   background:var(--night);
 }
-/* thin neon top edge */
+/* warm amber top edge */
 .app::before{
   content:'';
   position:fixed;
@@ -53,8 +64,8 @@ html,body{
   transform:translateX(-50%);
   width:min(420px,100vw);
   height:2px;
-  background:linear-gradient(90deg,transparent 5%,var(--green) 40%,var(--lime) 60%,transparent 95%);
-  opacity:.7;
+  background:linear-gradient(90deg,transparent 5%,var(--orange) 30%,var(--accent) 55%,var(--accent2) 75%,transparent 95%);
+  opacity:.8;
   z-index:10;
   pointer-events:none;
 }
@@ -72,7 +83,7 @@ html,body{
 .logo-mark{
   width:38px;height:38px;background:var(--green);border-radius:11px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 0 16px rgba(0,192,107,.5);
+  box-shadow:0 0 16px rgba(255,159,67,.55);
 }
 .logo-mark svg{width:22px;height:22px}
 .logo-name{
@@ -92,7 +103,7 @@ html,body{
   color:var(--ink3);background:none;transition:all .18s;
   white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;
 }
-.mode-tab.on{background:var(--green);color:#fff;box-shadow:0 2px 10px rgba(0,192,107,.5)}
+.mode-tab.on{background:var(--green);color:#fff;box-shadow:0 2px 10px rgba(255,159,67,.55)}
 
 /* ── SUBNAV ── */
 .subnav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 10px}
@@ -103,7 +114,7 @@ html,body{
   font-family:'Nunito',sans-serif;color:var(--ink3);background:none;
   transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
 }
-.diet-btn.veg-on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 12px rgba(0,192,107,.4)}
+.diet-btn.veg-on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 12px rgba(255,159,67,.45)}
 .diet-btn.nv-on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 12px rgba(255,107,43,.4)}
 
 .day-nav{display:flex;align-items:center;gap:6px}
@@ -142,7 +153,7 @@ html,body{
   width:100%;padding:12px;background:var(--lime);border:none;border-radius:12px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
   font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;
-  color:#061A12;letter-spacing:.05em;text-transform:uppercase;
+  color:#16181F;letter-spacing:.05em;text-transform:uppercase;
   box-shadow:0 4px 20px rgba(173,255,92,.35);transition:all .16s;margin-bottom:10px;
 }
 .shuffle-btn:active{transform:scale(.97) translateY(1px);box-shadow:0 2px 8px rgba(173,255,92,.2)}
@@ -184,10 +195,10 @@ html,body{
   letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;
 }
 .t-pro{background:rgba(43,142,255,.18);color:#6AB8FF;border:1px solid rgba(43,142,255,.25)}
-.t-lc{background:rgba(0,192,107,.15);color:#4DFFAB;border:1px solid rgba(0,192,107,.25)}
+.t-lc{background:rgba(255,159,67,.14);color:#FFD580;border:1px solid rgba(255,159,67,.26)}
 .t-gi{background:rgba(255,107,43,.15);color:#FF9D6B;border:1px solid rgba(255,107,43,.25)}
 .t-cheat{background:rgba(255,205,0,.12);color:#FFD84D;border:1px solid rgba(255,205,0,.25)}
-.t-veg{background:rgba(173,255,92,.12);color:#ADFF5C;border:1px solid rgba(173,255,92,.25)}
+.t-veg{background:rgba(255,202,107,.12);color:#FFCA6B;border:1px solid rgba(255,202,107,.25)}
 .t-nv{background:rgba(255,107,43,.15);color:#FF9D6B;border:1px solid rgba(255,107,43,.25)}
 .swap-btn{
   flex-shrink:0;background:transparent;border:1.5px solid var(--border2);
@@ -213,9 +224,9 @@ html,body{
 [data-t=lunch] .card-type{color:#6AB8FF}
 [data-t=lunch] .ct-dot{background:#2B8EFF}
 [data-t=lunch] .card-kcal{background:rgba(43,142,255,.15);color:#6AB8FF;border:1px solid rgba(43,142,255,.2)}
-[data-t=snacks] .card-accent{background:#00C8A0;box-shadow:2px 0 12px rgba(0,200,160,.4)}
+[data-t=snacks] .card-accent{background:var(--teal);box-shadow:2px 0 12px rgba(0,212,170,.4)}
 [data-t=snacks] .card-type{color:#33D9B8}
-[data-t=snacks] .ct-dot{background:#00C8A0}
+[data-t=snacks] .ct-dot{background:var(--teal)}
 [data-t=snacks] .card-kcal{background:rgba(0,200,160,.15);color:#33D9B8;border:1px solid rgba(0,200,160,.2)}
 [data-t=dinner] .card-accent{background:#9B5DFF;box-shadow:2px 0 12px rgba(155,93,255,.4)}
 [data-t=dinner] .card-type{color:#BA8FFF}
@@ -229,7 +240,7 @@ html,body{
 /* ── CHECKED STATE ── */
 .card.checked{
   border-color:var(--green);
-  background:rgba(0,192,107,.08);
+  background:rgba(255,159,67,.09);
 }
 .card.checked .card-name{text-decoration:line-through;opacity:.6}
 .card.checked .card-desc{opacity:.5}
@@ -246,7 +257,7 @@ html,body{
 }
 .check-btn.done{
   background:var(--green);border-color:var(--green);
-  color:#fff;box-shadow:0 0 10px rgba(0,192,107,.5);
+  color:#fff;box-shadow:0 0 10px rgba(255,159,67,.55);
 }
 .check-btn:active{transform:scale(.88)}
 
@@ -270,7 +281,7 @@ html,body{
   font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
   cursor:pointer;transition:all .15s;letter-spacing:.04em;
 }
-.bev-pill.on{background:#F4C430;color:#061A12;border-color:#F4C430;box-shadow:0 0 8px rgba(244,196,48,.4)}
+.bev-pill.on{background:#F4C430;color:#16181F;border-color:#F4C430;box-shadow:0 0 8px rgba(244,196,48,.4)}
 
 /* ── LOG BUTTON ── */
 .log-btn-row{padding:10px 12px 0;display:flex;gap:8px}
@@ -280,7 +291,7 @@ html,body{
   letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
   display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.log-btn.save{background:var(--green);color:#fff;box-shadow:0 3px 14px rgba(0,192,107,.4)}
+.log-btn.save{background:var(--green);color:#fff;box-shadow:0 3px 14px rgba(255,159,67,.45)}
 .log-btn.save:active{transform:scale(.97)}
 .log-btn.history{background:var(--ink4);color:var(--ink2);border:1px solid var(--border2)}
 .log-btn.history:active{transform:scale(.97)}
@@ -314,7 +325,7 @@ html,body{
 .log-export-btn{
   padding:6px 14px;border-radius:8px;background:var(--lime);
   border:none;cursor:pointer;font-family:'Nunito',sans-serif;
-  font-size:10px;font-weight:900;color:#061A12;letter-spacing:.05em;text-transform:uppercase;
+  font-size:10px;font-weight:900;color:#16181F;letter-spacing:.05em;text-transform:uppercase;
 }
 .log-close-btn{
   width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);
@@ -365,13 +376,13 @@ html,body{
     <div class="logo">
       <div class="logo-mark">
         <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="8"  cy="10" r="5" fill="#061A12"/><circle cx="8"  cy="10" r="3.5" fill="#FDF6E3"/>
-          <circle cx="18" cy="10" r="5" fill="#061A12"/><circle cx="18" cy="10" r="3.5" fill="#FDF6E3"/>
-          <circle cx="13" cy="18" r="5" fill="#061A12"/><circle cx="13" cy="18" r="3.5" fill="#FDF6E3"/>
-          <circle cx="8"  cy="10" r="2.4" fill="#00C8A0"/>
+          <circle cx="8"  cy="10" r="5" fill="#16181F"/><circle cx="8"  cy="10" r="3.5" fill="#FDF6E3"/>
+          <circle cx="18" cy="10" r="5" fill="#16181F"/><circle cx="18" cy="10" r="3.5" fill="#FDF6E3"/>
+          <circle cx="13" cy="18" r="5" fill="#16181F"/><circle cx="13" cy="18" r="3.5" fill="#FDF6E3"/>
+          <circle cx="8"  cy="10" r="2.4" fill="#00D4AA"/>
           <circle cx="18" cy="10" r="2.4" fill="#FF6B2B"/>
-          <circle cx="13" cy="18" r="2.4" fill="#9B5DFF"/>
-          <circle cx="13" cy="13" r="2.8" fill="#061A12"/><circle cx="13" cy="13" r="1.6" fill="#ADFF5C"/>
+          <circle cx="13" cy="18" r="2.4" fill="#A67AFF"/>
+          <circle cx="13" cy="13" r="2.8" fill="#16181F"/><circle cx="13" cy="13" r="1.6" fill="#FF9F43"/>
         </svg>
       </div>
       <div>
@@ -838,7 +849,7 @@ function render(){
   const pct=Math.min(100,Math.round(tot/1800*100));
   const b=document.getElementById('calBar');
   b.style.width=pct+'%';
-  const barCol=tot>1850?'#FF6B2B':tot>1700?'#FFD84D':'#00C06B';
+  const barCol=tot>1850?'#FF6B2B':tot>1700?'#FFD84D':'#FF9F43';
   b.style.background=barCol;
   b.style.boxShadow=`0 0 10px ${barCol}80`;
   document.getElementById('modeNote').textContent=MODE_NOTE[mode];
@@ -925,7 +936,7 @@ function logDay(){
   // visual feedback
   const btn=document.querySelector('.log-btn.save');
   const orig=btn.innerHTML;
-  btn.innerHTML='✅ Logged!';btn.style.background='#00C06B';
+  btn.innerHTML='✅ Logged!';btn.style.background='#FF9F43';
   setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},1800);
 }
 
