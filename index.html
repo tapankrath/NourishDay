@@ -248,18 +248,24 @@ html,body{
 /* ── CHECK BUTTON ── */
 .check-btn{
   flex-shrink:0;
-  width:28px;height:28px;border-radius:50%;
-  border:2px solid var(--border2);
-  background:transparent;
-  color:var(--green);font-size:14px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .15s;margin-left:6px;
+  width:26px;height:26px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .18s;margin-left:6px;
+  font-size:0; /* hide any text content when unchecked */
 }
 .check-btn.done{
-  background:var(--green);border-color:var(--green);
-  color:#fff;box-shadow:0 0 10px rgba(255,159,67,.55);
+  background:var(--accent);
+  border-color:var(--accent);
+  box-shadow:0 0 10px rgba(255,159,67,.5);
+  font-size:13px;font-weight:900;color:#16181F;
+  font-family:'Nunito',sans-serif;
 }
-.check-btn:active{transform:scale(.88)}
+.check-btn.done::after{content:'✓'}
+.check-btn:not(.done):hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+.check-btn:active{transform:scale(.84)}
 
 /* ── BEVERAGE PICKER ── */
 .bev-card{
@@ -442,7 +448,7 @@ html,body{
           </div>
           <div class="bev-right">
             <div class="bev-pills" id="bevPills"></div>
-            <button class="check-btn" id="bevCheck" onclick="toggleBevCheck()">✓</button>
+            <button class="check-btn" id="bevCheck" onclick="toggleBevCheck()"></button>
           </div>
         </div>
       </div>
@@ -882,7 +888,7 @@ function render(){
         <div class="tags">${tags}</div>
         <div style="display:flex;gap:5px;flex-shrink:0;margin-left:6px">
           ${isDone?'':` <button class="swap-btn" onclick="swap('${t}')">⟳ Swap</button>`}
-          <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')">${isDone?'✓':'✓'}</button>
+          <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')"></button>
         </div>
       </div>
     </div>
