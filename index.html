@@ -126,8 +126,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .card-type{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:5px}
 .ct-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .card-kcal{font-size:11.5px;font-weight:900;padding:3px 9px;border-radius:20px;letter-spacing:.02em}
-.card-name{font-size:19px;font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:4px;letter-spacing:-.5px}
-.card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.5}
+.card-name{font-size:19px;font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:5px;letter-spacing:-.5px}
+.card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.6;margin-top:3px}
 /* ── CARD FOOTER: macros row ── */
 .card-macros{
   display:flex;align-items:center;
@@ -178,9 +178,10 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .rate-btn:active{transform:scale(.88)}
 
 /* Tags row */
-.card-tags{
-  display:flex;align-items:center;gap:4px;
-  padding:6px 12px 0;flex-wrap:wrap;
+.card-tags{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.card-tags-inline{
+  display:inline-flex;align-items:center;gap:4px;
+  flex-wrap:wrap;vertical-align:middle;margin-left:4px;
 }
 .tag{font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
 .t-pro{background:rgba(56,189,248,.12);color:#7DD3F8;border:1px solid rgba(56,189,248,.20)}
@@ -351,7 +352,17 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 }
 .add-meal-btn:hover{border-color:var(--border2);color:var(--accent2)}
 
-/* ── SHARE BUTTON ── */
+/* ── RATING TOAST ── */
+.rating-toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:var(--deep);border:1px solid var(--border2);
+  color:var(--ink2);font-size:12px;font-weight:700;
+  padding:10px 18px;border-radius:30px;
+  box-shadow:0 4px 20px rgba(0,0,0,.4);
+  z-index:300;white-space:nowrap;
+  animation:slideUp .2s ease;pointer-events:none;
+}
+@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .share-btn{
   flex:1;padding:11px;border-radius:12px;border:none;cursor:pointer;
   font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;
@@ -512,6 +523,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
       <div class="log-sheet-title">📅 Day Log</div>
       <div class="log-actions">
         <button class="log-export-btn" onclick="exportLog()">⬇ Export</button>
+        <button class="log-export-btn" style="background:var(--ink4);color:var(--ink3);border:1px solid var(--ink4)" onclick="resetRatings()">★ Reset Ratings</button>
         <button class="log-close-btn" onclick="closeLog()">✕</button>
       </div>
     </div>
@@ -867,19 +879,41 @@ document.getElementById('bevName').addEventListener('click',swapBev);
 // This ensures nonveg users always see nonveg meals
 function pool(t){
   const custom=getCustomMeals();
+  const ratings=getRatings();
   if(vegOn()){
     const base=[...DB[t].veg,...custom];
     const f=base.filter(m=>m.m.includes(mode));
-    return f.length?f:base;
+    return applyRatings(f.length?f:base, ratings);
   } else {
-    // Nonveg: use nonveg items primarily, fall back to veg only if nonveg pool too small
     const nv=DB[t].nonveg.filter(m=>m.m.includes(mode));
-    if(nv.length>=4) return nv;
-    // If nonveg pool thin, mix but put nonveg first
+    if(nv.length>=4) return applyRatings(nv, ratings);
     const all=[...DB[t].nonveg,...DB[t].veg].filter(m=>m.m.includes(mode));
-    return all.length?all:[...DB[t].nonveg,...DB[t].veg];
+    return applyRatings(all.length?all:[...DB[t].nonveg,...DB[t].veg], ratings);
   }
 }
+
+// Filter disliked meals out (unless pool would shrink below 3)
+// Boost liked meals by duplicating them in the candidate list (appear 3x more often)
+function applyRatings(p, ratings){
+  const disliked=p.filter(m=>ratings[m.n]===-1);
+  const liked=p.filter(m=>ratings[m.n]===1);
+  const neutral=p.filter(m=>!ratings[m.n]);
+
+  // Only filter disliked if enough remain
+  const filtered=(p.length - disliked.length)>=3
+    ? p.filter(m=>ratings[m.n]!==-1)
+    : p;
+
+  // Boost liked meals — add them extra times so they appear more in random picks
+  const boosted=[...filtered];
+  liked.forEach(m=>{
+    if(filtered.includes(m)){
+      boosted.push(m,m); // liked meals appear 3x total
+    }
+  });
+  return boosted.length?boosted:p;
+}
+
 function rnd(arr){return arr[Math.floor(Math.random()*arr.length)]}
 
 // Indian meal detection by dish name — tag-based not position-based
@@ -889,6 +923,7 @@ function isIndian(name){
 }
 
 // Pick different from cur. Lunch/dinner: 55% Indian, 45% other — balanced
+// Ratings already baked into pool() via applyRatings()
 function pickDiff(t, cur){
   const p=pool(t);
   if(p.length<2) return p[0];
@@ -896,7 +931,6 @@ function pickDiff(t, cur){
   if(t==='lunch'||t==='dinner'){
     const indian=p.filter(m=>isIndian(m.n)&&m.n!==cur?.n);
     const other=p.filter(m=>!isIndian(m.n)&&m.n!==cur?.n);
-    // Only bias if both groups have options
     if(indian.length>=1 && other.length>=1){
       const pool2=(Math.random()<0.55)?indian:other;
       return pool2[Math.floor(Math.random()*pool2.length)];
@@ -912,7 +946,7 @@ function seed(){
   picks={}; checked={};
   const base=dayIdx*137+new Date().getDate()*31+(vegOn()?0:500)+(mode==='R'?0:mode==='D'?200:400);
   TYPES.forEach((t,i)=>{
-    const p=pool(t);
+    const p=pool(t); // already has ratings applied
     let candidate;
     if(t==='lunch'||t==='dinner'){
       const indian=p.filter(m=>isIndian(m.n));
@@ -996,9 +1030,8 @@ function render(){
         <span class="card-kcal">${m.cal} kcal</span>
       </div>
       <div class="card-name">${m.n}</div>
-      <div class="card-desc">${m.d}</div>
+      <div class="card-desc">${m.d} <span class="card-tags-inline">${tags}<span class="tag t-prep">Prep: ${getPrepTime(m.n)}</span></span></div>
     </div>
-    <div class="card-tags">${tags}<span class="tag t-prep">⏱ ${getPrepTime(m.n)}</span></div>
     <div class="card-macros">
       <div class="mac"><strong>${m.p}g</strong>Protein</div>
       <div class="mac"><strong>${m.c}g</strong>Carbs</div>
@@ -1176,6 +1209,16 @@ function rateMeal(mealName, val){
   const r=getRatings();
   r[mealName]=val;
   saveRatings(r);
+  // Brief toast feedback
+  const existing=document.querySelector('.rating-toast');
+  if(existing) existing.remove();
+  const toast=document.createElement('div');
+  toast.className='rating-toast';
+  toast.textContent=val===1?'👍 Added to favourites — will appear more often'
+    :val===-1?'👎 Got it — will show less often'
+    :'Rating removed';
+  document.querySelector('.app').appendChild(toast);
+  setTimeout(()=>toast.remove(),2200);
   render();
 }
 
@@ -1324,7 +1367,15 @@ function shareDay(){
   }
 }
 
-window.shuffleAll=shuffleAll;window.swap=swap;window.chgDay=chgDay;window.setMode=setMode;window.setDiet=setDiet;
+function resetRatings(){
+  if(confirm('Reset all meal ratings? This will restore all meals to equal probability.')){
+    localStorage.removeItem(RATINGS_KEY);
+    render();
+    const btn=document.querySelector('.log-sheet-hdr .log-export-btn:last-of-type');
+    if(btn){const orig=btn.textContent;btn.textContent='✓ Done';setTimeout(()=>btn.textContent=orig,1500);}
+  }
+}
+window.resetRatings=resetRatings;window.swap=swap;window.chgDay=chgDay;window.setMode=setMode;window.setDiet=setDiet;
 window.tapGlass=tapGlass;window.rateMeal=rateMeal;window.shareDay=shareDay;window.openCustomModal=openCustomModal;window.closeCustomModal=closeCustomModal;window.modalBgClick=modalBgClick;window.saveCustomMeal=saveCustomMeal;
 window.toggleCheck=toggleCheck;window.setBevCat=setBevCat;window.toggleBevCheck=toggleBevCheck;
 window.logDay=logDay;window.openLog=openLog;window.closeLog=closeLog;
