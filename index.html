@@ -16,24 +16,24 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  /* Backgrounds — warm slate, not green */
-  --night:#16181F;--deep:#1E2130;--card:#1A1D28;--bg:#0F1117;
+  /* Backgrounds — warm off-white / soft stone */
+  --night:#F7F4EF;--deep:#EDE9E2;--card:#FFFFFF;--bg:#F0EDE6;
 
-  /* Primary accent — saffron/amber, warm & vibrant */
-  --accent:#FF9F43;        /* warm saffron orange */
-  --accent2:#FFCA6B;       /* golden yellow highlight */
-  --accent-dim:rgba(255,159,67,.18);
-  --accent-border:rgba(255,159,67,.28);
+  /* Primary accent — muted sage green, calm and natural */
+  --accent:#5C7A5C;
+  --accent2:#7A9E7A;
+  --accent-dim:rgba(92,122,92,.12);
+  --accent-border:rgba(92,122,92,.22);
 
-  /* Meal type colors — kept vivid */
-  --orange:#FF6B2B;--blue:#4D9EFF;--teal:#00D4AA;--purple:#A67AFF;
+  /* Meal type colors — softened, easy on the eye */
+  --orange:#B5764A;--blue:#4A7BA8;--teal:#3D8C82;--purple:#7A5EA8;
 
-  --ink:#FFFFFF;--ink2:rgba(255,255,255,.75);--ink3:rgba(255,255,255,.42);--ink4:rgba(255,255,255,.10);
-  --border:rgba(255,159,67,.14);--border2:rgba(255,159,67,.26);
-  --frame:rgba(255,159,67,.20);
+  --ink:#1E2820;--ink2:rgba(30,40,32,.68);--ink3:rgba(30,40,32,.42);--ink4:rgba(30,40,32,.07);
+  --border:rgba(92,122,92,.14);--border2:rgba(92,122,92,.22);
+  --frame:rgba(92,122,92,.18);
 
-  /* Keep these for backwards compat with any --green refs */
-  --green:#FF9F43;--lime:#FFCA6B;
+  /* backwards compat aliases */
+  --green:#5C7A5C;--lime:#7A9E7A;
 }
 html,body{
   background:var(--bg);
@@ -51,12 +51,11 @@ html,body{
   position:relative;
   box-shadow:
     0 0 0 1px var(--frame),
-    0 0 40px rgba(255,159,67,.07),
-    0 0 0 4px rgba(255,159,67,.03);
+    0 0 40px rgba(92,122,92,.08);
   min-height:100vh;
   background:var(--night);
 }
-/* warm amber top edge */
+/* soft sage top edge */
 .app::before{
   content:'';
   position:fixed;
@@ -64,8 +63,8 @@ html,body{
   transform:translateX(-50%);
   width:min(420px,100vw);
   height:2px;
-  background:linear-gradient(90deg,transparent 5%,var(--orange) 30%,var(--accent) 55%,var(--accent2) 75%,transparent 95%);
-  opacity:.8;
+  background:linear-gradient(90deg,transparent 5%,var(--teal) 30%,var(--accent) 55%,var(--accent2) 75%,transparent 95%);
+  opacity:.6;
   z-index:10;
   pointer-events:none;
 }
@@ -83,11 +82,11 @@ html,body{
 .logo-mark{
   width:38px;height:38px;background:var(--green);border-radius:11px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 0 16px rgba(255,159,67,.55);
+  box-shadow:0 2px 10px rgba(92,122,92,.35);
 }
 .logo-mark svg{width:22px;height:22px}
 .logo-name{
-  font-size:24px;font-weight:900;color:#fff;
+  font-size:24px;font-weight:900;color:var(--ink);
   letter-spacing:-.8px;line-height:1;
 }
 .logo-sub{
@@ -96,14 +95,14 @@ html,body{
 }
 
 /* Mode tabs */
-.mode-tabs{display:flex;background:rgba(255,255,255,.06);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4)}
+.mode-tabs{display:flex;background:rgba(0,0,0,.06);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4)}
 .mode-tab{
   padding:6px 10px;border-radius:7px;border:none;cursor:pointer;
   font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
   color:var(--ink3);background:none;transition:all .18s;
   white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;
 }
-.mode-tab.on{background:var(--green);color:#fff;box-shadow:0 2px 10px rgba(255,159,67,.55)}
+.mode-tab.on{background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(92,122,92,.40)}
 
 /* ── SUBNAV ── */
 .subnav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 10px}
@@ -114,8 +113,8 @@ html,body{
   font-family:'Nunito',sans-serif;color:var(--ink3);background:none;
   transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
 }
-.diet-btn.veg-on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 12px rgba(255,159,67,.45)}
-.diet-btn.nv-on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 12px rgba(255,107,43,.4)}
+.diet-btn.veg-on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 2px 8px rgba(92,122,92,.35)}
+.diet-btn.nv-on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 8px rgba(181,118,74,.3)}
 
 .day-nav{display:flex;align-items:center;gap:6px}
 .day-arrow{
@@ -124,8 +123,8 @@ html,body{
   display:flex;align-items:center;justify-content:center;transition:all .14s;
 }
 .day-arrow:active{background:var(--border);transform:scale(.9)}
-.day-lbl{font-size:15px;font-weight:900;color:#fff;min-width:82px;text-align:center;letter-spacing:-.2px}
-.veg-dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 6px var(--lime);display:none;flex-shrink:0;margin-left:-3px}
+.day-lbl{font-size:15px;font-weight:900;color:var(--ink);min-width:82px;text-align:center;letter-spacing:-.2px}
+.veg-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 5px var(--teal);display:none;flex-shrink:0;margin-left:-3px}
 
 /* ── STATS ── */
 .stats-zone{background:var(--deep);border-top:1px solid var(--ink4);border-bottom:1px solid var(--ink4)}
@@ -133,10 +132,10 @@ html,body{
 .stats-sep{background:var(--ink4);margin:3px 0}
 .stat{padding:2px 6px;text-align:center}
 .stat-val{
-  font-size:22px;font-weight:900;color:#fff;
+  font-size:22px;font-weight:900;color:var(--ink);
   display:block;letter-spacing:-.8px;line-height:1;
 }
-.stat-val.hi{color:var(--lime)}
+.stat-val.hi{color:var(--green)}
 .stat-lbl{
   font-size:8px;font-weight:800;color:var(--ink3);
   text-transform:uppercase;letter-spacing:.12em;margin-top:2px;display:block;
@@ -150,13 +149,13 @@ html,body{
 /* ── BODY ── */
 .body{padding:10px 12px 0}
 .shuffle-btn{
-  width:100%;padding:12px;background:var(--lime);border:none;border-radius:12px;
+  width:100%;padding:12px;background:var(--green);border:none;border-radius:12px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
   font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;
-  color:#16181F;letter-spacing:.05em;text-transform:uppercase;
-  box-shadow:0 4px 20px rgba(173,255,92,.35);transition:all .16s;margin-bottom:10px;
+  color:#fff;letter-spacing:.05em;text-transform:uppercase;
+  box-shadow:0 3px 12px rgba(92,122,92,.28);transition:all .16s;margin-bottom:10px;
 }
-.shuffle-btn:active{transform:scale(.97) translateY(1px);box-shadow:0 2px 8px rgba(173,255,92,.2)}
+.shuffle-btn:active{transform:scale(.97) translateY(1px);box-shadow:0 1px 6px rgba(92,122,92,.18)}
 .s-ico{font-size:17px;display:inline-block;transition:transform .4s}
 .shuffle-btn:active .s-ico{transform:rotate(180deg)}
 .mode-note{
@@ -183,7 +182,7 @@ html,body{
 
 /* BIGGER, BOLDER meal name */
 .card-name{
-  font-size:19px;font-weight:900;color:#fff;
+  font-size:19px;font-weight:900;color:var(--ink);
   line-height:1.15;margin-bottom:4px;letter-spacing:-.5px;
 }
 .card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.5}
@@ -194,12 +193,12 @@ html,body{
   font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;
   letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;
 }
-.t-pro{background:rgba(43,142,255,.18);color:#6AB8FF;border:1px solid rgba(43,142,255,.25)}
-.t-lc{background:rgba(255,159,67,.14);color:#FFD580;border:1px solid rgba(255,159,67,.26)}
-.t-gi{background:rgba(255,107,43,.15);color:#FF9D6B;border:1px solid rgba(255,107,43,.25)}
-.t-cheat{background:rgba(255,205,0,.12);color:#FFD84D;border:1px solid rgba(255,205,0,.25)}
-.t-veg{background:rgba(255,202,107,.12);color:#FFCA6B;border:1px solid rgba(255,202,107,.25)}
-.t-nv{background:rgba(255,107,43,.15);color:#FF9D6B;border:1px solid rgba(255,107,43,.25)}
+.t-pro{background:rgba(74,123,168,.10);color:#2E5C82;border:1px solid rgba(74,123,168,.20)}
+.t-lc{background:rgba(92,122,92,.10);color:#3A5C3A;border:1px solid rgba(92,122,92,.20)}
+.t-gi{background:rgba(181,118,74,.10);color:#6A4020;border:1px solid rgba(181,118,74,.20)}
+.t-cheat{background:rgba(181,100,60,.10);color:#7A3A18;border:1px solid rgba(181,100,60,.20)}
+.t-veg{background:rgba(61,140,130,.10);color:#1A5C52;border:1px solid rgba(61,140,130,.20)}
+.t-nv{background:rgba(181,118,74,.10);color:#6A4020;border:1px solid rgba(181,118,74,.20)}
 .swap-btn{
   flex-shrink:0;background:transparent;border:1.5px solid var(--border2);
   color:var(--green);font-size:9.5px;font-weight:900;
@@ -212,82 +211,82 @@ html,body{
 /* Macros */
 .card-macros{background:var(--deep);padding:8px 12px;display:flex;border-top:1px solid var(--ink4)}
 .cmac{flex:1;text-align:center;font-size:9px;font-weight:800;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase}
-.cmac strong{display:block;font-size:15px;font-weight:900;color:#fff;letter-spacing:-.4px;line-height:1.1;margin-bottom:1px}
+.cmac strong{display:block;font-size:15px;font-weight:900;color:var(--ink);letter-spacing:-.4px;line-height:1.1;margin-bottom:1px}
 .cmac+.cmac{border-left:1px solid var(--ink4)}
 
 /* Meal type themes */
-[data-t=breakfast] .card-accent{background:#FF6B2B;box-shadow:2px 0 12px rgba(255,107,43,.4)}
-[data-t=breakfast] .card-type{color:#FF8D5C}
-[data-t=breakfast] .ct-dot{background:#FF6B2B}
-[data-t=breakfast] .card-kcal{background:rgba(255,107,43,.15);color:#FF8D5C;border:1px solid rgba(255,107,43,.2)}
-[data-t=lunch] .card-accent{background:#2B8EFF;box-shadow:2px 0 12px rgba(43,142,255,.4)}
-[data-t=lunch] .card-type{color:#6AB8FF}
-[data-t=lunch] .ct-dot{background:#2B8EFF}
-[data-t=lunch] .card-kcal{background:rgba(43,142,255,.15);color:#6AB8FF;border:1px solid rgba(43,142,255,.2)}
-[data-t=snacks] .card-accent{background:var(--teal);box-shadow:2px 0 12px rgba(0,212,170,.4)}
-[data-t=snacks] .card-type{color:#33D9B8}
-[data-t=snacks] .ct-dot{background:var(--teal)}
-[data-t=snacks] .card-kcal{background:rgba(0,200,160,.15);color:#33D9B8;border:1px solid rgba(0,200,160,.2)}
-[data-t=dinner] .card-accent{background:#9B5DFF;box-shadow:2px 0 12px rgba(155,93,255,.4)}
-[data-t=dinner] .card-type{color:#BA8FFF}
-[data-t=dinner] .ct-dot{background:#9B5DFF}
-[data-t=dinner] .card-kcal{background:rgba(155,93,255,.15);color:#BA8FFF;border:1px solid rgba(155,93,255,.2)}
-[data-t=beverage] .card-accent{background:#F4C430;box-shadow:2px 0 12px rgba(244,196,48,.4)}
-[data-t=beverage] .card-type{color:#F4C430}
-[data-t=beverage] .ct-dot{background:#F4C430}
-[data-t=beverage] .card-kcal{background:rgba(244,196,48,.12);color:#F4C430;border:1px solid rgba(244,196,48,.2)}
+[data-t=breakfast] .card-accent{background:#B5764A;box-shadow:2px 0 8px rgba(181,118,74,.25)}
+[data-t=breakfast] .card-type{color:#8A5430}
+[data-t=breakfast] .ct-dot{background:#B5764A}
+[data-t=breakfast] .card-kcal{background:rgba(181,118,74,.10);color:#8A5430;border:1px solid rgba(181,118,74,.20)}
+[data-t=lunch] .card-accent{background:#4A7BA8;box-shadow:2px 0 8px rgba(74,123,168,.25)}
+[data-t=lunch] .card-type{color:#2E5C82}
+[data-t=lunch] .ct-dot{background:#4A7BA8}
+[data-t=lunch] .card-kcal{background:rgba(74,123,168,.10);color:#2E5C82;border:1px solid rgba(74,123,168,.20)}
+[data-t=snacks] .card-accent{background:#3D8C82;box-shadow:2px 0 8px rgba(61,140,130,.25)}
+[data-t=snacks] .card-type{color:#266B62}
+[data-t=snacks] .ct-dot{background:#3D8C82}
+[data-t=snacks] .card-kcal{background:rgba(61,140,130,.10);color:#266B62;border:1px solid rgba(61,140,130,.20)}
+[data-t=dinner] .card-accent{background:#7A5EA8;box-shadow:2px 0 8px rgba(122,94,168,.25)}
+[data-t=dinner] .card-type{color:#5A3E88}
+[data-t=dinner] .ct-dot{background:#7A5EA8}
+[data-t=dinner] .card-kcal{background:rgba(122,94,168,.10);color:#5A3E88;border:1px solid rgba(122,94,168,.20)}
+[data-t=beverage] .card-accent{background:#8C7040;box-shadow:2px 0 8px rgba(140,112,64,.25)}
+[data-t=beverage] .card-type{color:#6A5020}
+[data-t=beverage] .ct-dot{background:#8C7040}
+[data-t=beverage] .card-kcal{background:rgba(140,112,64,.10);color:#6A5020;border:1px solid rgba(140,112,64,.20)}
 
 /* ── CHECKED STATE ── */
 .card.checked{
   border-color:var(--green);
-  background:rgba(255,159,67,.09);
+  background:rgba(92,122,92,.06);
 }
-.card.checked .card-name{text-decoration:line-through;opacity:.6}
-.card.checked .card-desc{opacity:.5}
+.card.checked .card-name{text-decoration:line-through;opacity:.5}
+.card.checked .card-desc{opacity:.45}
 
-/* ── CHECK BUTTON ── */
+/* ── CHECK BUTTON — SQUARE ── */
 .check-btn{
   flex-shrink:0;
-  width:26px;height:26px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.04);
+  width:26px;height:26px;border-radius:6px;
+  border:2px solid var(--border2);
+  background:rgba(0,0,0,.03);
   cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:all .18s;margin-left:6px;
-  font-size:0; /* hide any text content when unchecked */
+  font-size:0;
 }
 .check-btn.done{
-  background:var(--accent);
-  border-color:var(--accent);
-  box-shadow:0 0 10px rgba(255,159,67,.5);
-  font-size:13px;font-weight:900;color:#16181F;
+  background:var(--green);
+  border-color:var(--green);
+  box-shadow:0 2px 8px rgba(92,122,92,.35);
+  font-size:13px;font-weight:900;color:#fff;
   font-family:'Nunito',sans-serif;
 }
 .check-btn.done::after{content:'✓'}
-.check-btn:not(.done):hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08)}
+.check-btn:not(.done):hover{border-color:var(--green);background:rgba(92,122,92,.08)}
 .check-btn:active{transform:scale(.84)}
 
 /* ── BEVERAGE PICKER ── */
 .bev-card{
   background:var(--card);border-radius:14px;
-  border:1px solid rgba(244,196,48,.2);
+  border:1px solid rgba(140,112,64,.20);
   overflow:hidden;
 }
 .bev-inner{display:flex;align-items:stretch}
-.bev-accent{width:4px;background:#F4C430;box-shadow:2px 0 12px rgba(244,196,48,.4);flex-shrink:0}
+.bev-accent{width:4px;background:#8C7040;box-shadow:2px 0 8px rgba(140,112,64,.25);flex-shrink:0}
 .bev-body{flex:1;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .bev-label{display:flex;align-items:center;gap:6px}
-.bev-title{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#F4C430}
-.bev-name{font-size:16px;font-weight:900;color:#fff;letter-spacing:-.3px}
+.bev-title{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#6A5020}
+.bev-name{font-size:16px;font-weight:900;color:var(--ink);letter-spacing:-.3px}
 .bev-right{display:flex;align-items:center;gap:6px}
 .bev-pills{display:flex;gap:4px;flex-wrap:wrap}
 .bev-pill{
-  padding:4px 10px;border-radius:20px;border:1.5px solid rgba(244,196,48,.25);
-  background:none;color:rgba(244,196,48,.6);
+  padding:4px 10px;border-radius:20px;border:1.5px solid rgba(140,112,64,.25);
+  background:none;color:rgba(106,80,32,.55);
   font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
   cursor:pointer;transition:all .15s;letter-spacing:.04em;
 }
-.bev-pill.on{background:#F4C430;color:#16181F;border-color:#F4C430;box-shadow:0 0 8px rgba(244,196,48,.4)}
+.bev-pill.on{background:#8C7040;color:#fff;border-color:#8C7040;box-shadow:0 2px 6px rgba(140,112,64,.30)}
 
 /* ── LOG BUTTON ── */
 .log-btn-row{padding:10px 12px 0;display:flex;gap:8px}
@@ -297,7 +296,7 @@ html,body{
   letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
   display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.log-btn.save{background:var(--green);color:#fff;box-shadow:0 3px 14px rgba(255,159,67,.45)}
+.log-btn.save{background:var(--green);color:#fff;box-shadow:0 3px 10px rgba(92,122,92,.30)}
 .log-btn.save:active{transform:scale(.97)}
 .log-btn.history{background:var(--ink4);color:var(--ink2);border:1px solid var(--border2)}
 .log-btn.history:active{transform:scale(.97)}
@@ -326,12 +325,12 @@ html,body{
   padding:16px 16px 12px;border-bottom:1px solid var(--ink4);
   flex-shrink:0;
 }
-.log-sheet-title{font-size:17px;font-weight:900;color:#fff;letter-spacing:-.4px}
+.log-sheet-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
 .log-actions{display:flex;gap:8px;align-items:center}
 .log-export-btn{
-  padding:6px 14px;border-radius:8px;background:var(--lime);
+  padding:6px 14px;border-radius:8px;background:var(--green);
   border:none;cursor:pointer;font-family:'Nunito',sans-serif;
-  font-size:10px;font-weight:900;color:#16181F;letter-spacing:.05em;text-transform:uppercase;
+  font-size:10px;font-weight:900;color:#fff;letter-spacing:.05em;text-transform:uppercase;
 }
 .log-close-btn{
   width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);
@@ -350,8 +349,8 @@ html,body{
   display:flex;align-items:center;justify-content:space-between;
   padding:10px 12px 8px;border-bottom:1px solid var(--ink4);
 }
-.log-date{font-size:13px;font-weight:900;color:#fff;letter-spacing:-.2px}
-.log-kcal{font-size:11px;font-weight:800;color:var(--lime)}
+.log-date{font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.2px}
+.log-kcal{font-size:11px;font-weight:800;color:var(--green)}
 .log-del-btn{
   width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,107,43,.3);
   background:none;color:rgba(255,107,43,.7);font-size:14px;cursor:pointer;
@@ -382,18 +381,18 @@ html,body{
     <div class="logo">
       <div class="logo-mark">
         <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="8"  cy="10" r="5" fill="#16181F"/><circle cx="8"  cy="10" r="3.5" fill="#FDF6E3"/>
-          <circle cx="18" cy="10" r="5" fill="#16181F"/><circle cx="18" cy="10" r="3.5" fill="#FDF6E3"/>
-          <circle cx="13" cy="18" r="5" fill="#16181F"/><circle cx="13" cy="18" r="3.5" fill="#FDF6E3"/>
-          <circle cx="8"  cy="10" r="2.4" fill="#00D4AA"/>
-          <circle cx="18" cy="10" r="2.4" fill="#FF6B2B"/>
-          <circle cx="13" cy="18" r="2.4" fill="#A67AFF"/>
-          <circle cx="13" cy="13" r="2.8" fill="#16181F"/><circle cx="13" cy="13" r="1.6" fill="#FF9F43"/>
+          <circle cx="8"  cy="10" r="5" fill="rgba(255,255,255,0.3)"/><circle cx="8"  cy="10" r="3.5" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="18" cy="10" r="5" fill="rgba(255,255,255,0.3)"/><circle cx="18" cy="10" r="3.5" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="13" cy="18" r="5" fill="rgba(255,255,255,0.3)"/><circle cx="13" cy="18" r="3.5" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="8"  cy="10" r="2.4" fill="#3D8C82"/>
+          <circle cx="18" cy="10" r="2.4" fill="#B5764A"/>
+          <circle cx="13" cy="18" r="2.4" fill="#7A5EA8"/>
+          <circle cx="13" cy="13" r="2.8" fill="rgba(255,255,255,0.25)"/><circle cx="13" cy="13" r="1.6" fill="rgba(255,255,255,0.9)"/>
         </svg>
       </div>
       <div>
         <div class="logo-name">EatRight</div>
-        <div class="logo-sub">High Protein · Low Carb · 1800 kcal</div>
+        <div class="logo-sub">High Protein · Low Carb · Eat Right</div>
       </div>
     </div>
     <div class="mode-tabs">
@@ -440,7 +439,7 @@ html,body{
   <div style="margin-top:9px" id="bevCard">
     <div class="bev-card">
       <div class="bev-inner">
-        <div class="bev-accent"></div>
+        <div class="bev-accent" style="background:#8C7040"></div>
         <div class="bev-body">
           <div>
             <div class="bev-label"><div class="ct-dot" style="background:#F4C430"></div><span class="bev-title">☕ Beverages</span></div>
@@ -477,7 +476,6 @@ html,body{
 </div>
 
 <div class="footer">
-  No beef · pork · cheese · turkey · sausage · pasta<br>
   Veg enforced Mon &amp; Thu &nbsp;·&nbsp; <span>EatRight</span>
 </div>
 </div>
@@ -489,11 +487,11 @@ const TYPES=['breakfast','lunch','snacks','dinner'];
 const T_ICON={breakfast:'🌅',lunch:'☀️',snacks:'🍊',dinner:'🌙'};
 const T_LBL={breakfast:'Breakfast',lunch:'Lunch',snacks:'Snack',dinner:'Dinner'};
 const CARB_CAP=130; // daily soft target — shown in stats, turns orange if exceeded
-                    // not used to restrict swaps (would leave only 1 dinner option)
+const CAL_TARGET={R:1900, D:1600, C:2500}; // per-mode calorie targets
 const MODE_NOTE={
-  R:'Balanced diet · high protein · moderate carbs · healthy fats',
-  D:'Low-GI meals · controlled carbs · high fibre · no refined sugar',
-  C:'Enjoy your cheat day! Back on track tomorrow 💪'
+  R:'Regular · 1900 kcal target · high protein · moderate carbs · healthy fats',
+  D:'Diabetic · 1600 kcal target · low-GI · controlled carbs · high fibre',
+  C:'Cheat Day · 2500 kcal · enjoy it — back on track tomorrow 💪'
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -507,43 +505,53 @@ const MODE_NOTE={
 const DB={
 
 // ══════════════════ BREAKFAST ══════════════════
+// All entries include a paired tea or coffee
 breakfast:{
  veg:[
-  {n:'Veggie Omelette + Wholegrain Toast',      d:'3 eggs · spinach, mushroom & capsicum omelette + 1 slice wholegrain toast + 1 orange',                  cal:340,p:20,c:22,f:16,m:'RDC'},
-  {n:'Scrambled Tofu + Toast + Mixed Berries',  d:'150g silken tofu scrambled with turmeric & spinach + 1 wholegrain toast + ½ cup fresh berries',          cal:320,p:18,c:26,f:10,m:'RDC'},
-  {n:'Shakshuka (Veg) + Fruit Salad',           d:'2 eggs poached in 200ml spiced tomato-pepper sauce + 1 slice wholegrain bread + ½ cup seasonal fruit',   cal:360,p:18,c:30,f:14,m:'RDC'},
-  {n:'Avocado Toast + Poached Eggs + Berries',  d:'2 slices wholegrain toast + ½ avocado + 2 poached eggs + chilli flakes + ½ cup mixed berries',           cal:410,p:20,c:32,f:20,m:'RC'},
-  {n:'Lentil Pancakes + Yogurt + Berries',      d:'2 lentil pancakes (80g batter each) + 3 tbsp plain yogurt + ½ cup mixed berries + 1 tsp honey',          cal:340,p:18,c:36,f:6,m:'RDC'},
-  {n:'Savoury Oat Porridge + Mixed Nuts',       d:'¾ cup rolled oats cooked with veg stock & cumin + 20g almonds & walnuts + sliced banana',               cal:330,p:12,c:38,f:12,m:'RDC'},
-  {n:'Spinach & Mushroom Egg Cups + Fruit',     d:'3 eggs baked in muffin cups with spinach, mushroom & herbs + 1 cup fresh fruit salad on the side',       cal:280,p:18,c:16,f:16,m:'RDC'},
-  {n:'Avocado + Boiled Eggs + Tomatoes + Nuts', d:'½ avocado + 2 boiled eggs + cherry tomatoes + 10g walnuts + black pepper & lemon',                       cal:330,p:16,c:10,f:24,m:'RDC'},
-  {n:'Paneer Cubes + Fruit + Flaxseeds',        d:'150g paneer cubes (lightly spiced) + ½ cup pineapple & papaya chunks + 1 tbsp flaxseeds',               cal:310,p:22,c:20,f:14,m:'RDC'},
-  {n:'Greek Yogurt + Berries + Almond Butter',  d:'200g plain Greek yogurt + ¾ cup mixed berries + 1 tbsp almond butter + 1 tsp chia seeds',               cal:320,p:20,c:26,f:10,m:'RDC'},
-  {n:'Yogurt Parfait + Granola + Kiwi + Nuts',  d:'180g Greek yogurt + 3 tbsp low-sugar granola + 1 kiwi + 10g cashews + 1 tsp chia seeds',               cal:350,p:16,c:38,f:10,m:'RC'},
-  {n:'Smoothie Bowl',                           d:'1 frozen banana + ½ cup mango + spinach blended · topped with granola, berries & 10g almonds',           cal:360,p:10,c:54,f:8,m:'RC'},
-  {n:'Berry Protein Smoothie',                  d:'1 cup almond milk + 100g Greek yogurt + ½ cup berries + 1 tbsp peanut butter + 1 tsp flaxseeds',         cal:320,p:20,c:28,f:10,m:'RDC'},
-  {n:'Chia Pudding + Mango + Almonds',          d:'3 tbsp chia seeds soaked in 250ml almond milk overnight + ½ cup mango + 15g sliced almonds',             cal:330,p:10,c:32,f:16,m:'RDC'},
-  {n:'Overnight Oats + Banana + Walnuts',       d:'¾ cup oats soaked in 200ml almond milk + ½ banana + 15g crushed walnuts + 1 tsp honey',                 cal:370,p:12,c:48,f:14,m:'RC'},
-  {n:'Whole Wheat Pancakes + Fruit Compote',    d:'3 small whole wheat pancakes + 3 tbsp warm mixed berry compote + 1 tsp honey + sliced kiwi',             cal:380,p:12,c:54,f:8,m:'RC'},
-  {n:'Peanut Butter Toast + Banana + Yogurt',   d:'2 slices wholegrain toast + 2 tbsp natural peanut butter + ½ banana + 100g plain yogurt on the side',   cal:430,p:18,c:48,f:16,m:'RC'},
-  {n:'Muesli + Milk + Fresh Fruit + Nuts',      d:'60g no-sugar muesli + 200ml low-fat milk + ½ cup seasonal fruit + 10g mixed nuts',                      cal:360,p:12,c:48,f:10,m:'RC'},
+  {n:'Veggie Omelette + Toast + Masala Chai',        d:'3 eggs · spinach, mushroom & capsicum omelette + 1 wholegrain toast + 1 orange · paired with 1 cup masala chai (no sugar)',                  cal:355,p:20,c:24,f:16,m:'RDC'},
+  {n:'Scrambled Tofu + Toast + Green Tea',           d:'150g silken tofu scrambled with turmeric & spinach + 1 wholegrain toast + ½ cup berries · paired with 1 cup green tea',                       cal:322,p:18,c:26,f:10,m:'RDC'},
+  {n:'Shakshuka (Veg) + Fruit + Black Coffee',       d:'2 eggs poached in spiced tomato-pepper sauce + 1 wholegrain bread + ½ cup seasonal fruit · paired with 1 black coffee',                       cal:365,p:18,c:30,f:14,m:'RDC'},
+  {n:'Avocado Toast + Poached Eggs + Filter Coffee', d:'2 slices wholegrain toast + ½ avocado + 2 poached eggs + chilli flakes + ½ cup berries · paired with 1 filter coffee (low sugar)',            cal:440,p:20,c:34,f:20,m:'RC'},
+  {n:'Lentil Pancakes + Yogurt + Ginger Tea',        d:'2 lentil pancakes + 3 tbsp plain yogurt + ½ cup mixed berries + 1 tsp honey · paired with 1 cup ginger lemon tea',                            cal:345,p:18,c:36,f:6,m:'RDC'},
+  {n:'Savoury Oat Porridge + Nuts + Chai',           d:'¾ cup rolled oats with veg stock & cumin + 20g mixed nuts + sliced banana · paired with 1 cup elaichi chai (no sugar)',                       cal:345,p:12,c:40,f:12,m:'RDC'},
+  {n:'Egg Cups + Fruit Salad + Tulsi Tea',           d:'3 eggs baked in muffin cups with spinach & herbs + 1 cup fresh fruit salad · paired with 1 cup tulsi tea',                                    cal:282,p:18,c:16,f:16,m:'RDC'},
+  {n:'Avocado + Boiled Eggs + Nuts + Black Coffee',  d:'½ avocado + 2 boiled eggs + cherry tomatoes + 10g walnuts + lemon · paired with 1 black coffee',                                              cal:335,p:16,c:10,f:24,m:'RDC'},
+  {n:'Paneer Cubes + Fruit + Flaxseeds + Chai',      d:'150g lightly spiced paneer cubes + ½ cup pineapple & papaya + 1 tbsp flaxseeds · paired with 1 cup masala chai (no sugar)',                   cal:325,p:22,c:22,f:14,m:'RDC'},
+  {n:'Greek Yogurt + Berries + Almond Butter + Tea', d:'200g plain Greek yogurt + ¾ cup mixed berries + 1 tbsp almond butter + 1 tsp chia seeds · paired with 1 cup green tea',                       cal:322,p:20,c:26,f:10,m:'RDC'},
+  {n:'Yogurt Parfait + Granola + Kiwi + Coffee',     d:'180g Greek yogurt + 3 tbsp low-sugar granola + 1 kiwi + 10g cashews + chia seeds · paired with 1 americano',                                  cal:365,p:16,c:40,f:10,m:'RC'},
+  {n:'Smoothie Bowl + Green Tea',                    d:'Frozen banana + ½ cup mango + spinach blended · topped with granola, berries & almonds · paired with 1 cup green tea',                         cal:362,p:10,c:54,f:8,m:'RC'},
+  {n:'Berry Protein Smoothie + Black Coffee',        d:'1 cup almond milk + 100g Greek yogurt + ½ cup berries + 1 tbsp peanut butter + flaxseeds · paired with 1 black coffee',                       cal:325,p:20,c:28,f:10,m:'RDC'},
+  {n:'Chia Pudding + Mango + Almonds + Chai',        d:'3 tbsp chia seeds soaked in almond milk overnight + ½ cup mango + 15g almonds · paired with 1 cup masala chai (no sugar)',                    cal:345,p:10,c:34,f:16,m:'RDC'},
+  {n:'Overnight Oats + Banana + Walnuts + Coffee',   d:'¾ cup oats soaked in almond milk + ½ banana + 15g walnuts + honey · paired with 1 filter coffee (low sugar)',                                 cal:400,p:12,c:50,f:14,m:'RC'},
+  {n:'Whole Wheat Pancakes + Berries + Chai',        d:'3 small whole wheat pancakes + 3 tbsp warm berry compote + 1 tsp honey + sliced kiwi · paired with 1 cup masala chai',                        cal:395,p:12,c:56,f:8,m:'RC'},
+  {n:'Peanut Butter Toast + Banana + Coffee',        d:'2 slices wholegrain toast + 2 tbsp natural peanut butter + ½ banana + 100g yogurt · paired with 1 black coffee',                              cal:445,p:18,c:50,f:16,m:'RC'},
+  {n:'Muesli + Milk + Fruit + Nuts + Tea',           d:'60g no-sugar muesli + 200ml low-fat milk + ½ cup seasonal fruit + 10g mixed nuts · paired with 1 cup green tea',                              cal:362,p:12,c:48,f:10,m:'RC'},
+  // Extra dishes for Cheat / Regular higher cal
+  {n:'Aloo Paratha (2) + Curd + Chai',              d:'2 whole wheat flatbreads stuffed with spiced potato + 150g plain curd + sliced onion · paired with 1 cup masala chai',                          cal:560,p:16,c:76,f:18,m:'RC'},
+  {n:'Masala Dosa + Sambar + Coffee',               d:'Crispy rice-lentil crepe with spiced potato filling + sambar + coconut chutney · paired with 1 filter coffee',                                  cal:420,p:10,c:62,f:12,m:'RC'},
+  {n:'Idli (3) + Sambar + Coconut Chutney + Tea',   d:'3 steamed fermented rice-lentil cakes + lentil-veg sambar + coconut chutney · paired with 1 cup ginger tea',                                   cal:360,p:12,c:58,f:4,m:'RDC'},
+  {n:'Upma + Fruit Bowl + Chai',                    d:'¾ cup semolina upma with mixed veg & curry leaves + ½ cup fresh fruit bowl · paired with 1 cup masala chai (no sugar)',                         cal:380,p:10,c:52,f:10,m:'RC'},
  ],
  nonveg:[
-  {n:'Spiced Scrambled Eggs + Roti + Fruit',    d:'3 eggs scrambled with onion & capsicum + 1 small wholegrain roti + ½ cup mixed fruit salad',            cal:390,p:24,c:28,f:18,m:'RDC'},
-  {n:'Classic Omelette + Toast + Orange',       d:'3-egg omelette with onion, tomato & herbs + 1 slice wholegrain toast + 1 orange',                        cal:360,p:22,c:24,f:16,m:'RDC'},
-  {n:'Boiled Eggs + Avocado + Fruit + Almonds', d:'3 hard-boiled eggs + ½ avocado + ½ cup mixed fruit + 10g almonds + sea salt',                            cal:380,p:22,c:18,f:24,m:'RDC'},
-  {n:'Smoked Salmon + Avocado Toast + Berries', d:'2 slices wholegrain toast + ½ avocado + 80g smoked salmon + capers + ½ cup mixed berries',              cal:420,p:26,c:30,f:18,m:'RDC'},
-  {n:'Greek Yogurt + Boiled Eggs + Nuts + Fruit',d:'150g plain Greek yogurt + 2 boiled eggs + 15g mixed nuts + ½ cup blueberries',                         cal:390,p:28,c:20,f:18,m:'RDC'},
-  {n:'Egg White Omelette + Spinach + Fruit',    d:'4 egg whites + spinach & capsicum omelette + 1 cup mixed fruit salad on the side',                       cal:270,p:22,c:20,f:4,m:'RDC'},
-  {n:'Tuna + Avocado + Crackers + Apple',       d:'80g canned tuna + ½ avocado mashed + 4 wholegrain crackers + 1 sliced apple',                           cal:380,p:28,c:28,f:14,m:'RDC'},
-  {n:'Shakshuka + Wholegrain Bread + Fruit',    d:'2 eggs poached in spiced tomato sauce + 1 slice wholegrain bread + ½ cup sliced seasonal fruit',         cal:360,p:18,c:28,f:14,m:'RDC'},
-  {n:'Grilled Chicken + Eggs + Cucumber',       d:'80g cold grilled chicken sliced + 2 boiled eggs + cucumber sticks + cherry tomatoes + 10g walnuts',      cal:380,p:38,c:8,f:16,m:'RDC'},
-  {n:'Prawn & Egg Scramble + Fruit + Nuts',     d:'80g prawns stir-fried with 2 scrambled eggs & spring onion + ½ cup pineapple + 10g cashews',             cal:380,p:30,c:20,f:16,m:'RDC'},
-  {n:'Smoked Fish Scramble + Toast + Berries',  d:'60g smoked fish flaked into 2-egg scramble + 1 slice wholegrain toast + ½ cup fresh berries',            cal:370,p:28,c:24,f:14,m:'RDC'},
-  {n:'High-Protein Yogurt Bowl + Nuts + Berries',d:'200g Greek yogurt + 2 tbsp hemp seeds + ½ cup berries + 1 boiled egg + 10g almonds',                   cal:390,p:30,c:22,f:16,m:'RDC'},
-  {n:'Egg Muffins + Fruit Salad',               d:'3 baked egg muffins with spinach & sun-dried tomato + 1 cup fresh mixed fruit + 10g walnuts',            cal:340,p:22,c:22,f:16,m:'RDC'},
-  {n:'Sardines + Wholegrain Toast + Tomato',    d:'1 tin sardines in brine (100g) + 2 slices wholegrain toast + sliced tomato & rocket + sliced orange',    cal:380,p:30,c:28,f:12,m:'RDC'},
-  {n:'Shrimp & Egg Omelette + Toast',           d:'60g cooked shrimp + 2-egg omelette with spring onion & ginger + 1 slice wholegrain toast + ½ cup berries',cal:360,p:30,c:24,f:14,m:'RDC'},
+  {n:'Spiced Scrambled Eggs + Roti + Chai',          d:'3 eggs scrambled with onion & capsicum + 1 wholegrain roti + ½ cup mixed fruit · paired with 1 cup masala chai (no sugar)',                   cal:405,p:24,c:30,f:18,m:'RDC'},
+  {n:'Classic Omelette + Toast + Filter Coffee',     d:'3-egg omelette with onion, tomato & herbs + 1 wholegrain toast + 1 orange · paired with 1 filter coffee (low sugar)',                          cal:375,p:22,c:26,f:16,m:'RDC'},
+  {n:'Boiled Eggs + Avocado + Fruit + Black Coffee', d:'3 hard-boiled eggs + ½ avocado + ½ cup mixed fruit + 10g almonds + sea salt · paired with 1 black coffee',                                    cal:385,p:22,c:18,f:24,m:'RDC'},
+  {n:'Smoked Salmon + Avocado Toast + Green Tea',    d:'2 slices wholegrain toast + ½ avocado + 80g smoked salmon + capers + ½ cup berries · paired with 1 cup green tea',                            cal:422,p:26,c:30,f:18,m:'RDC'},
+  {n:'Greek Yogurt + Boiled Eggs + Nuts + Chai',     d:'150g plain Greek yogurt + 2 boiled eggs + 15g mixed nuts + ½ cup blueberries · paired with 1 cup masala chai (no sugar)',                     cal:405,p:28,c:22,f:18,m:'RDC'},
+  {n:'Egg White Omelette + Spinach + Fruit + Tea',   d:'4 egg whites + spinach & capsicum omelette + 1 cup mixed fruit salad · paired with 1 cup tulsi tea',                                          cal:272,p:22,c:20,f:4,m:'RDC'},
+  {n:'Tuna + Avocado + Crackers + Apple + Coffee',   d:'80g canned tuna + ½ avocado + 4 wholegrain crackers + 1 sliced apple · paired with 1 americano',                                              cal:390,p:28,c:28,f:14,m:'RDC'},
+  {n:'Shakshuka + Bread + Fruit + Masala Chai',      d:'2 eggs poached in spiced tomato sauce + 1 wholegrain bread + ½ cup seasonal fruit · paired with 1 cup masala chai (no sugar)',                cal:375,p:18,c:30,f:14,m:'RDC'},
+  {n:'Grilled Chicken + Eggs + Cucumber + Coffee',   d:'80g cold grilled chicken + 2 boiled eggs + cucumber sticks + cherry tomatoes + 10g walnuts · paired with 1 black coffee',                     cal:385,p:38,c:8,f:16,m:'RDC'},
+  {n:'Prawn & Egg Scramble + Fruit + Chai',          d:'80g prawns stir-fried with 2 scrambled eggs & spring onion + ½ cup pineapple + 10g cashews · paired with 1 cup ginger tea',                   cal:395,p:30,c:22,f:16,m:'RDC'},
+  {n:'Smoked Fish Scramble + Toast + Green Tea',     d:'60g smoked fish flaked into 2-egg scramble + 1 wholegrain toast + ½ cup berries · paired with 1 cup green tea',                               cal:372,p:28,c:24,f:14,m:'RDC'},
+  {n:'High-Protein Yogurt Bowl + Nuts + Coffee',     d:'200g Greek yogurt + 2 tbsp hemp seeds + ½ cup berries + 1 boiled egg + 10g almonds · paired with 1 americano',                                cal:395,p:30,c:22,f:16,m:'RDC'},
+  {n:'Egg Muffins + Fruit Salad + Chai',             d:'3 baked egg muffins with spinach & sun-dried tomato + 1 cup fresh mixed fruit + 10g walnuts · paired with 1 cup masala chai',                 cal:355,p:22,c:24,f:16,m:'RDC'},
+  {n:'Sardines + Wholegrain Toast + Tea',            d:'1 tin sardines in brine (100g) + 2 slices wholegrain toast + sliced tomato & rocket + 1 orange · paired with 1 cup green tea',                cal:382,p:30,c:28,f:12,m:'RDC'},
+  {n:'Shrimp & Egg Omelette + Toast + Coffee',       d:'60g cooked shrimp + 2-egg omelette with spring onion & ginger + 1 wholegrain toast + ½ cup berries · paired with 1 black coffee',             cal:365,p:30,c:24,f:14,m:'RDC'},
+  // Extra dishes
+  {n:'Egg Bhurji + 2 Rotis + Chai',                 d:'3 eggs scrambled masala-style with onion, tomato & green chilli + 2 small wholegrain rotis · paired with 1 cup masala chai (no sugar)',        cal:460,p:26,c:36,f:20,m:'RDC'},
+  {n:'Chicken Keema Paratha + Curd + Coffee',        d:'1 whole wheat paratha stuffed with spiced chicken mince + 100g plain curd · paired with 1 filter coffee',                                     cal:520,p:32,c:42,f:20,m:'RC'},
+  {n:'Full English (No Pork) + Tea',                 d:'2 eggs (any style) + grilled tomato + mushrooms + baked beans + 1 wholegrain toast · paired with 1 cup black tea',                             cal:480,p:26,c:38,f:18,m:'RC'},
  ]
 },
 
@@ -606,6 +614,12 @@ lunch:{
   {n:'Tuna Salad Bowl + Crackers + Apple',      d:'120g canned tuna + 2 cups mixed greens + yogurt dressing + 4 wholegrain crackers + 1 apple',             cal:410,p:34,c:28,f:12,m:'RDC'},
   {n:'Salmon + Greens + Quinoa + Nuts',         d:'140g baked salmon + 2 cups mixed greens + ½ cup quinoa + 10g walnuts + lemon-herb dressing',            cal:470,p:40,c:30,f:20,m:'RDC'},
   {n:'Shrimp & Avocado Salad Bowl',             d:'150g grilled shrimp + 2 cups mixed greens + ½ avocado + cherry tomatoes + lemon vinaigrette + 10g nuts', cal:390,p:32,c:14,f:20,m:'RDC'},
+  // Cheat-mode extras — bigger, indulgent but still clean
+  {n:'Chicken Biryani + Raita + Salad',         d:'1.5 cups fragrant layered chicken biryani + ½ cup boondi raita + cucumber-onion salad',                  cal:620,p:34,c:72,f:18,m:'RC'},
+  {n:'Mutton Biryani + Raita',                  d:'1.5 cups slow-cooked spiced mutton biryani with pickled onion & boondi raita',                           cal:680,p:34,c:76,f:24,m:'C'},
+  {n:'Prawn Biryani + Raita + Salad',           d:'1.5 cups fragrant spiced prawn biryani + ½ cup cucumber-mint raita + green salad',                       cal:580,p:32,c:68,f:16,m:'RC'},
+  {n:'BBQ Chicken + Roasted Veg + Quinoa',      d:'180g baked BBQ chicken thigh + 200g roasted peppers & zucchini + ¾ cup quinoa',                          cal:520,p:40,c:36,f:18,m:'RC'},
+  {n:'Butter Chicken + 2 Rotis + Salad',        d:'150g butter chicken in creamy tomato gravy + 2 wholegrain rotis + cucumber-onion salad',                 cal:580,p:36,c:46,f:24,m:'RC'},
  ]
 },
 
@@ -703,6 +717,14 @@ dinner:{
   {n:'Herb Chicken + Kale Salad + Walnuts',     d:'150g herb-baked chicken breast + 2 cups kale with 15g walnuts, cranberries & balsamic dressing',        cal:410,p:38,c:14,f:18,m:'RDC'},
   {n:'Garlic Shrimp + Zucchini Noodles + Nuts', d:'150g garlic shrimp + 200g zucchini noodles + cherry tomatoes + fresh basil + 10g pine nuts',            cal:350,p:30,c:12,f:18,m:'RDC'},
   {n:'Tuna Niçoise Salad + Fruit',              d:'120g tuna + 2 boiled eggs + green beans + olives + cherry tomatoes + Dijon vinaigrette + sliced orange', cal:400,p:36,c:16,f:20,m:'RDC'},
+  // Cheat-mode & higher-cal Regular
+  {n:'Chicken Tikka Masala + 2 Rotis + Salad',  d:'180g rich chicken tikka masala curry + 2 wholegrain rotis + cucumber-tomato salad + 3 tbsp raita',      cal:580,p:40,c:44,f:22,m:'RC'},
+  {n:'Butter Chicken + 1 Roti + Raita',         d:'150g butter chicken in creamy tomato gravy + 1 wholegrain roti + ½ cup yogurt raita + cucumber salad',   cal:520,p:36,c:32,f:22,m:'RC'},
+  {n:'Mutton Rogan Josh + Rice + Raita',        d:'180g slow-cooked Kashmiri mutton curry + ¾ cup basmati rice + ½ cup yogurt raita + onion salad',         cal:660,p:36,c:58,f:28,m:'C'},
+  {n:'Prawn Biryani + Raita',                   d:'1.5 cups fragrant spiced prawn biryani + ½ cup cucumber-mint raita + sliced onion salad',                cal:560,p:30,c:64,f:16,m:'RC'},
+  {n:'Grilled Fish + Brown Rice + Salad',        d:'200g oven-baked masala fish fillet + ¾ cup brown rice + large mixed green salad + lemon wedge',         cal:480,p:38,c:46,f:12,m:'RC'},
+  {n:'Lamb Chops + Roasted Veg',                d:'2 grilled lamb chops (180g) + 200g roasted peppers, zucchini & eggplant + mint-yogurt dip',              cal:560,p:42,c:16,f:30,m:'C'},
+  {n:'Butter Garlic Shrimp + Pasta Alt + Salad',d:'180g butter-garlic shrimp + 200g sautéed zucchini noodles + cherry tomatoes + large green salad',        cal:420,p:34,c:14,f:22,m:'RC'},
  ]
 }
 };
@@ -852,12 +874,13 @@ function render(){
   carbEl.textContent=totC+'g';
   carbEl.style.color=totC>CARB_CAP?'#FF6B2B':'';
   document.getElementById('sFat').textContent=totF+'g';
-  const pct=Math.min(100,Math.round(tot/1800*100));
+  const calTarget=CAL_TARGET[mode];
+  const pct=Math.min(100,Math.round(tot/calTarget*100));
   const b=document.getElementById('calBar');
   b.style.width=pct+'%';
-  const barCol=tot>1850?'#FF6B2B':tot>1700?'#FFD84D':'#FF9F43';
+  const barCol=tot>calTarget*1.05?'#B5764A':tot>calTarget*0.9?'#8C7040':'#5C7A5C';
   b.style.background=barCol;
-  b.style.boxShadow=`0 0 10px ${barCol}80`;
+  b.style.boxShadow=`0 0 6px ${barCol}50`;
   document.getElementById('modeNote').textContent=MODE_NOTE[mode];
   const wrap=document.getElementById('meals');wrap.innerHTML='';
   TYPES.forEach(t=>{
@@ -942,7 +965,7 @@ function logDay(){
   // visual feedback
   const btn=document.querySelector('.log-btn.save');
   const orig=btn.innerHTML;
-  btn.innerHTML='✅ Logged!';btn.style.background='#FF9F43';
+  btn.innerHTML='✅ Logged!';btn.style.background='#5C7A5C';
   setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},1800);
 }
 
