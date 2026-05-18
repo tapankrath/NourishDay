@@ -573,11 +573,11 @@ const TYPES=['breakfast','lunch','snacks','dinner'];
 const T_ICON={breakfast:'🌅',lunch:'☀️',snacks:'🍊',dinner:'🌙'};
 const T_LBL={breakfast:'Breakfast',lunch:'Lunch',snacks:'Snack',dinner:'Dinner'};
 const CARB_CAP=130; // daily soft target — shown in stats, turns orange if exceeded
-const CAL_TARGET={R:1900, D:1600, C:2500}; // per-mode calorie targets
+const CAL_TARGET={R:1800, D:1550, C:2400}; // per-mode calorie targets
 const MODE_NOTE={
-  R:'Regular · 1900 kcal · high protein · moderate carbs · healthy fats',
-  D:'Low-GI · 1600 kcal · controlled carbs · high fibre · no refined sugar',
-  C:'Treat Day · 2500 kcal · enjoy it — back on track tomorrow 💪'
+  R:'Regular · ~1800 kcal · high protein · balanced carbs · healthy fats',
+  D:'Low-GI · ~1550 kcal · controlled carbs · high fibre · blood-sugar friendly',
+  C:'Treat Day · ~2400 kcal · enjoy it — back on track tomorrow 💪'
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -617,6 +617,15 @@ breakfast:{
   {n:'Masala Dosa + Sambar + Coffee',               d:'Crispy rice-lentil crepe with spiced potato filling + sambar + coconut chutney · paired with 1 filter coffee',                                  cal:420,p:10,c:62,f:12,m:'RC'},
   {n:'Idli (3) + Sambar + Coconut Chutney + Tea',   d:'3 steamed fermented rice-lentil cakes + lentil-veg sambar + coconut chutney · paired with 1 cup ginger tea',                                   cal:360,p:12,c:58,f:4,m:'RDC'},
   {n:'Upma + Fruit Bowl + Chai',                    d:'¾ cup semolina upma with mixed veg & curry leaves + ½ cup fresh fruit bowl · paired with 1 cup masala chai (no sugar)',                         cal:380,p:10,c:52,f:10,m:'RC'},
+  // More Low-GI veg breakfasts
+  {n:'Flaxseed Chilla (2) + Mint Yogurt + Tea',     d:'2 flaxseed & besan chillas (high omega-3, low GI) + 3 tbsp mint yogurt · paired with 1 cup green tea',                                        cal:310,p:16,c:22,f:14,m:'RDC'},
+  {n:'Barley Porridge + Almonds + Berries + Chai',  d:'¾ cup cooked pearl barley with cinnamon + 15g almonds + ½ cup mixed berries · paired with 1 cup masala chai (no sugar)',                       cal:340,p:10,c:46,f:10,m:'RD'},
+  {n:'Tofu Scramble + Rye Toast + Green Tea',       d:'150g tofu scrambled with turmeric, spinach & tomato + 1 slice rye bread + ½ cup berries · paired with 1 cup green tea',                        cal:318,p:18,c:24,f:10,m:'RDC'},
+  {n:'Mung Bean Sprout Bowl + Seeds + Chai',        d:'1 cup sprouted mung beans sautéed with cumin, chilli & lemon + 1 tbsp mixed seeds + ½ cup fruit · paired with 1 cup tulsi tea',               cal:295,p:16,c:26,f:8,m:'RDC'},
+  // Cheat-Day veg breakfasts
+  {n:'Chole Bhature + Chai',                        d:'1 fluffy bhatura + ½ cup rich chole masala + sliced raw onion & lemon · paired with 1 cup masala chai',                                        cal:620,p:16,c:82,f:22,m:'C'},
+  {n:'Bread Omelette (3 eggs) + Chai',              d:'3-egg masala omelette stuffed between 2 buttered white bread slices + sliced tomato & chilli sauce · paired with 1 cup chai',                  cal:540,p:22,c:46,f:26,m:'C'},
+  {n:'Paneer Paratha (2) + Butter + Chai',          d:'2 thick whole wheat parathas stuffed with spiced paneer + 1 tsp butter + 150g curd · paired with 1 cup masala chai',                           cal:600,p:24,c:70,f:22,m:'C'},
  ],
  nonveg:[
   {n:'Spiced Scrambled Eggs + Roti + Chai',          d:'3 eggs scrambled with onion & capsicum + 1 wholegrain roti + ½ cup mixed fruit · paired with 1 cup masala chai (no sugar)',                   cal:405,p:24,c:30,f:18,m:'RDC'},
@@ -637,7 +646,14 @@ breakfast:{
   // Extra dishes
   {n:'Egg Bhurji + 2 Rotis + Chai',                 d:'3 eggs scrambled masala-style with onion, tomato & green chilli + 2 small wholegrain rotis · paired with 1 cup masala chai (no sugar)',        cal:460,p:26,c:36,f:20,m:'RDC'},
   {n:'Chicken Keema Paratha + Curd + Coffee',        d:'1 whole wheat paratha stuffed with spiced chicken mince + 100g plain curd · paired with 1 filter coffee',                                     cal:520,p:32,c:42,f:20,m:'RC'},
-  {n:'Full English (No Pork) + Tea',                 d:'2 eggs (any style) + grilled tomato + mushrooms + baked beans + 1 wholegrain toast · paired with 1 cup black tea',                             cal:480,p:26,c:38,f:18,m:'RC'},
+  {n:'Full English Breakfast + Tea',             d:'2 eggs (any style) + grilled tomato + mushrooms + baked beans + 1 wholegrain toast — no processed meat · paired with 1 cup black tea',           cal:480,p:26,c:38,f:18,m:'RC'},
+  // Cheat-Day nonveg breakfasts
+  {n:'Egg & Chicken Frankie Roll + Chai',            d:'3-egg omelette + 100g spiced chicken wrapped in 2 rumali-style rotis with chutney & onion · paired with 1 cup masala chai',                   cal:580,p:38,c:48,f:22,m:'C'},
+  {n:'Prawn Omelette + Buttered Toast + Coffee',     d:'3-egg omelette with 80g prawns, garlic & herbs + 2 slices buttered wholegrain toast + sliced tomato · paired with 1 black coffee',             cal:540,p:36,c:30,f:28,m:'C'},
+  {n:'Fish Fry (2 pcs) + Egg + Paratha + Chai',     d:'2 pieces crispy spiced fish fry + 1 fried egg + 1 whole wheat paratha + sliced onion & chilli · paired with 1 cup masala chai',               cal:600,p:40,c:38,f:28,m:'C'},
+  // More Low-GI nonveg
+  {n:'Egg Drop Soup + 2 Boiled Eggs + Green Tea',   d:'1.5 cups clear egg drop soup with ginger & spring onion + 2 additional boiled eggs + ½ cup berries · paired with 1 cup green tea',             cal:280,p:24,c:8,f:14,m:'D'},
+  {n:'Smoked Salmon + Cucumber + Seeds + Tea',       d:'80g smoked salmon + sliced cucumber + ½ avocado + 1 tbsp mixed seeds + lemon · paired with 1 cup ginger lemon tea',                           cal:310,p:22,c:6,f:20,m:'RDC'},
  ]
 },
 
@@ -670,6 +686,16 @@ lunch:{
   {n:'Lentil Soup + Wholegrain Bread + Salad',  d:'2 cups thick lentil soup + 1 slice wholegrain bread + green salad with lemon-olive oil dressing',        cal:400,p:18,c:46,f:8,m:'RDC'},
   {n:'Stuffed Peppers + Quinoa + Yogurt Dip',   d:'2 peppers stuffed with quinoa, black beans & herbs (baked) + ½ cup yogurt-herb dip + side salad',       cal:430,p:16,c:46,f:10,m:'RDC'},
   {n:'Cauliflower Bowl + Chickpeas + Tahini',   d:'200g roasted cauliflower + ½ cup chickpeas + greens + 2 tbsp tahini + sliced cucumber & tomato',         cal:390,p:14,c:36,f:16,m:'RDC'},
+  // More Low-GI veg lunches
+  {n:'Rajma + Salad (No Rice)',                  d:'1 cup spiced rajma curry + 2 cups mixed salad with lemon-olive oil dressing + 3 tbsp plain yogurt',        cal:380,p:18,c:38,f:8,m:'RD'},
+  {n:'Moong Dal Soup + Rye Bread + Salad',       d:'1.5 cups thick moong dal soup with cumin & ginger + 1 slice rye bread + large green salad',               cal:370,p:18,c:40,f:6,m:'RD'},
+  {n:'Chickpea Salad Bowl + Olive Oil Dressing', d:'¾ cup chickpeas + cucumber, tomato, red onion, parsley + feta alt + 2 tbsp olive oil-lemon dressing',     cal:380,p:14,c:36,f:16,m:'RD'},
+  {n:'Barley Khichdi + Raita + Salad',           d:'1 cup pearl barley cooked with moong dal & turmeric + ½ cup yogurt raita + cucumber salad (low GI swap)', cal:400,p:16,c:52,f:6,m:'D'},
+  // Cheat-Day veg lunches
+  {n:'Pav Bhaji + Butter + Chai',                d:'2 soft pav rolls with spiced mashed vegetable bhaji + 1 tsp butter + sliced raw onion & lemon',            cal:580,p:14,c:86,f:16,m:'C'},
+  {n:'Paneer Butter Masala + 2 Rotis',           d:'150g paneer in rich buttery tomato gravy + 2 wholegrain rotis + cucumber salad + 3 tbsp raita',            cal:620,p:28,c:52,f:30,m:'C'},
+  {n:'Chole Puri (2) + Pickle',                  d:'½ cup spiced chole masala + 2 puris + raw onion-tomato salad + 1 tbsp mixed pickle',                       cal:650,p:16,c:90,f:22,m:'C'},
+  {n:'Veg Fried Rice + Manchurian Gravy',        d:'1.5 cups egg fried rice with mixed veg + 6 veg manchurian balls in spiced gravy + spring onion',           cal:580,p:14,c:80,f:18,m:'C'},
  ],
  nonveg:[
   // Indian (front — prioritized)
@@ -692,20 +718,27 @@ lunch:{
   {n:'Grilled Fish + Thai Herb Salad + ½ Rice', d:'180g grilled fish fillet + 1.5 cups green mango-herb salad + ½ cup steamed rice + lime',                cal:430,p:34,c:30,f:12,m:'RDC'},
   {n:'Grilled Shrimp + Papaya Salad + Rice',    d:'150g grilled shrimp with chilli-lime marinade + 1.5 cups green papaya salad + ½ cup jasmine rice',      cal:420,p:32,c:36,f:8,m:'RDC'},
   // Mexican
-  {n:'Chicken Burrito Bowl (Half Rice)',         d:'150g grilled chicken + ¼ cup brown rice + ½ cup black beans + salsa + ¼ avocado — no cheese',           cal:470,p:38,c:36,f:14,m:'RDC'},
+  {n:'Chicken Burrito Bowl (Half Rice)',         d:'150g grilled chicken + ¼ cup brown rice + ½ cup black beans + salsa + ¼ avocado — no dairy',           cal:470,p:38,c:36,f:14,m:'RDC'},
   {n:'Fish Tacos (2) + Mango Salsa',            d:'2 corn tortillas + 140g grilled fish + shredded cabbage + ¼ avocado + 3 tbsp mango salsa',              cal:450,p:30,c:40,f:14,m:'RDC'},
-  {n:'Shrimp Fajita Bowl (No Cheese)',          d:'150g grilled shrimp + peppers & onion + ½ cup black beans + salsa + ¼ avocado + yogurt dressing',       cal:420,p:32,c:28,f:14,m:'RDC'},
+  {n:'Shrimp Fajita Bowl',                       d:'150g grilled shrimp + peppers & onion + ½ cup black beans + salsa + ¼ avocado + yogurt dressing — no dairy',cal:420,p:32,c:28,f:14,m:'RDC'},
   // American
   {n:'Grilled Chicken Caesar Salad',            d:'150g grilled chicken + 2 cups romaine + cherry tomatoes + light Caesar dressing (no croutons)',           cal:400,p:36,c:10,f:18,m:'RDC'},
   {n:'Tuna Salad Bowl + Crackers + Apple',      d:'120g canned tuna + 2 cups mixed greens + yogurt dressing + 4 wholegrain crackers + 1 apple',             cal:410,p:34,c:28,f:12,m:'RDC'},
   {n:'Salmon + Greens + Quinoa + Nuts',         d:'140g baked salmon + 2 cups mixed greens + ½ cup quinoa + 10g walnuts + lemon-herb dressing',            cal:470,p:40,c:30,f:20,m:'RDC'},
   {n:'Shrimp & Avocado Salad Bowl',             d:'150g grilled shrimp + 2 cups mixed greens + ½ avocado + cherry tomatoes + lemon vinaigrette + 10g nuts', cal:390,p:32,c:14,f:20,m:'RDC'},
-  // Cheat-mode extras — bigger, indulgent but still clean
+  // More Low-GI nonveg lunches
+  {n:'Grilled Fish + Salad (No Rice)',           d:'180g marinated grilled fish fillet + 2 cups mixed greens + cucumber, tomato & lemon vinaigrette + 3 tbsp curd',cal:360,p:36,c:8,f:14,m:'D'},
+  {n:'Chicken Clear Soup + Egg + Salad',         d:'1.5 cups clear chicken soup with veg + 2 boiled eggs + 2 cups mixed salad + lemon-olive oil dressing',    cal:340,p:32,c:10,f:14,m:'D'},
+  {n:'Prawn Salad + Chickpeas + Yogurt',         d:'150g grilled prawns + 2 cups mixed greens + ½ cup chickpeas + 3 tbsp yogurt-herb dressing + lemon',      cal:380,p:34,c:20,f:10,m:'D'},
+  {n:'Steamed Fish + Dal + Salad',               d:'180g steamed ginger-garlic fish + ½ cup moong dal + large cucumber-tomato salad + 2 tbsp curd',           cal:390,p:38,c:22,f:10,m:'RD'},
+  // Cheat-Day nonveg lunches
   {n:'Chicken Biryani + Raita + Salad',         d:'1.5 cups fragrant layered chicken biryani + ½ cup boondi raita + cucumber-onion salad',                  cal:620,p:34,c:72,f:18,m:'RC'},
   {n:'Mutton Biryani + Raita',                  d:'1.5 cups slow-cooked spiced mutton biryani with pickled onion & boondi raita',                           cal:680,p:34,c:76,f:24,m:'C'},
   {n:'Prawn Biryani + Raita + Salad',           d:'1.5 cups fragrant spiced prawn biryani + ½ cup cucumber-mint raita + green salad',                       cal:580,p:32,c:68,f:16,m:'RC'},
   {n:'BBQ Chicken + Roasted Veg + Quinoa',      d:'180g baked BBQ chicken thigh + 200g roasted peppers & zucchini + ¾ cup quinoa',                          cal:520,p:40,c:36,f:18,m:'RC'},
   {n:'Butter Chicken + 2 Rotis + Salad',        d:'150g butter chicken in creamy tomato gravy + 2 wholegrain rotis + cucumber-onion salad',                 cal:580,p:36,c:46,f:24,m:'RC'},
+  {n:'Fish & Chips (Baked) + Yogurt Dip',       d:'200g baked spiced fish + 150g oven-baked potato wedges + 2 tbsp thick yogurt-mint dip + salad',          cal:560,p:36,c:52,f:16,m:'C'},
+  {n:'Dragon Chicken + Fried Rice',             d:'150g crispy fried chicken in chilli-soy sauce + 1 cup egg fried rice + sliced spring onion & chilli',     cal:640,p:36,c:64,f:22,m:'C'},
  ]
 },
 
@@ -729,6 +762,16 @@ snacks:{
   {n:'Pumpkin Seeds + Cashews + Berries',       d:'15g pumpkin seeds + 10g cashews + ½ cup fresh strawberries & blueberries',                               cal:190,p:6,c:18,f:10,m:'RDC'},
   {n:'Smoothie: Spinach + Banana + Almond Milk',d:'1 cup almond milk + 1 frozen banana + handful spinach + 1 tsp peanut butter — blended',                  cal:200,p:5,c:28,f:6,m:'RC'},
   {n:'Mango + Yogurt + Pistachios',             d:'½ cup fresh mango cubes + 100g plain yogurt + 15g shelled pistachios',                                   cal:210,p:8,c:24,f:8,m:'RDC'},
+  // More Low-GI veg snacks
+  {n:'Roasted Makhana (Fox Nuts) + Chai',       d:'1 cup makhana dry-roasted with ghee, pepper & himalayan salt + 1 cup green tea',                          cal:195,p:8,c:22,f:6,m:'RDC'},
+  {n:'Celery + Almond Butter + Cinnamon',       d:'4 celery sticks + 2 tbsp natural almond butter + a sprinkle of cinnamon',                                 cal:175,p:6,c:8,f:14,m:'RDC'},
+  {n:'Avocado + Lemon + Seeds',                 d:'½ avocado sliced + squeeze of lemon + 1 tbsp pumpkin seeds + black salt & chilli flakes',                  cal:200,p:4,c:8,f:18,m:'RDC'},
+  {n:'Paneer Cubes + Cucumber + Cumin',          d:'150g lightly seasoned paneer cubes with diced cucumber, cumin powder & lemon squeeze — high protein, very low GI',cal:180,p:18,c:6,f:10,m:'D'},
+  // Cheat-Day veg snacks
+  {n:'Samosa (2) + Green Chutney',              d:'2 crispy potato samosas + 3 tbsp mint-coriander chutney + sliced onion & lemon — the real deal',           cal:360,p:6,c:44,f:18,m:'C'},
+  {n:'Bhel Puri (Large)',                       d:'2 cups puffed rice with onion, tomato, chaat masala, tamarind & mint chutney + sev & peanuts',              cal:340,p:8,c:50,f:12,m:'C'},
+  {n:'Masala Chai + 2 Biscuits + Namkeen',      d:'1 cup masala chai + 2 digestive biscuits + ¼ cup spiced namkeen mix',                                      cal:280,p:5,c:40,f:10,m:'C'},
+  {n:'Vada Pav',                                d:'1 fluffy pav bun + spiced potato vada + dry garlic chutney + green chutney — Mumbai classic',               cal:380,p:8,c:52,f:16,m:'C'},
  ],
  nonveg:[
   {n:'Boiled Eggs + Almonds + Apple',           d:'2 boiled eggs + 15g almonds + 1 small apple',                                                            cal:230,p:16,c:14,f:14,m:'RDC'},
@@ -744,6 +787,14 @@ snacks:{
   {n:'Sardines + Tomato + Crackers + Fruit',    d:'50g sardines in brine + sliced tomato + 2 Ryvita crispbreads + 1 small orange',                          cal:220,p:18,c:20,f:6,m:'RDC'},
   {n:'Protein Yogurt Bowl + Nuts + Berries',    d:'150g Greek yogurt + 2 tbsp hemp seeds + 1 boiled egg + 10g almonds + ½ cup berries',                     cal:270,p:26,c:14,f:14,m:'RDC'},
   {n:'Fish Tikka Bites + Mint Yogurt',          d:'100g small grilled fish tikka bites + 2 tbsp thick mint-coriander yogurt dip + cucumber sticks',         cal:210,p:24,c:6,f:8,m:'RDC'},
+  // More Low-GI nonveg snacks
+  {n:'Chicken Tikka Bites (3) + Mint Curd',     d:'3 small grilled chicken tikka pieces (90g) + 2 tbsp mint-coriander curd dip — nearly zero carb',          cal:195,p:24,c:4,f:8,m:'RDC'},
+  {n:'Tuna Lettuce Wraps',                       d:'80g canned tuna with lemon & mustard in 3 butter lettuce cups + sliced cucumber & radish',                 cal:180,p:22,c:4,f:8,m:'RDC'},
+  {n:'Devilled Eggs (3)',                        d:'3 hard-boiled egg halves filled with yogurt, mustard & paprika — low carb, high protein',                  cal:190,p:14,c:4,f:12,m:'RDC'},
+  // Cheat-Day nonveg snacks
+  {n:'Chicken Wings (6) + Dip',                 d:'6 grilled spiced chicken wings + 3 tbsp yogurt-herb dip + sliced celery & carrot',                         cal:400,p:32,c:8,f:26,m:'C'},
+  {n:'Egg Roll + Chai',                         d:'2-egg omelette rolled in a thin roti with chutney, onion & chilli sauce + 1 cup masala chai',              cal:380,p:18,c:40,f:16,m:'C'},
+  {n:'Prawn Koliwada (6 pcs)',                  d:'6 crispy fried spiced prawns with lemon, raw onion & mint chutney — coastal street snack',                  cal:320,p:24,c:18,f:16,m:'C'},
  ]
 },
 
@@ -775,6 +826,15 @@ dinner:{
   {n:'Roasted Veg Platter + Hummus + Nuts',     d:'300g roasted mixed vegetables + 4 tbsp hummus + ½ mini wholegrain pita + 10g almonds',                  cal:360,p:12,c:32,f:16,m:'RDC'},
   {n:'Cauliflower Steak + Lentils + Greens',    d:'250g roasted cauliflower steak + ½ cup red lentils + 1 cup sautéed spinach + 2 tbsp yogurt on the side', cal:360,p:18,c:30,f:10,m:'RDC'},
   {n:'Egg Fried Cauliflower Rice + Fruit',      d:'2 eggs scrambled into 200g cauliflower rice with spring onion & sesame + side salad + seasonal fruit',   cal:310,p:18,c:18,f:16,m:'RDC'},
+  // More Low-GI veg dinners
+  {n:'Soya Chunk Curry + Salad (No Rice)',       d:'½ cup soya chunk curry in spiced tomato gravy + 2 cups large salad + 3 tbsp curd — high protein, low GI',cal:340,p:26,c:18,f:8,m:'D'},
+  {n:'Paneer Soup + Salad',                      d:'1.5 cups paneer & spinach clear soup + 2 cups mixed salad with seeds + lemon dressing — light & filling', cal:300,p:18,c:12,f:16,m:'D'},
+  {n:'Baked Tofu + Roasted Veg (No Grains)',     d:'180g marinated baked tofu + 250g roasted broccoli, capsicum & zucchini + 2 tbsp sesame-soy dressing',    cal:330,p:22,c:16,f:18,m:'D'},
+  // Cheat-Day veg dinners
+  {n:'Vegetable Biryani + Raita + Salad',        d:'1.5 cups fragrant veg biryani with whole spices + ½ cup boondi raita + cucumber-onion salad',             cal:560,p:14,c:82,f:12,m:'C'},
+  {n:'Paneer Tikka Masala + 2 Rotis + Raita',   d:'180g rich paneer tikka masala + 2 wholegrain rotis + ½ cup yogurt raita + sliced onion & lemon',           cal:640,p:30,c:52,f:30,m:'C'},
+  {n:'Dal Makhani + 2 Rotis + Raita',            d:'150g rich creamy dal makhani (overnight slow-cooked) + 2 wholegrain rotis + ½ cup yogurt raita',           cal:580,p:20,c:66,f:20,m:'RC'},
+  {n:'Pindi Chole + 2 Puris + Raita',            d:'1 cup spiced Pindi chole masala + 2 wholegrain puris + ½ cup cucumber raita + sliced raw onion',          cal:620,p:18,c:82,f:20,m:'C'},
  ],
  nonveg:[
   // Indian (front — prioritized)
@@ -803,14 +863,21 @@ dinner:{
   {n:'Herb Chicken + Kale Salad + Walnuts',     d:'150g herb-baked chicken breast + 2 cups kale with 15g walnuts, cranberries & balsamic dressing',        cal:410,p:38,c:14,f:18,m:'RDC'},
   {n:'Garlic Shrimp + Zucchini Noodles + Nuts', d:'150g garlic shrimp + 200g zucchini noodles + cherry tomatoes + fresh basil + 10g pine nuts',            cal:350,p:30,c:12,f:18,m:'RDC'},
   {n:'Tuna Niçoise Salad + Fruit',              d:'120g tuna + 2 boiled eggs + green beans + olives + cherry tomatoes + Dijon vinaigrette + sliced orange', cal:400,p:36,c:16,f:20,m:'RDC'},
-  // Cheat-mode & higher-cal Regular
+  // More Low-GI nonveg dinners
+  {n:'Clear Chicken Soup + 2 Boiled Eggs',      d:'2 cups clear spiced chicken broth with veg + 2 boiled eggs + large salad + lemon dressing',               cal:310,p:32,c:8,f:12,m:'D'},
+  {n:'Steamed Fish + Sautéed Spinach (No Grain)',d:'200g steamed fish fillet with ginger & garlic + 200g sautéed spinach + 2 tbsp yogurt dip + lemon',       cal:340,p:38,c:8,f:12,m:'D'},
+  {n:'Egg White Curry + Salad',                  d:'5 egg white curry in light spiced tomato-onion sauce + large cucumber-tomato salad + 2 tbsp curd',        cal:280,p:24,c:12,f:8,m:'D'},
+  {n:'Grilled Shrimp + Cauliflower Rice',        d:'180g spiced grilled shrimp + 200g cauliflower rice stir-fried with garlic + green salad + lime',          cal:320,p:32,c:14,f:10,m:'D'},
+  // Cheat-Day nonveg dinners
   {n:'Chicken Tikka Masala + 2 Rotis + Salad',  d:'180g rich chicken tikka masala curry + 2 wholegrain rotis + cucumber-tomato salad + 3 tbsp raita',      cal:580,p:40,c:44,f:22,m:'RC'},
   {n:'Butter Chicken + 1 Roti + Raita',         d:'150g butter chicken in creamy tomato gravy + 1 wholegrain roti + ½ cup yogurt raita + cucumber salad',   cal:520,p:36,c:32,f:22,m:'RC'},
   {n:'Mutton Rogan Josh + Rice + Raita',        d:'180g slow-cooked Kashmiri mutton curry + ¾ cup basmati rice + ½ cup yogurt raita + onion salad',         cal:660,p:36,c:58,f:28,m:'C'},
   {n:'Prawn Biryani + Raita',                   d:'1.5 cups fragrant spiced prawn biryani + ½ cup cucumber-mint raita + sliced onion salad',                cal:560,p:30,c:64,f:16,m:'RC'},
   {n:'Grilled Fish + Brown Rice + Salad',        d:'200g oven-baked masala fish fillet + ¾ cup brown rice + large mixed green salad + lemon wedge',         cal:480,p:38,c:46,f:12,m:'RC'},
   {n:'Lamb Chops + Roasted Veg',                d:'2 grilled lamb chops (180g) + 200g roasted peppers, zucchini & eggplant + mint-yogurt dip',              cal:560,p:42,c:16,f:30,m:'C'},
-  {n:'Butter Garlic Shrimp + Pasta Alt + Salad',d:'180g butter-garlic shrimp + 200g sautéed zucchini noodles + cherry tomatoes + large green salad',        cal:420,p:34,c:14,f:22,m:'RC'},
+  {n:'Butter Garlic Shrimp + Salad',            d:'180g butter-garlic shrimp + 200g sautéed zucchini noodles + cherry tomatoes + large green salad',        cal:420,p:34,c:14,f:22,m:'RC'},
+  {n:'Chicken Seekh Kebab (4) + Salad + Raita', d:'4 grilled chicken seekh kebabs (180g) + large onion-tomato salad + ½ cup mint raita + lemon & chaat',   cal:480,p:44,c:16,f:20,m:'RC'},
+  {n:'Goan Fish Curry + ½ Cup Rice + Salad',    d:'180g Goan-style coconut fish curry + ½ cup steamed rice + cucumber salad + fresh lemon wedge',           cal:500,p:34,c:44,f:18,m:'RC'},
  ]
 }
 };
@@ -1023,7 +1090,12 @@ function syncDietButtons(){
 // ── RENDER ──
 function render(){
   syncDietButtons();
-  document.getElementById('dayLbl').textContent=DAYS[dayIdx];
+  const todayIdx=new Date().getDay();
+  const tomorrowIdx=(todayIdx+1)%7;
+  const dayBadge=dayIdx===todayIdx?' <span id="dayBadge" style="font-size:10px;font-weight:800;background:var(--accent);color:#fff;padding:2px 7px;border-radius:6px;vertical-align:middle;letter-spacing:.05em">TODAY</span>'
+    :dayIdx===tomorrowIdx?' <span id="dayBadge" style="font-size:10px;font-weight:800;background:var(--purple);color:#fff;padding:2px 7px;border-radius:6px;vertical-align:middle;letter-spacing:.05em">TOMORROW</span>'
+    :'';
+  document.getElementById('dayLbl').innerHTML=DAYS[dayIdx]+dayBadge;
   document.getElementById('vegDot').style.display=isVegDay(dayIdx)?'flex':'none';
   const tot=TYPES.reduce((s,t)=>s+(picks[t]?.cal||0),0);
   const totP=TYPES.reduce((s,t)=>s+(picks[t]?.p||0),0);
@@ -1103,17 +1175,29 @@ function saveLog(entries){
 }
 
 function logDay(){
+  // Only include meals the user has ticked
+  const meals=TYPES
+    .filter(t=>!!checked[t])
+    .map(t=>({
+      type:t,
+      icon:T_ICON[t],
+      name:picks[t]?.n||'—',
+      cal:picks[t]?.cal||0,
+      done:true
+    }));
+  if(bevChecked){
+    const bev=BEVERAGES[bevCat][bevIdx];
+    meals.push({type:'beverage',icon:'☕',name:bev.n,cal:bev.cal,done:true});
+  }
+  if(!meals.length){
+    const btn=document.querySelector('.log-btn.save');
+    const orig=btn.innerHTML;
+    btn.innerHTML='⚠ Tick meals first!';btn.style.background='#C07A4A';
+    setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},2000);
+    return;
+  }
   const today=new Date();
   const dateStr=today.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
-  const meals=TYPES.map(t=>({
-    type:t,
-    icon:T_ICON[t],
-    name:picks[t]?.n||'—',
-    cal:picks[t]?.cal||0,
-    done:!!checked[t]
-  }));
-  const bev=BEVERAGES[bevCat][bevIdx];
-  meals.push({type:'beverage',icon:'☕',name:bev.n,cal:bev.cal,done:bevChecked});
   const totalCal=meals.reduce((s,m)=>s+m.cal,0);
   const entry={
     id:Date.now(),
@@ -1123,15 +1207,23 @@ function logDay(){
     meals
   };
   const log=getLog();
-  // replace if same date already logged
   const idx=log.findIndex(e=>e.date===dateStr);
-  if(idx>=0) log[idx]=entry; else log.unshift(entry);
+  if(idx>=0){
+    // merge: update existing types, append new ones
+    meals.forEach(m=>{
+      const mi=log[idx].meals.findIndex(x=>x.type===m.type);
+      if(mi>=0) log[idx].meals[mi]=m; else log[idx].meals.push(m);
+    });
+    log[idx].totalCal=log[idx].meals.reduce((s,m)=>s+m.cal,0);
+  } else {
+    log.unshift(entry);
+  }
   saveLog(log);
-  // visual feedback
   const btn=document.querySelector('.log-btn.save');
   const orig=btn.innerHTML;
-  btn.innerHTML='✅ Logged!';btn.style.background='#2EC4B2';
-  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},1800);
+  btn.innerHTML=`✅ ${meals.length} meal${meals.length>1?'s':''} logged!`;
+  btn.style.background='#2EC4B2';
+  setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},2000);
 }
 
 function openLog(){
