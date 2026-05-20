@@ -476,6 +476,255 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
 }
 
+
+/* ═══════════════════════════════════════════════════════
+   ONBOARDING OVERLAY
+═══════════════════════════════════════════════════════ */
+.onboard-overlay{
+  position:fixed;inset:0;background:var(--bg);z-index:1000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;overflow-y:auto;
+}
+.onboard-overlay.hidden{display:none}
+.ob-card{
+  width:100%;max-width:380px;
+  background:var(--card);border-radius:20px;border:1px solid var(--frame);
+  padding:28px 24px 24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.ob-step-dots{display:flex;gap:7px;margin-bottom:22px;justify-content:center}
+.ob-dot{width:28px;height:4px;border-radius:2px;background:var(--ink4);transition:all .25s}
+.ob-dot.active{background:var(--accent2)}
+.ob-dot.done{background:var(--accent)}
+.ob-title{font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.6px;margin-bottom:6px}
+.ob-sub{font-size:13px;font-weight:600;color:var(--ink3);margin-bottom:22px;line-height:1.5}
+.ob-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.ob-option{
+  padding:14px 10px;border-radius:12px;border:2px solid var(--ink4);
+  cursor:pointer;text-align:center;transition:all .18s;background:none;
+  font-family:'Nunito',sans-serif;
+}
+.ob-option:hover{border-color:var(--border2)}
+.ob-option.selected{border-color:var(--accent2);background:var(--accent-dim)}
+.ob-option-icon{font-size:26px;display:block;margin-bottom:6px}
+.ob-option-label{font-size:12px;font-weight:900;color:var(--ink);letter-spacing:.02em}
+.ob-option-sub{font-size:9.5px;font-weight:700;color:var(--ink3);margin-top:2px}
+/* allergy grid 3-col */
+.ob-allergy-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px}
+.ob-allergy-item{
+  padding:10px 6px;border-radius:10px;border:2px solid var(--ink4);
+  cursor:pointer;text-align:center;transition:all .16s;background:none;
+  font-family:'Nunito',sans-serif;
+}
+.ob-allergy-item.selected{border-color:var(--orange);background:rgba(212,136,90,.12)}
+.ob-allergy-item-icon{font-size:20px;display:block;margin-bottom:4px}
+.ob-allergy-item-label{font-size:9px;font-weight:900;color:var(--ink);letter-spacing:.03em}
+.ob-none-btn{
+  width:100%;padding:9px;border-radius:10px;border:1.5px dashed var(--ink4);
+  background:none;color:var(--ink3);font-family:'Nunito',sans-serif;
+  font-size:11px;font-weight:800;cursor:pointer;margin-bottom:16px;
+  text-transform:uppercase;letter-spacing:.05em;transition:all .15s;
+}
+.ob-none-btn:hover{border-color:var(--border2);color:var(--ink2)}
+/* TDEE form */
+.ob-form{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.ob-field-label{font-size:9px;font-weight:900;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}
+.ob-input{
+  width:100%;background:var(--deep);border:1px solid var(--border2);
+  border-radius:10px;padding:10px 12px;
+  font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;
+  color:var(--ink);outline:none;
+}
+.ob-input:focus{border-color:var(--accent2)}
+.ob-input::placeholder{color:var(--ink3)}
+.ob-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ob-activity-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ob-act-btn{
+  padding:10px 8px;border-radius:10px;border:2px solid var(--ink4);
+  cursor:pointer;text-align:center;transition:all .16s;background:none;
+  font-family:'Nunito',sans-serif;
+}
+.ob-act-btn.selected{border-color:var(--accent2);background:var(--accent-dim)}
+.ob-act-label{font-size:11px;font-weight:900;color:var(--ink);display:block}
+.ob-act-sub{font-size:8.5px;font-weight:700;color:var(--ink3)}
+.ob-next-btn{
+  width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;
+  cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;
+  color:#fff;letter-spacing:.05em;text-transform:uppercase;
+  box-shadow:0 4px 18px rgba(14,143,204,.4);transition:all .16s;
+}
+.ob-next-btn:active{transform:scale(.97)}
+.ob-skip{
+  display:block;text-align:center;margin-top:12px;
+  font-size:11px;font-weight:700;color:var(--ink3);cursor:pointer;
+  text-decoration:underline;opacity:.6;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TDEE BADGE in header
+═══════════════════════════════════════════════════════ */
+.tdee-badge{
+  font-size:9px;font-weight:800;color:var(--accent2);
+  letter-spacing:.06em;text-transform:uppercase;
+  margin-top:2px;cursor:pointer;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RECIPE MODAL
+═══════════════════════════════════════════════════════ */
+.recipe-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);z-index:250;
+  display:none;align-items:flex-end;justify-content:center;
+}
+.recipe-overlay.open{display:flex}
+.recipe-sheet{
+  background:var(--night);border:1px solid var(--frame);
+  border-radius:20px 20px 0 0;width:100%;max-width:420px;
+  max-height:90vh;display:flex;flex-direction:column;overflow:hidden;
+}
+.recipe-hdr{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:18px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0;
+}
+.recipe-meal-type{font-size:9px;font-weight:900;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}
+.recipe-meal-name{font-size:19px;font-weight:900;color:var(--ink);letter-spacing:-.5px;line-height:1.15}
+.recipe-close{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--ink4);
+  background:none;color:var(--ink3);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.recipe-macros{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  padding:10px 14px;background:var(--deep);border-bottom:1px solid var(--ink4);flex-shrink:0;
+}
+.recipe-mac{text-align:center;font-size:9px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em}
+.recipe-mac strong{display:block;font-size:15px;font-weight:900;color:var(--ink);letter-spacing:-.3px;margin-bottom:2px}
+.recipe-body{overflow-y:auto;flex:1;padding:16px}
+.recipe-section{margin-bottom:18px}
+.recipe-section-title{
+  font-size:10px;font-weight:900;color:var(--accent2);text-transform:uppercase;
+  letter-spacing:.14em;margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+.recipe-section-title::after{content:'';flex:1;height:1px;background:var(--ink4)}
+.recipe-ingredient{
+  display:flex;align-items:center;gap:8px;padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:12.5px;font-weight:700;color:var(--ink2);
+}
+.recipe-ingredient-bullet{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.recipe-step{
+  display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);
+}
+.recipe-step-num{
+  width:22px;height:22px;border-radius:50%;background:var(--accent);
+  font-size:10px;font-weight:900;color:#fff;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.recipe-step-text{font-size:12.5px;font-weight:700;color:var(--ink2);line-height:1.55;flex:1}
+.recipe-tip{
+  background:var(--ink4);border-radius:10px;border:1px solid var(--border);
+  padding:10px 12px;font-size:11.5px;font-weight:700;color:var(--ink3);
+  line-height:1.5;display:flex;gap:8px;align-items:flex-start;
+}
+/* Recipe button on card */
+.recipe-btn{
+  flex:1;background:var(--deep);border:1.5px solid var(--border2);
+  color:var(--ink3);font-size:11px;font-weight:900;
+  padding:7px 10px;border-radius:9px;cursor:pointer;
+  font-family:'Nunito',sans-serif;letter-spacing:.04em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .14s;
+}
+.recipe-btn:active{transform:scale(.96);background:var(--border)}
+.recipe-btn:hover{color:var(--accent2);border-color:var(--accent2)}
+
+/* ═══════════════════════════════════════════════════════
+   REGIONAL FILTER BAR
+═══════════════════════════════════════════════════════ */
+.region-bar{
+  background:var(--deep);border-bottom:1px solid var(--ink4);
+  padding:7px 14px;overflow-x:auto;
+  display:flex;gap:6px;align-items:center;
+  scrollbar-width:none;
+}
+.region-bar::-webkit-scrollbar{display:none}
+.region-lbl{font-size:9px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;margin-right:4px}
+.region-btn{
+  padding:5px 11px;border-radius:20px;border:1.5px solid var(--ink4);
+  background:none;color:var(--ink3);font-family:'Nunito',sans-serif;
+  font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap;
+  transition:all .15s;letter-spacing:.03em;flex-shrink:0;
+}
+.region-btn.on{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 10px rgba(14,143,204,.35)}
+.region-btn.south.on{background:#2EC4B2;border-color:#2EC4B2}
+.region-btn.punjab.on{background:#D4885A;border-color:#D4885A}
+.region-btn.bengal.on{background:#9480DC;border-color:#9480DC}
+.region-btn.gujarat.on{background:#F4C430;border-color:#F4C430;color:#141C22}
+
+/* ═══════════════════════════════════════════════════════
+   WEEK PLAN VIEW
+═══════════════════════════════════════════════════════ */
+.week-btn{
+  flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border2);
+  background:none;color:var(--ink2);font-family:'Nunito',sans-serif;
+  font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:all .15s;
+}
+.week-btn:active{transform:scale(.97)}
+.week-panel{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:150;display:none;align-items:flex-end;justify-content:center}
+.week-panel.open{display:flex}
+.week-sheet{background:var(--night);border:1px solid var(--frame);border-radius:20px 20px 0 0;width:100%;max-width:420px;max-height:94vh;display:flex;flex-direction:column;overflow:hidden}
+.week-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0}
+.week-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
+.week-actions{display:flex;gap:8px;align-items:center}
+.week-action-btn{padding:6px 14px;border-radius:8px;background:var(--accent);border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:#fff;letter-spacing:.05em;text-transform:uppercase}
+.week-close{width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;color:var(--ink3);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.week-tabs{display:flex;border-bottom:1px solid var(--ink4);flex-shrink:0}
+.week-tab{flex:1;padding:10px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:var(--ink3);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .14s;border-bottom:2px solid transparent}
+.week-tab.on{color:var(--accent2);border-bottom-color:var(--accent2)}
+.week-body{overflow-y:auto;flex:1;padding:12px}
+/* Week grid */
+.week-day-card{background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:10px;overflow:hidden}
+.week-day-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 8px;border-bottom:1px solid var(--ink4);background:var(--deep)}
+.week-day-name{font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.2px}
+.week-day-kcal{font-size:11px;font-weight:800;color:var(--accent2)}
+.week-day-regen{
+  padding:3px 9px;border-radius:7px;border:1.5px solid var(--border2);
+  background:none;color:var(--accent2);font-family:'Nunito',sans-serif;
+  font-size:9px;font-weight:900;cursor:pointer;letter-spacing:.04em;
+}
+.week-meal-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.03)}
+.week-meal-row:last-child{border-bottom:none}
+.week-meal-icon{font-size:13px;flex-shrink:0;width:18px;text-align:center}
+.week-meal-name{font-size:11.5px;font-weight:700;color:var(--ink2);flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.week-meal-cal{font-size:9.5px;font-weight:800;color:var(--ink3);flex-shrink:0}
+/* Grocery list */
+.grocery-cat{margin-bottom:14px}
+.grocery-cat-title{font-size:10px;font-weight:900;color:var(--accent2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.grocery-cat-title::after{content:'';flex:1;height:1px;background:var(--ink4)}
+.grocery-item{
+  display:flex;align-items:center;gap:10px;padding:7px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;
+}
+.grocery-check{
+  width:18px;height:18px;border-radius:4px;border:2px solid var(--ink3);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  transition:all .14s;
+}
+.grocery-check.done{background:var(--teal);border-color:var(--teal)}
+.grocery-item-name{font-size:12.5px;font-weight:700;color:var(--ink2);flex:1}
+.grocery-item.done .grocery-item-name{text-decoration:line-through;opacity:.4}
+.week-summary-bar{
+  background:var(--deep);border-top:1px solid var(--ink4);
+  padding:12px 16px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  flex-shrink:0;
+}
+.week-sum-stat{text-align:center}
+.week-sum-val{font-size:16px;font-weight:900;color:var(--ink);display:block;letter-spacing:-.4px}
+.week-sum-lbl{font-size:8px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em}
+
 </style>
 </head>
 <body>
@@ -499,6 +748,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
       <div>
         <div class="logo-name">EatRight</div>
         <div class="logo-sub">High Protein · Low Carb · Eat Right</div>
+        <div class="tdee-badge" id="tdeeBadge" onclick="resetProfile()">Tap to recalculate TDEE</div>
       </div>
     </div>
     <div class="mode-tabs">
@@ -562,6 +812,15 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   </div>
 </div>
 
+<div class="region-bar" id="regionBar">
+  <span class="region-lbl">🇮🇳 Region</span>
+  <button class="region-btn on" data-r="all" onclick="setRegion('all')">All India</button>
+  <button class="region-btn south" data-r="south" onclick="setRegion('south')">🌴 South Indian</button>
+  <button class="region-btn punjab" data-r="punjab" onclick="setRegion('punjab')">🌾 Punjabi</button>
+  <button class="region-btn bengal" data-r="bengal" onclick="setRegion('bengal')">🐟 Bengali</button>
+  <button class="region-btn gujarat" data-r="gujarat" onclick="setRegion('gujarat')">🌿 Gujarati</button>
+</div>
+
 <div class="body">
   <button class="shuffle-btn" onclick="shuffleAll()"><span class="s-ico">⟳</span> Shuffle All Meals</button>
   <div class="diet-toggle-row">
@@ -593,6 +852,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   </div>
 
   <!-- Log day buttons -->
+  <div class="log-btn-row" style="padding-top:4px">    <button class="week-btn" onclick="openWeekPanel()">📅 Week Plan</button>
+  </div>
   <div class="log-btn-row">
     <button class="log-btn save" onclick="logDay()">📋 Log Today</button>
     <button class="log-btn history" onclick="openLog()">📅 History</button>
@@ -638,6 +899,160 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
     </div>
   </div>
 </div>
+
+
+<!-- ═══════════════ ONBOARDING OVERLAY ═══════════════ -->
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="ob-card">
+    <div class="ob-step-dots">
+      <div class="ob-dot active" id="obDot0"></div>
+      <div class="ob-dot" id="obDot1"></div>
+      <div class="ob-dot" id="obDot2"></div>
+    </div>
+
+    <!-- Step 0: Goal -->
+    <div id="obStep0">
+      <div class="ob-title">What's your goal? 🎯</div>
+      <div class="ob-sub">We'll personalise your daily calorie target and meal style around this.</div>
+      <div class="ob-grid">
+        <button class="ob-option" data-goal="lose" onclick="selectGoal(this)">
+          <span class="ob-option-icon">🔥</span>
+          <div class="ob-option-label">Lose Weight</div>
+          <div class="ob-option-sub">Calorie deficit · high protein</div>
+        </button>
+        <button class="ob-option" data-goal="maintain" onclick="selectGoal(this)">
+          <span class="ob-option-icon">⚖️</span>
+          <div class="ob-option-label">Maintain</div>
+          <div class="ob-option-sub">Balanced · stay at target</div>
+        </button>
+        <button class="ob-option" data-goal="muscle" onclick="selectGoal(this)">
+          <span class="ob-option-icon">💪</span>
+          <div class="ob-option-label">Build Muscle</div>
+          <div class="ob-option-sub">Slight surplus · max protein</div>
+        </button>
+        <button class="ob-option" data-goal="health" onclick="selectGoal(this)">
+          <span class="ob-option-icon">🌿</span>
+          <div class="ob-option-label">Eat Healthy</div>
+          <div class="ob-option-sub">Low-GI · wholefood focus</div>
+        </button>
+      </div>
+      <button class="ob-next-btn" id="obNext0" onclick="obGoStep(1)" disabled>Continue →</button>
+      <span class="ob-skip" onclick="skipOnboarding()">Skip setup — use defaults</span>
+    </div>
+
+    <!-- Step 1: TDEE Details -->
+    <div id="obStep1" style="display:none">
+      <div class="ob-title">Tell us about you 📊</div>
+      <div class="ob-sub">We'll calculate your exact daily calorie target using your TDEE.</div>
+      <div class="ob-form">
+        <div class="ob-row">
+          <div>
+            <div class="ob-field-label">Age (years)</div>
+            <input class="ob-input" id="obAge" type="number" min="15" max="90" placeholder="28">
+          </div>
+          <div>
+            <div class="ob-field-label">Sex</div>
+            <select class="ob-input" id="obSex" style="cursor:pointer">
+              <option value="m">Male</option>
+              <option value="f">Female</option>
+            </select>
+          </div>
+        </div>
+        <div class="ob-row">
+          <div>
+            <div class="ob-field-label">Weight (kg)</div>
+            <input class="ob-input" id="obWeight" type="number" min="30" max="250" placeholder="70">
+          </div>
+          <div>
+            <div class="ob-field-label">Height (cm)</div>
+            <input class="ob-input" id="obHeight" type="number" min="130" max="220" placeholder="170">
+          </div>
+        </div>
+        <div>
+          <div class="ob-field-label" style="margin-bottom:8px">Activity Level</div>
+          <div class="ob-activity-btns">
+            <button class="ob-act-btn" data-act="1.2" onclick="selectActivity(this)">
+              <span class="ob-act-label">Sedentary</span>
+              <span class="ob-act-sub">Office / mostly sitting</span>
+            </button>
+            <button class="ob-act-btn" data-act="1.375" onclick="selectActivity(this)">
+              <span class="ob-act-label">Light</span>
+              <span class="ob-act-sub">Walk 1–3 days/week</span>
+            </button>
+            <button class="ob-act-btn" data-act="1.55" onclick="selectActivity(this)">
+              <span class="ob-act-label">Moderate</span>
+              <span class="ob-act-sub">Exercise 3–5 days</span>
+            </button>
+            <button class="ob-act-btn" data-act="1.725" onclick="selectActivity(this)">
+              <span class="ob-act-label">Active</span>
+              <span class="ob-act-sub">Hard training 6–7 days</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button class="ob-next-btn" onclick="obGoStep(2)">Continue →</button>
+      <span class="ob-skip" onclick="skipOnboarding()">Skip — use defaults</span>
+    </div>
+
+    <!-- Step 2: Diet Preference -->
+    <div id="obStep2" style="display:none">
+      <div class="ob-title">Dietary preference? 🍽</div>
+      <div class="ob-sub">Also, do you have any allergies? Tap to mark them.</div>
+      <div class="ob-grid" style="margin-bottom:14px">
+        <button class="ob-option" data-diet="veg" onclick="selectDietPref(this)">
+          <span class="ob-option-icon">🌿</span>
+          <div class="ob-option-label">Vegetarian</div>
+          <div class="ob-option-sub">No meat, fish or eggs</div>
+        </button>
+        <button class="ob-option" data-diet="nv" onclick="selectDietPref(this)">
+          <span class="ob-option-icon">🍗</span>
+          <div class="ob-option-label">Non-Veg</div>
+          <div class="ob-option-sub">Includes meat & fish</div>
+        </button>
+      </div>
+      <div class="ob-field-label" style="margin-bottom:10px">🚫 Any allergies? (optional)</div>
+      <div class="ob-allergy-grid" id="obAllergyGrid"></div>
+      <button class="ob-none-btn" onclick="clearObAllergies()">No allergies — skip this</button>
+      <button class="ob-next-btn" id="obFinish" onclick="finishOnboarding()" disabled>Let's Go! 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ RECIPE MODAL ═══════════════ -->
+<div class="recipe-overlay" id="recipeOverlay" onclick="recipeOverlayClick(event)">
+  <div class="recipe-sheet">
+    <div class="recipe-hdr">
+      <div>
+        <div class="recipe-meal-type" id="recipeMealType">Lunch</div>
+        <div class="recipe-meal-name" id="recipeMealName">Loading…</div>
+      </div>
+      <button class="recipe-close" onclick="closeRecipe()">✕</button>
+    </div>
+    <div class="recipe-macros" id="recipeMacros"></div>
+    <div class="recipe-body" id="recipeBody"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ WEEK PLAN PANEL ═══════════════ -->
+<div class="week-panel" id="weekPanel" onclick="weekPanelBg(event)">
+  <div class="week-sheet">
+    <div class="week-hdr">
+      <div class="week-title">📅 Week Plan</div>
+      <div class="week-actions">
+        <button class="week-action-btn" onclick="regenWeek()">⟳ Regen All</button>
+        <button class="week-action-btn" style="background:var(--teal)" onclick="showWeekTab('grocery')">🛒 Grocery</button>
+        <button class="week-close" onclick="closeWeekPanel()">✕</button>
+      </div>
+    </div>
+    <div class="week-tabs">
+      <button class="week-tab on" id="weekTabPlan" onclick="showWeekTab('plan')">📅 7-Day Plan</button>
+      <button class="week-tab" id="weekTabGrocery" onclick="showWeekTab('grocery')">🛒 Grocery List</button>
+    </div>
+    <div class="week-body" id="weekBody"></div>
+    <div class="week-summary-bar" id="weekSummary"></div>
+  </div>
+</div>
+
 
 </div>
 
@@ -1682,6 +2097,681 @@ window.toggleCheck=toggleCheck;window.setBevCat=setBevCat;window.toggleBevCheck=
 window.logDay=logDay;window.openLog=openLog;window.closeLog=closeLog;
 window.panelBgClick=panelBgClick;window.deleteEntry=deleteEntry;window.exportLog=exportLog;
 seed();render();
+
+
+// ═══════════════════════════════════════════════════════════════
+// REGIONAL CUISINE SYSTEM
+// ═══════════════════════════════════════════════════════════════
+const REGIONAL_FILTERS = {
+  all:    { label:'All',          cls:'',       match: null },
+  south:  { label:'🌴 South Indian', cls:'south', match: /idli|dosa|sambar|uttapam|appam|rasam|pongal|kootu|chettinad|avial|bisi bele|pesarattu|upma|coconut chutney|filter coffee|tamarind/i },
+  punjab: { label:'🌾 Punjabi',   cls:'punjab', match: /sarson|makki|rajma|chole|pindi|rogan josh|seekh|tandoori|makhani|dal makhani|paneer tikka|lassi|jeera rice|kulcha|paratha.*amritsar|langar/i },
+  bengal: { label:'🐟 Bengali',   cls:'bengal', match: /mustard.*fish|fish.*mustard|hilsa|machher|posto|aloo posto|shorshe|luchi|kosha mangsho|chingri|doi maach|bhapa|mochar|dhokar/i },
+  gujarat:{ label:'🌿 Gujarati',  cls:'gujarat',match: /dhokla|thepla|khaman|handvo|undhiyu|kadi.*pakora|fafda|jalebi.*fafda|surti|gujarati.*dal|roti.*shaak|bajra/i },
+};
+let activeRegion = 'all';
+
+// Broad Indian region detection using dish descriptions + names
+function matchesRegion(meal) {
+  const r = REGIONAL_FILTERS[activeRegion];
+  if(!r || !r.match) return true;
+  const text = (meal.n + ' ' + meal.d).toLowerCase();
+  // For Bengali/Gujarati/South/Punjabi we also check the generic Indian meals
+  // by detecting keywords in the broader description
+  return r.match.test(text);
+}
+
+// Extend pool function to apply region filter on top of existing logic
+const _origPool = pool;
+function poolWithRegion(t) {
+  const p = _origPool(t);
+  if(activeRegion === 'all') return p;
+  const regional = p.filter(m => matchesRegion(m));
+  // fallback to full pool if region has <3 items for this meal type
+  return regional.length >= 2 ? regional : p;
+}
+
+function setRegion(r) {
+  activeRegion = r;
+  document.querySelectorAll('.region-btn').forEach(b => b.classList.toggle('on', b.dataset.r === r));
+  seed(); render();
+}
+window.setRegion = setRegion;
+
+// Override global pool to use region-aware version
+// We do this by patching pickDiff and seed after load:
+function patchPoolForRegion() {
+  // Store original
+  const origPickDiff = pickDiff.toString();
+  // We monkey-patch pool references in seed/pickDiff
+  window._poolBase = window.pool;
+  window.pool = poolWithRegion;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ONBOARDING SYSTEM
+// ═══════════════════════════════════════════════════════════════
+const OB_KEY = 'eatright_profile';
+let obGoal = null, obActivity = null, obDietPref = null;
+
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem(OB_KEY) || 'null'); } catch { return null; }
+}
+function saveProfile(p) { localStorage.setItem(OB_KEY, JSON.stringify(p)); }
+
+function checkOnboarding() {
+  const p = getProfile();
+  if (!p) {
+    document.getElementById('onboardOverlay').classList.remove('hidden');
+    renderObAllergyGrid();
+  } else {
+    applyProfile(p);
+    document.getElementById('onboardOverlay').classList.add('hidden');
+  }
+}
+
+function renderObAllergyGrid() {
+  const grid = document.getElementById('obAllergyGrid');
+  const cur = getAllergies();
+  grid.innerHTML = ALLERGY_LIST.map(a => `
+    <button class="ob-allergy-item${cur.includes(a.id)?' selected':''}" data-id="${a.id}" onclick="toggleObAllergy(this,'${a.id}')">
+      <span class="ob-allergy-item-icon">${a.icon}</span>
+      <span class="ob-allergy-item-label">${a.name}</span>
+    </button>`).join('');
+}
+
+function toggleObAllergy(el, id) {
+  el.classList.toggle('selected');
+  toggleAllergy(id);
+}
+function clearObAllergies() {
+  saveAllergies([]);
+  renderObAllergyGrid();
+}
+
+function selectGoal(btn) {
+  document.querySelectorAll('#obStep0 .ob-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  obGoal = btn.dataset.goal;
+  document.getElementById('obNext0').disabled = false;
+}
+
+function selectActivity(btn) {
+  document.querySelectorAll('.ob-act-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  obActivity = parseFloat(btn.dataset.act);
+}
+
+function selectDietPref(btn) {
+  document.querySelectorAll('#obStep2 .ob-option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  obDietPref = btn.dataset.diet;
+  document.getElementById('obFinish').disabled = false;
+}
+
+let obCurrentStep = 0;
+function obGoStep(n) {
+  document.getElementById('obStep' + obCurrentStep).style.display = 'none';
+  document.getElementById('obDot' + obCurrentStep).classList.remove('active');
+  document.getElementById('obDot' + obCurrentStep).classList.add('done');
+  obCurrentStep = n;
+  document.getElementById('obStep' + n).style.display = '';
+  document.getElementById('obDot' + n).classList.add('active');
+}
+
+function calcTDEE() {
+  const age = parseInt(document.getElementById('obAge').value) || 30;
+  const sex = document.getElementById('obSex').value;
+  const w = parseFloat(document.getElementById('obWeight').value) || 70;
+  const h = parseFloat(document.getElementById('obHeight').value) || 170;
+  const act = obActivity || 1.375;
+  // Mifflin-St Jeor
+  let bmr = sex === 'm'
+    ? 10*w + 6.25*h - 5*age + 5
+    : 10*w + 6.25*h - 5*age - 161;
+  let tdee = Math.round(bmr * act);
+  return tdee;
+}
+
+function goalCalorieAdjustment(goal, tdee) {
+  switch(goal) {
+    case 'lose':    return { R: Math.round(tdee * 0.82), D: Math.round(tdee * 0.78), C: Math.round(tdee * 0.95) };
+    case 'maintain':return { R: tdee, D: Math.round(tdee * 0.95), C: Math.round(tdee * 1.08) };
+    case 'muscle':  return { R: Math.round(tdee * 1.1), D: Math.round(tdee * 1.05), C: Math.round(tdee * 1.18) };
+    case 'health':  return { R: Math.round(tdee * 0.95), D: Math.round(tdee * 0.9), C: tdee };
+    default:        return { R: tdee, D: Math.round(tdee * 0.9), C: Math.round(tdee * 1.1) };
+  }
+}
+
+function finishOnboarding() {
+  const tdee = calcTDEE();
+  const targets = goalCalorieAdjustment(obGoal || 'maintain', tdee);
+  const profile = {
+    goal: obGoal || 'maintain',
+    tdee,
+    targets,
+    diet: obDietPref || 'nv',
+    age: parseInt(document.getElementById('obAge').value) || null,
+    weight: parseFloat(document.getElementById('obWeight').value) || null,
+    height: parseFloat(document.getElementById('obHeight').value) || null,
+    activity: obActivity || 1.375,
+    allergies: getAllergies(),
+  };
+  saveProfile(profile);
+  applyProfile(profile);
+  document.getElementById('onboardOverlay').classList.add('hidden');
+  seed(); render();
+}
+
+function skipOnboarding() {
+  const defaultProfile = {
+    goal: 'maintain', tdee: 2000,
+    targets: { R: 1900, D: 1600, C: 2400 },
+    diet: 'nv', allergies: [],
+  };
+  saveProfile(defaultProfile);
+  applyProfile(defaultProfile);
+  document.getElementById('onboardOverlay').classList.add('hidden');
+}
+
+function applyProfile(p) {
+  if(p.targets) {
+    CAL_TARGET.R = p.targets.R;
+    CAL_TARGET.D = p.targets.D;
+    CAL_TARGET.C = p.targets.C;
+    MODE_NOTE.R = `Regular · ~${p.targets.R} kcal · high protein · balanced carbs`;
+    MODE_NOTE.D = `Low-GI · ~${p.targets.D} kcal · controlled carbs · blood-sugar friendly`;
+    MODE_NOTE.C = `Treat Day · ~${p.targets.C} kcal · enjoy it — back on track tomorrow 💪`;
+  }
+  if(p.diet) diet = p.diet;
+  // Update TDEE badge
+  const badge = document.getElementById('tdeeBadge');
+  if(badge && p.tdee) {
+    badge.textContent = `TDEE: ${p.tdee} kcal · Goal: ${goalLabel(p.goal)}`;
+  }
+}
+
+function goalLabel(g) {
+  return {lose:'Lose Weight', maintain:'Maintain', muscle:'Build Muscle', health:'Eat Healthy'}[g] || 'Maintain';
+}
+
+function resetProfile() {
+  localStorage.removeItem(OB_KEY);
+  location.reload();
+}
+window.resetProfile = resetProfile;
+
+// ═══════════════════════════════════════════════════════════════
+// RECIPE SYSTEM
+// ═══════════════════════════════════════════════════════════════
+
+// Recipe database — full step-by-step instructions for all meals
+// Key = meal name (n). Falls back to generic recipe generator.
+const RECIPE_DB = {
+  // ── SAMPLE full recipes (more can be added) ──
+  'Palak Paneer + 1 Roti + Salad': {
+    time:'20 min', serves:1,
+    ingredients:['150g paneer, cubed','2 cups fresh spinach (palak), washed','1 medium onion, finely chopped','2 garlic cloves, minced','1 tsp ginger paste','1 tomato, chopped','½ tsp cumin seeds','½ tsp garam masala','¼ tsp turmeric','½ tsp coriander powder','Salt to taste','1 tsp ghee or oil','1 wholegrain roti','Mixed salad greens + cucumber + lemon'],
+    steps:['Blanch spinach in boiling water for 2 minutes. Drain and blend to a smooth purée. Set aside.','Heat ghee in a pan over medium heat. Add cumin seeds and let them splutter.','Add onions and sauté until golden brown (~4 min). Add ginger-garlic paste and cook 1 min.','Add tomato, turmeric, coriander powder and salt. Cook until tomatoes soften and oil separates (~3 min).','Pour in the spinach purée. Mix well and simmer for 3–4 minutes.','Add paneer cubes. Stir gently, simmer 2 min. Finish with garam masala.','Serve with 1 wholegrain roti and a side salad dressed with lemon juice.'],
+    tip:'For best texture, lightly pan-fry the paneer cubes in a dry non-stick pan before adding — gives a golden crust without extra oil.'
+  },
+  'Dal + 1 Roti + Salad + Yogurt': {
+    time:'25 min', serves:1,
+    ingredients:['½ cup mixed dal (toor + masoor)', '1.5 cups water','½ tsp turmeric','1 small tomato, chopped','1 tsp ghee','½ tsp cumin seeds','1 dry red chilli','2 garlic cloves, sliced','Salt to taste','1 wholegrain roti','100g plain yogurt','Cucumber + tomato salad with lemon'],
+    steps:['Rinse dal and pressure cook with water, turmeric and tomato (3–4 whistles) or simmer for 20 min until soft.','Mash lightly with a ladle for a creamy texture. Season with salt.','Heat ghee in a small pan. Add cumin seeds — they should splutter in 30 seconds. Add dry chilli and garlic slices. Cook 1 min until garlic is golden.','Pour the hot tadka (tempering) over the dal. Mix well.','Serve with 1 wholegrain roti, plain yogurt and a fresh cucumber-tomato salad with lemon.'],
+    tip:'Adding a squeeze of lemon juice just before serving brightens the flavour significantly.'
+  },
+  'Chickpea Curry + 1 Roti + Salad + Raita': {
+    time:'20 min', serves:1,
+    ingredients:['1 cup canned chickpeas, drained & rinsed','1 medium onion, chopped','1 tomato, chopped','1 tsp ginger-garlic paste','½ tsp each: cumin, coriander, garam masala, chaat masala','¼ tsp turmeric','1 tsp oil','Salt to taste','1 wholegrain roti','3 tbsp yogurt + grated cucumber for raita','Mixed salad'],
+    steps:['Heat oil in a pan. Add onion, cook until golden (~4 min).','Add ginger-garlic paste, cook 1 min. Add tomato and all spices. Cook until masala thickens and oil separates.','Add chickpeas + ¼ cup water. Simmer 5–6 min. Mash a few chickpeas for a thicker gravy.','Season with salt and chaat masala. Finish with a squeeze of lemon.','Mix yogurt with grated cucumber, salt and a pinch of cumin for raita. Serve with roti and salad.'],
+    tip:'Canned chickpeas work perfectly here. If using dried, soak overnight and pressure cook for 15 min first.'
+  },
+  'Moong Dal Khichdi + Raita + Salad': {
+    time:'25 min', serves:1,
+    ingredients:['½ cup moong dal (split yellow)','¼ cup basmati rice','1.5 cups water','¼ tsp turmeric','½ tsp cumin seeds','1 tsp ghee','1 small onion, sliced (optional)','Salt to taste','Pinch of asafoetida (hing)','½ cup yogurt raita','Cucumber salad + seasonal fruit'],
+    steps:['Wash dal and rice together. Soak 10 min.','Heat ghee in a pressure cooker or pot. Add cumin seeds and hing. Splutter 30 seconds.','Add sliced onion (optional), cook 2 min. Add turmeric and drained dal+rice. Stir.','Add water and salt. Pressure cook 2–3 whistles (or simmer covered 20 min until mushy).','Serve with yogurt raita (yogurt + cucumber + cumin + salt) and sliced cucumber salad.'],
+    tip:'Khichdi should be slightly wetter than rice — it firms up as it sits. Add ¼ cup extra water if needed.'
+  },
+  'Grilled Chicken + Brown Rice + Raita': {
+    time:'25 min', serves:1,
+    ingredients:['150g chicken breast','1 tsp olive oil','1 tsp lemon juice','½ tsp each: cumin, paprika, garlic powder, garam masala','Salt & pepper','½ cup brown rice (cooked)','½ cup yogurt + grated cucumber + ¼ tsp cumin for raita','Green salad'],
+    steps:['Mix oil, lemon juice and all spices. Coat chicken breast evenly. Marinate 10 min (or up to 24 hours in fridge).','Heat a grill pan or non-stick pan over medium-high heat. Grill chicken 5–6 min per side until cooked through (internal temp 75°C / no pink inside).','Rest 3 min before slicing — this keeps it juicy.','Mix yogurt, cucumber, cumin and a pinch of salt for raita.','Serve sliced chicken over brown rice with raita and a green salad.'],
+    tip:'Pounding the chicken breast to even thickness (about 2cm) ensures it cooks evenly and stays moist.'
+  },
+  'Paneer Tikka + Roasted Veg + Salad': {
+    time:'20 min', serves:1,
+    ingredients:['150g paneer, cubed','2 tbsp thick yogurt','½ tsp each: cumin, garam masala, chilli powder, turmeric','1 tsp lemon juice','½ tsp ginger-garlic paste','1 tsp oil','200g mixed veg: capsicum, broccoli, zucchini','Salt to taste','Green salad to serve'],
+    steps:['Whisk yogurt with all spices, lemon juice, ginger-garlic paste and ½ tsp oil. Coat paneer cubes. Marinate 10–15 min.','Toss veg with ½ tsp oil and salt. Spread on a baking tray. Roast at 200°C / 390°F for 15 min until slightly charred.','Thread marinated paneer on skewers (or arrange on a lined baking tray).','Grill or bake at 220°C / 425°F for 8–10 min, turning once, until lightly charred.','Serve with roasted veg and green salad.'],
+    tip:'A squeeze of chaat masala and lemon juice just before serving elevates this dish considerably.'
+  },
+  'Egg Bhurji + 2 Rotis + Chai': {
+    time:'10 min', serves:1,
+    ingredients:['3 eggs','1 small onion, finely chopped','1 tomato, finely chopped','1 green chilli, finely chopped','¼ tsp turmeric','¼ tsp garam masala','Salt to taste','1 tsp oil','Fresh coriander to garnish','2 small wholegrain rotis','1 cup masala chai (no sugar)'],
+    steps:['Heat oil in a non-stick pan over medium heat. Add onion, cook until translucent (~2 min).','Add green chilli and tomato. Cook 2 min until tomato softens.','Add turmeric and salt. Stir.','Beat eggs and pour over the mixture. Scramble gently, stirring constantly until just set — don\'t overcook.','Sprinkle garam masala and fresh coriander. Serve immediately with hot rotis and masala chai.'],
+    tip:'Remove from heat while eggs still look slightly wet — residual heat finishes the cooking and keeps them soft.'
+  },
+  'Idli (3) + Sambar + Coconut Chutney + Tea': {
+    time:'15 min (batter pre-made)', serves:1,
+    ingredients:['3 idlis (from store-bought batter or pre-made)','1 cup sambar (lentil-vegetable soup)','2 tbsp fresh coconut chutney','1 cup ginger tea'],
+    steps:['If making idlis fresh: grease idli moulds with a drop of oil. Pour batter. Steam for 10–12 min until firm and a toothpick comes out clean.','For sambar: cook toor dal until soft. Temper mustard seeds, curry leaves, onion, tomato, sambar powder & tamarind. Combine. Simmer 5 min.','For coconut chutney: blend ¼ cup fresh coconut, 1 tsp roasted chana dal, 1 green chilli, a little water and salt until smooth. Temper with mustard seeds and curry leaves.','Serve idlis with hot sambar and coconut chutney alongside ginger tea.'],
+    tip:'Good idli batter should have fermented 8–12 hours. Store-bought batter is a perfectly fine shortcut for weekdays.'
+  },
+};
+
+// Generic recipe generator from the meal description field
+function generateGenericRecipe(meal, mealType) {
+  const desc = meal.d;
+  // Parse components from the description
+  const parts = desc.split('+').map(s => s.trim()).filter(Boolean);
+  const ingredients = parts.map(p => p.replace(/·.*$/, '').trim()).filter(p => p.length > 1);
+
+  // Build steps from description context
+  const steps = [];
+  const nameL = meal.n.toLowerCase();
+
+  if(/omelette|scrambled|egg/i.test(nameL)) {
+    steps.push('Beat eggs with salt, pepper and any listed spices in a bowl.');
+    steps.push('Heat a non-stick pan over medium heat with a little oil or butter.');
+    steps.push('Pour in egg mixture. Cook gently, stirring or folding as required.');
+    steps.push('Add any fillings (vegetables, herbs) midway through cooking.');
+    steps.push('Serve immediately with the accompaniments listed.');
+  } else if(/curry|masala/i.test(nameL)) {
+    steps.push('Prepare all ingredients: chop onion, tomato, ginger and garlic. Measure out spices.');
+    steps.push('Heat 1 tsp oil in a pan over medium heat. Add onion and cook until golden (~4 min).');
+    steps.push('Add ginger-garlic and cook 1 minute. Add tomato and spices. Cook until oil separates.');
+    steps.push('Add main ingredient (protein/vegetable). Add water as needed. Simmer until cooked through.');
+    steps.push('Adjust seasoning. Serve with the accompaniments listed in the meal description.');
+  } else if(/salad|bowl/i.test(nameL)) {
+    steps.push('Prepare all salad ingredients: wash, dry and chop greens and vegetables.');
+    steps.push('If the dish includes a protein (chicken, tuna, shrimp), cook it separately and allow to cool slightly.');
+    steps.push('Combine all salad components in a bowl. Add the protein on top.');
+    steps.push('Whisk together dressing ingredients (oil, lemon/vinegar, salt, pepper). Dress just before serving.');
+    steps.push('Finish with seeds, nuts or any garnish listed in the description.');
+  } else if(/soup|broth/i.test(nameL)) {
+    steps.push('Bring stock or water to a boil with aromatics (ginger, garlic, onion).');
+    steps.push('Add vegetables and simmer until tender (~8 min).');
+    steps.push('Add protein if included. Cook through. Season with salt and pepper.');
+    steps.push('Finish with any fresh herbs. Serve hot.');
+  } else if(/smoothie/i.test(nameL)) {
+    steps.push('Add all liquid ingredients to a blender first.');
+    steps.push('Add remaining ingredients (frozen fruit, protein, seeds).');
+    steps.push('Blend on high for 60 seconds until completely smooth.');
+    steps.push('Pour into a glass and consume immediately for best nutrition.');
+  } else {
+    steps.push('Gather all ingredients as listed. Pre-measure spices and sauces.');
+    steps.push('Prepare any ingredients that need cooking first (grains, pulses, proteins).');
+    steps.push('Assemble or cook remaining components as described.');
+    steps.push('Plate together and serve. Adjust seasoning to taste.');
+  }
+
+  // Add a description-based step
+  steps.push(`Complete the dish: ${desc}.`);
+
+  return {
+    time: getPrepTime(meal.n),
+    serves: 1,
+    ingredients,
+    steps,
+    tip: getGenericTip(meal),
+  };
+}
+
+function getGenericTip(meal) {
+  if(meal.p >= 30) return 'This is a high-protein meal — pair with adequate water intake to support muscle recovery.';
+  if(meal.c < 20) return 'Low-carb meal — great choice for blood sugar control and sustained energy without spikes.';
+  if(/dal|lentil/i.test(meal.n)) return 'Lentils improve in flavour the next day. Make extra and refrigerate — works great for meal prep.';
+  if(/paneer/i.test(meal.n)) return 'Paneer soaks up marinades well. Even 15 minutes marinating makes a noticeable difference.';
+  if(/chicken/i.test(meal.n)) return 'Let chicken rest 3–5 minutes after cooking before cutting — this keeps it moist and juicy.';
+  if(/fish|salmon|tuna/i.test(meal.n)) return 'Fish cooks fast — err on the side of slightly underdone as it continues cooking off heat.';
+  return 'Meal prep tip: most components of this meal can be prepared a day ahead and refrigerated separately.';
+}
+
+function openRecipe(mealType) {
+  const meal = picks[mealType];
+  if(!meal) return;
+  const recipe = RECIPE_DB[meal.n] || generateGenericRecipe(meal, mealType);
+
+  document.getElementById('recipeMealType').textContent = T_ICON[mealType] + ' ' + T_LBL[mealType];
+  document.getElementById('recipeMealName').textContent = meal.n;
+  document.getElementById('recipeMacros').innerHTML = `
+    <div class="recipe-mac"><strong>${meal.cal}</strong>kcal</div>
+    <div class="recipe-mac"><strong>${meal.p}g</strong>Protein</div>
+    <div class="recipe-mac"><strong>${meal.c}g</strong>Carbs</div>
+    <div class="recipe-mac"><strong>${meal.f}g</strong>Fat</div>`;
+
+  let body = '';
+  // Time + serves row
+  body += `<div style="display:flex;gap:12px;margin-bottom:16px">
+    <div style="background:var(--ink4);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;color:var(--accent2)">⏱ ${recipe.time}</div>
+    <div style="background:var(--ink4);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;color:var(--ink3)">🍽 ${recipe.serves} serving</div>
+  </div>`;
+
+  // Ingredients
+  body += '<div class="recipe-section"><div class="recipe-section-title">Ingredients</div>';
+  recipe.ingredients.forEach(ing => {
+    body += `<div class="recipe-ingredient"><div class="recipe-ingredient-bullet"></div>${ing}</div>`;
+  });
+  body += '</div>';
+
+  // Steps
+  body += '<div class="recipe-section"><div class="recipe-section-title">Instructions</div>';
+  recipe.steps.forEach((step, i) => {
+    body += `<div class="recipe-step">
+      <div class="recipe-step-num">${i+1}</div>
+      <div class="recipe-step-text">${step}</div>
+    </div>`;
+  });
+  body += '</div>';
+
+  // Tip
+  if(recipe.tip) {
+    body += `<div class="recipe-tip"><span style="font-size:18px;flex-shrink:0">💡</span><span>${recipe.tip}</span></div>`;
+  }
+  body += '<div style="height:20px"></div>';
+
+  document.getElementById('recipeBody').innerHTML = body;
+  document.getElementById('recipeOverlay').classList.add('open');
+}
+function closeRecipe() { document.getElementById('recipeOverlay').classList.remove('open'); }
+function recipeOverlayClick(e) { if(e.target === document.getElementById('recipeOverlay')) closeRecipe(); }
+window.openRecipe = openRecipe; window.closeRecipe = closeRecipe; window.recipeOverlayClick = recipeOverlayClick;
+
+// ═══════════════════════════════════════════════════════════════
+// WEEK PLAN SYSTEM
+// ═══════════════════════════════════════════════════════════════
+const WEEK_KEY = 'eatright_weekplan';
+let weekPlan = {}; // {0:{breakfast:meal, lunch:meal, snacks:meal, dinner:meal}, ...}
+let groceryChecked = {};
+let weekViewTab = 'plan';
+
+function loadWeekPlan() {
+  try { weekPlan = JSON.parse(localStorage.getItem(WEEK_KEY) || '{}'); } catch { weekPlan = {}; }
+}
+function saveWeekPlan() { localStorage.setItem(WEEK_KEY, JSON.stringify(weekPlan)); }
+
+function generateWeekPlan() {
+  loadWeekPlan();
+  // Generate missing days
+  for(let d = 0; d < 7; d++) {
+    if(!weekPlan[d]) {
+      weekPlan[d] = {};
+      const savedDay = dayIdx;
+      dayIdx = d;
+      diet = isVegDay(d) ? 'veg' : 'nv';
+      TYPES.forEach(t => {
+        const p = pool(t);
+        if(p.length) weekPlan[d][t] = rnd(p);
+      });
+      dayIdx = savedDay;
+      diet = isVegDay(savedDay) ? 'veg' : 'nv';
+    }
+  }
+  saveWeekPlan();
+}
+
+function regenWeek() {
+  weekPlan = {};
+  saveWeekPlan();
+  generateWeekPlan();
+  renderWeekBody();
+}
+
+function regenDay(d) {
+  weekPlan[d] = {};
+  const savedDay = dayIdx;
+  dayIdx = d;
+  diet = isVegDay(d) ? 'veg' : 'nv';
+  TYPES.forEach(t => {
+    const p = pool(t);
+    if(p.length) weekPlan[d][t] = rnd(p);
+  });
+  dayIdx = savedDay;
+  diet = isVegDay(savedDay) ? 'veg' : 'nv';
+  saveWeekPlan();
+  renderWeekBody();
+}
+
+function openWeekPanel() {
+  generateWeekPlan();
+  showWeekTab('plan');
+  document.getElementById('weekPanel').classList.add('open');
+}
+function closeWeekPanel() { document.getElementById('weekPanel').classList.remove('open'); }
+function weekPanelBg(e) { if(e.target === document.getElementById('weekPanel')) closeWeekPanel(); }
+
+function showWeekTab(tab) {
+  weekViewTab = tab;
+  document.getElementById('weekTabPlan').classList.toggle('on', tab === 'plan');
+  document.getElementById('weekTabGrocery').classList.toggle('on', tab === 'grocery');
+  renderWeekBody();
+}
+
+function renderWeekBody() {
+  if(weekViewTab === 'plan') renderWeekPlan();
+  else renderGroceryList();
+  renderWeekSummary();
+}
+
+function renderWeekPlan() {
+  let html = '';
+  DAYS.forEach((dayName, d) => {
+    const dayMeals = weekPlan[d] || {};
+    const totalCal = TYPES.reduce((s, t) => s + (dayMeals[t]?.cal || 0), 0);
+    const totalPro = TYPES.reduce((s, t) => s + (dayMeals[t]?.p || 0), 0);
+    const todayMark = d === new Date().getDay() ? ' 📍' : '';
+    html += `<div class="week-day-card">
+      <div class="week-day-hdr">
+        <div>
+          <div class="week-day-name">${dayName}${todayMark} ${isVegDay(d) ? '🌿' : ''}</div>
+          <div style="font-size:9px;color:var(--ink3);font-weight:700;margin-top:2px">${totalCal} kcal · ${totalPro}g protein</div>
+        </div>
+        <button class="week-day-regen" onclick="regenDay(${d})">⟳ Regen</button>
+      </div>`;
+    TYPES.forEach(t => {
+      const m = dayMeals[t];
+      if(m) {
+        html += `<div class="week-meal-row">
+          <span class="week-meal-icon">${T_ICON[t]}</span>
+          <span class="week-meal-name">${m.n}</span>
+          <span class="week-meal-cal">${m.cal} kcal</span>
+        </div>`;
+      }
+    });
+    html += '</div>';
+  });
+  document.getElementById('weekBody').innerHTML = html;
+}
+
+function buildGroceryList() {
+  // Extract all ingredients from all week meal descriptions
+  const cats = {
+    'Proteins': [],
+    'Vegetables & Greens': [],
+    'Grains & Breads': [],
+    'Dairy & Eggs': [],
+    'Fruits': [],
+    'Pantry & Spices': [],
+  };
+
+  // Pattern-based ingredient extraction from meal names + descriptions
+  const allText = Object.values(weekPlan).flatMap(day =>
+    TYPES.map(t => day[t] ? (day[t].n + ' ' + day[t].d) : '')
+  ).join(' ').toLowerCase();
+
+  // Protein
+  const proteins = [];
+  if(/chicken/.test(allText)) proteins.push('Chicken breast / thighs');
+  if(/paneer/.test(allText)) proteins.push('Paneer (200–300g)');
+  if(/egg/.test(allText)) proteins.push('Eggs (1 dozen)');
+  if(/tofu/.test(allText)) proteins.push('Firm tofu (200g)');
+  if(/fish|salmon|tuna|sardine/.test(allText)) proteins.push('Fish fillets or canned tuna');
+  if(/shrimp|prawn/.test(allText)) proteins.push('Shrimp / Prawns (250g)');
+  if(/dal|lentil|moong|masoor|toor/.test(allText)) proteins.push('Mixed dal / lentils (500g)');
+  if(/chickpea|chole|rajma/.test(allText)) proteins.push('Canned chickpeas + kidney beans');
+  if(/greek yogurt|curd/.test(allText)) proteins.push('Greek yogurt / Curd (1kg)');
+  cats['Proteins'] = proteins;
+
+  // Vegetables
+  const veg = [];
+  if(/spinach|palak/.test(allText)) veg.push('Spinach / Palak (2 bunches)');
+  if(/tomato/.test(allText)) veg.push('Tomatoes (6–8)');
+  if(/onion/.test(allText)) veg.push('Onions (4–5)');
+  if(/cucumber/.test(allText)) veg.push('Cucumbers (3–4)');
+  if(/capsicum|pepper/.test(allText)) veg.push('Capsicum / Bell peppers (3)');
+  if(/broccoli/.test(allText)) veg.push('Broccoli (1 head)');
+  if(/zucchini/.test(allText)) veg.push('Zucchini (2)');
+  if(/cauliflower/.test(allText)) veg.push('Cauliflower (1 head)');
+  if(/mushroom/.test(allText)) veg.push('Mushrooms (200g)');
+  if(/carrot/.test(allText)) veg.push('Carrots (4)');
+  if(/kale/.test(allText)) veg.push('Kale (1 bunch)');
+  veg.push('Ginger (small knob)', 'Garlic (1 bulb)', 'Green chillies (6–8)', 'Fresh coriander (1 bunch)');
+  cats['Vegetables & Greens'] = veg;
+
+  // Grains
+  const grains = [];
+  if(/brown rice|basmati/.test(allText)) grains.push('Brown rice or Basmati rice (1kg)');
+  if(/roti|wholegrain.*bread|wholegrain.*roti/.test(allText)) grains.push('Wholegrain rotis or atta flour (1kg)');
+  if(/quinoa/.test(allText)) grains.push('Quinoa (500g)');
+  if(/oats/.test(allText)) grains.push('Rolled oats (500g)');
+  if(/bread|toast/.test(allText)) grains.push('Wholegrain bread loaf');
+  cats['Grains & Breads'] = grains.length ? grains : ['Wholegrain rotis or atta flour (1kg)'];
+
+  // Dairy & Eggs
+  const dairy = ['Milk (1L)', 'Plain yogurt / Curd (500g)'];
+  if(/ghee/.test(allText)) dairy.push('Ghee (small jar)');
+  if(/almond milk/.test(allText)) dairy.push('Almond milk (1L)');
+  cats['Dairy & Eggs'] = dairy;
+
+  // Fruits
+  const fruits = [];
+  if(/apple/.test(allText)) fruits.push('Apples (4–5)');
+  if(/banana/.test(allText)) fruits.push('Bananas (4–5)');
+  if(/berr/.test(allText)) fruits.push('Mixed berries (200g, fresh or frozen)');
+  if(/mango/.test(allText)) fruits.push('Mangoes (2)');
+  if(/lemon/.test(allText)) fruits.push('Lemons (4–5)');
+  if(/orange/.test(allText)) fruits.push('Oranges (3–4)');
+  if(/kiwi/.test(allText)) fruits.push('Kiwis (4)');
+  if(!fruits.length) fruits.push('Seasonal mixed fruit (500g)');
+  cats['Fruits'] = fruits;
+
+  // Pantry
+  const pantry = ['Olive oil / Coconut oil (1 bottle)', 'Salt, pepper', 'Cumin seeds', 'Turmeric', 'Garam masala', 'Coriander powder', 'Chilli powder'];
+  if(/almond|walnut|cashew|nut/.test(allText)) pantry.push('Mixed nuts (almonds, walnuts, cashews) 200g');
+  if(/chia/.test(allText)) pantry.push('Chia seeds (100g)');
+  if(/peanut butter/.test(allText)) pantry.push('Natural peanut butter (jar)');
+  if(/honey/.test(allText)) pantry.push('Honey (small jar)');
+  cats['Pantry & Spices'] = pantry;
+
+  return cats;
+}
+
+function renderGroceryList() {
+  const cats = buildGroceryList();
+  let html = '<div style="padding-bottom:8px">';
+  html += '<div style="font-size:11px;font-weight:700;color:var(--ink3);margin-bottom:12px;padding:8px 12px;background:var(--ink4);border-radius:8px">Based on your 7-day plan. Tap items to check off as you shop.</div>';
+
+  Object.entries(cats).forEach(([cat, items]) => {
+    if(!items.length) return;
+    const catEmoji = {Proteins:'🥩', 'Vegetables & Greens':'🥦', 'Grains & Breads':'🌾', 'Dairy & Eggs':'🥛', Fruits:'🍎', 'Pantry & Spices':'🧂'}[cat] || '📦';
+    html += `<div class="grocery-cat">
+      <div class="grocery-cat-title">${catEmoji} ${cat}</div>`;
+    items.forEach((item, idx) => {
+      const key = cat + ':' + idx;
+      const done = !!groceryChecked[key];
+      html += `<div class="grocery-item${done?' done':''}" onclick="toggleGrocery('${key}',this)">
+        <div class="grocery-check${done?' done':''}">${done?'✓':''}</div>
+        <span class="grocery-item-name">${item}</span>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  html += '<button onclick="groceryChecked={};renderGroceryList()" style="width:100%;padding:9px;border-radius:10px;border:1.5px dashed var(--ink4);background:none;color:var(--ink3);font-family:Nunito,sans-serif;font-size:11px;font-weight:800;cursor:pointer;margin-top:4px;text-transform:uppercase;letter-spacing:.05em">↺ Uncheck All</button>';
+  html += '<div style="height:20px"></div></div>';
+  document.getElementById('weekBody').innerHTML = html;
+}
+
+function toggleGrocery(key, el) {
+  groceryChecked[key] = !groceryChecked[key];
+  el.classList.toggle('done', groceryChecked[key]);
+  el.querySelector('.grocery-check').classList.toggle('done', groceryChecked[key]);
+  el.querySelector('.grocery-check').textContent = groceryChecked[key] ? '✓' : '';
+  el.querySelector('.grocery-item-name').parentElement.classList.toggle('done', groceryChecked[key]);
+}
+
+function renderWeekSummary() {
+  const allDays = Object.values(weekPlan);
+  const totalCal = allDays.reduce((s, d) => s + TYPES.reduce((ss, t) => ss + (d[t]?.cal || 0), 0), 0);
+  const totalPro = allDays.reduce((s, d) => s + TYPES.reduce((ss, t) => ss + (d[t]?.p || 0), 0), 0);
+  const avgCal = Math.round(totalCal / 7);
+  const avgPro = Math.round(totalPro / 7);
+  document.getElementById('weekSummary').innerHTML = `
+    <div class="week-sum-stat"><span class="week-sum-val">${avgCal}</span><span class="week-sum-lbl">Avg kcal/day</span></div>
+    <div class="week-sum-stat"><span class="week-sum-val">${avgPro}g</span><span class="week-sum-lbl">Avg protein</span></div>
+    <div class="week-sum-stat"><span class="week-sum-val">${totalCal}</span><span class="week-sum-lbl">Week total</span></div>
+    <div class="week-sum-stat"><span class="week-sum-val">7</span><span class="week-sum-lbl">Days planned</span></div>`;
+}
+
+window.openWeekPanel = openWeekPanel; window.closeWeekPanel = closeWeekPanel;
+window.weekPanelBg = weekPanelBg; window.showWeekTab = showWeekTab;
+window.regenWeek = regenWeek; window.regenDay = regenDay;
+window.toggleGrocery = toggleGrocery;
+
+// ═══════════════════════════════════════════════════════════════
+// PATCH RENDER TO ADD RECIPE BUTTON + REGION FILTER + TDEE
+// ═══════════════════════════════════════════════════════════════
+const _origRender = render;
+render = function() {
+  _origRender();
+  // Inject Recipe button into each card actions row
+  document.querySelectorAll('.card').forEach(card => {
+    const t = card.dataset.t;
+    if(!t) return;
+    const actions = card.querySelector('.card-actions');
+    if(actions && !actions.querySelector('.recipe-btn')) {
+      const btn = document.createElement('button');
+      btn.className = 'recipe-btn';
+      btn.innerHTML = '📖 Recipe';
+      btn.onclick = () => openRecipe(t);
+      // insert before swap btn
+      actions.insertBefore(btn, actions.firstChild);
+    }
+  });
+};
+
+// ═══════════════════════════════════════════════════════════════
+// INIT EXTENSIONS
+// ═══════════════════════════════════════════════════════════════
+loadWeekPlan();
+// Patch pool for region support
+window.pool = function(t) {
+  const custom = getCustomMeals();
+  const ratings = getRatings();
+  if(vegOn()){
+    const base = [...DB[t].veg, ...custom];
+    const f = base.filter(m => m.m.includes(mode));
+    const p = applyRatings(f.length ? f : base, ratings);
+    if(activeRegion === 'all') return p;
+    const regional = p.filter(m => matchesRegion(m));
+    return regional.length >= 2 ? regional : p;
+  } else {
+    const nv = DB[t].nonveg.filter(m => m.m.includes(mode));
+    const allMeals = nv.length >= 4 ? nv : [...DB[t].nonveg, ...DB[t].veg].filter(m => m.m.includes(mode));
+    const p = applyRatings(allMeals.length ? allMeals : [...DB[t].nonveg, ...DB[t].veg], ratings);
+    if(activeRegion === 'all') return p;
+    const regional = p.filter(m => matchesRegion(m));
+    return regional.length >= 2 ? regional : p;
+  }
+};
+
+// Run onboarding check after everything is ready
+setTimeout(() => {
+  checkOnboarding();
+  // Also call render to patch in recipe buttons
+  render();
+}, 50);
+
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
