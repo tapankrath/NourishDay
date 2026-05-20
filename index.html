@@ -46,23 +46,37 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .hdr{background:var(--night);padding:10px 14px 0;position:relative}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.15;}
 
-.logo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.logo{display:flex;align-items:center;gap:9px}
+.logo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.logo{display:flex;align-items:center;gap:9px;min-width:0;flex-shrink:1}
 .logo-mark{
-  width:38px;height:38px;background:var(--accent);border-radius:11px;
+  width:36px;height:36px;background:var(--accent);border-radius:10px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
   box-shadow:0 2px 14px rgba(14,143,204,.40);
 }
-.logo-mark svg{width:22px;height:22px}
-.logo-name{font-size:24px;font-weight:900;color:var(--ink);letter-spacing:-.8px;line-height:1}
-.logo-sub{font-size:9px;font-weight:800;color:var(--accent2);margin-top:2px;letter-spacing:.12em;text-transform:uppercase}
+.logo-mark svg{width:20px;height:20px}
+.logo-text{min-width:0}
+.logo-name{font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.8px;line-height:1}
 
-.mode-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4)}
+.mode-tabs-row{padding:0 0 8px}
+
+.profile-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:6px 12px;border-radius:8px;border:1.5px solid var(--border2);
+  background:none;color:var(--accent2);font-family:'Nunito',sans-serif;
+  font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;
+  letter-spacing:.03em;transition:all .15s;flex-shrink:0;line-height:1.2;
+}
+.profile-btn:hover{background:var(--accent-dim)}
+.profile-btn:active{transform:scale(.93)}
+.profile-btn-sub{font-size:8.5px;font-weight:700;color:var(--ink3);display:block;margin-top:2px;letter-spacing:.02em}
+
+
+.mode-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4);width:100%}
 .mode-tab{
-  padding:6px 10px;border-radius:7px;border:none;cursor:pointer;
+  flex:1;padding:7px 4px;border-radius:7px;border:none;cursor:pointer;
   font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
   color:var(--ink3);background:none;transition:all .18s;
-  white-space:nowrap;letter-spacing:.06em;text-transform:uppercase;
+  white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;text-align:center;
 }
 .mode-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(14,143,204,.40)}
 
@@ -154,23 +168,23 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .mac strong{font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.3px;line-height:1}
 .mac+.mac{border-left:1px solid var(--ink4)}
 
-/* ── CARD ACTION BAR: swap · rate · check ── */
+/* ── CARD ACTION BAR: recipe · swap · rate · check ── */
 .card-actions{
   display:flex;align-items:center;
-  padding:7px 10px;gap:6px;
+  padding:6px 10px;gap:5px;
   border-top:1px solid var(--ink4);
 }
 .swap-btn{
-  flex:1;
+  flex:1;min-width:0;
   background:var(--deep);
   border:1.5px solid var(--border2);
   color:var(--accent2);
-  font-size:11px;font-weight:900;
-  padding:7px 10px;border-radius:9px;cursor:pointer;
+  font-size:10.5px;font-weight:900;
+  padding:7px 8px;border-radius:9px;cursor:pointer;
   font-family:'Nunito',sans-serif;
-  letter-spacing:.04em;text-transform:uppercase;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:all .14s;
+  letter-spacing:.03em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  transition:all .14s;white-space:nowrap;
 }
 .swap-btn:active{transform:scale(.96);background:var(--border)}
 
@@ -478,12 +492,53 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 
 
 /* ═══════════════════════════════════════════════════════
+   ONBOARDING HERO BANNER
+═══════════════════════════════════════════════════════ */
+.ob-hero{
+  width:100%;max-width:380px;
+  text-align:center;
+  padding:0 4px 22px;
+}
+.ob-hero-logo{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:10px;
+}
+.ob-hero-mark{
+  width:48px;height:48px;background:var(--accent);border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(14,143,204,.50);
+  flex-shrink:0;
+}
+.ob-hero-name{
+  font-size:34px;font-weight:900;color:var(--ink);
+  letter-spacing:-1.2px;line-height:1;
+}
+.ob-hero-tagline{
+  font-size:14px;font-weight:600;color:var(--ink2);
+  line-height:1.55;margin-bottom:14px;
+  text-shadow:0 1px 12px rgba(0,0,0,.3);
+}
+.ob-hero-tagline em{
+  color:var(--accent2);font-style:normal;font-weight:900;
+}
+.ob-hero-pills{
+  display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+}
+.ob-hero-pill{
+  padding:5px 12px;border-radius:20px;
+  background:rgba(64,200,248,.08);
+  border:1px solid rgba(64,200,248,.20);
+  font-size:10.5px;font-weight:800;color:var(--ink3);
+  letter-spacing:.02em;white-space:nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════
    ONBOARDING OVERLAY
 ═══════════════════════════════════════════════════════ */
 .onboard-overlay{
   position:fixed;inset:0;background:var(--bg);z-index:1000;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:24px;overflow-y:auto;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:32px 24px 40px;overflow-y:auto;
 }
 .onboard-overlay.hidden{display:none}
 .ob-card{
@@ -526,8 +581,15 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   text-transform:uppercase;letter-spacing:.05em;transition:all .15s;
 }
 .ob-none-btn:hover{border-color:var(--border2);color:var(--ink2)}
-/* TDEE form */
-.ob-form{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+/* Unit toggle buttons in onboarding */
+.ob-unit-btn{
+  padding:3px 9px;border-radius:5px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:9.5px;font-weight:900;
+  color:var(--ink3);background:none;transition:all .15s;letter-spacing:.04em;text-transform:uppercase;
+}
+.ob-unit-btn.on{background:var(--accent);color:#fff;}
+
+
 .ob-field-label{font-size:9px;font-weight:900;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}
 .ob-input{
   width:100%;background:var(--deep);border:1px solid var(--border2);
@@ -564,10 +626,17 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
    TDEE BADGE in header
 ═══════════════════════════════════════════════════════ */
 .tdee-badge{
-  font-size:9px;font-weight:800;color:var(--accent2);
-  letter-spacing:.06em;text-transform:uppercase;
-  margin-top:2px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:4px;
+  margin-top:5px;
+  padding:3px 8px;border-radius:20px;
+  background:rgba(64,200,248,.10);
+  border:1px solid rgba(64,200,248,.22);
+  font-size:9.5px;font-weight:800;color:var(--accent2);
+  letter-spacing:.04em;cursor:pointer;
+  transition:all .15s;white-space:nowrap;
+  max-width:180px;overflow:hidden;text-overflow:ellipsis;
 }
+.tdee-badge:hover{background:rgba(64,200,248,.18);border-color:rgba(64,200,248,.4)}
 
 /* ═══════════════════════════════════════════════════════
    RECIPE MODAL
@@ -629,12 +698,12 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 }
 /* Recipe button on card */
 .recipe-btn{
-  flex:1;background:var(--deep);border:1.5px solid var(--border2);
-  color:var(--ink3);font-size:11px;font-weight:900;
-  padding:7px 10px;border-radius:9px;cursor:pointer;
-  font-family:'Nunito',sans-serif;letter-spacing:.04em;text-transform:uppercase;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  transition:all .14s;
+  flex:1;min-width:0;background:var(--deep);border:1.5px solid var(--border2);
+  color:var(--ink3);font-size:10.5px;font-weight:900;
+  padding:7px 8px;border-radius:9px;cursor:pointer;
+  font-family:'Nunito',sans-serif;letter-spacing:.03em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  transition:all .14s;white-space:nowrap;
 }
 .recipe-btn:active{transform:scale(.96);background:var(--border)}
 .recipe-btn:hover{color:var(--accent2);border-color:var(--accent2)}
@@ -676,11 +745,12 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .week-panel{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:150;display:none;align-items:flex-end;justify-content:center}
 .week-panel.open{display:flex}
 .week-sheet{background:var(--night);border:1px solid var(--frame);border-radius:20px 20px 0 0;width:100%;max-width:420px;max-height:94vh;display:flex;flex-direction:column;overflow:hidden}
-.week-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0}
+.week-hdr{padding:14px 14px 10px;border-bottom:1px solid var(--ink4);flex-shrink:0}
+.week-hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .week-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
-.week-actions{display:flex;gap:8px;align-items:center}
-.week-action-btn{padding:6px 14px;border-radius:8px;background:var(--accent);border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:#fff;letter-spacing:.05em;text-transform:uppercase}
 .week-close{width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;color:var(--ink3);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.week-actions{display:flex;gap:7px}
+.week-action-btn{flex:1;padding:8px 10px;border-radius:9px;background:var(--accent);border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;letter-spacing:.04em;text-transform:uppercase;text-align:center}
 .week-tabs{display:flex;border-bottom:1px solid var(--ink4);flex-shrink:0}
 .week-tab{flex:1;padding:10px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:var(--ink3);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .14s;border-bottom:2px solid transparent}
 .week-tab.on{color:var(--accent2);border-bottom-color:var(--accent2)}
@@ -732,6 +802,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 
 <div class="status-bar-spacer"></div>
 <div class="hdr">
+  <!-- Row 1: Logo + Profile -->
   <div class="logo-row">
     <div class="logo">
       <div class="logo-mark">
@@ -745,18 +816,21 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
           <circle cx="13" cy="13" r="2.8" fill="#0F161C"/><circle cx="13" cy="13" r="1.6" fill="#40C8F8"/>
         </svg>
       </div>
-      <div>
+      <div class="logo-text">
         <div class="logo-name">EatRight</div>
-        <div class="logo-sub">High Protein · Low Carb · Eat Right</div>
-        <div class="tdee-badge" id="tdeeBadge" onclick="resetProfile()">Tap to recalculate TDEE</div>
       </div>
     </div>
-    <div class="mode-tabs">
+    <button class="profile-btn" id="profileBtn" onclick="openProfile()">👤 Profile</button>
+  </div>
+  <!-- Row 2: Mode tabs full width -->
+  <div class="mode-tabs-row">
+    <div class="mode-tabs" style="width:100%">
       <button class="mode-tab on" id="tabR" onclick="setMode('R')">Regular</button>
       <button class="mode-tab"    id="tabD" onclick="setMode('D')">Low-GI</button>
       <button class="mode-tab"    id="tabC" onclick="setMode('C')">Treat Day</button>
     </div>
   </div>
+  <!-- Row 3: Day nav -->
   <div class="subnav">
     <div class="day-nav">
       <button class="day-arrow" onclick="chgDay(-1)">‹</button>
@@ -812,14 +886,6 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   </div>
 </div>
 
-<div class="region-bar" id="regionBar">
-  <span class="region-lbl">🇮🇳 Region</span>
-  <button class="region-btn on" data-r="all" onclick="setRegion('all')">All India</button>
-  <button class="region-btn south" data-r="south" onclick="setRegion('south')">🌴 South Indian</button>
-  <button class="region-btn punjab" data-r="punjab" onclick="setRegion('punjab')">🌾 Punjabi</button>
-  <button class="region-btn bengal" data-r="bengal" onclick="setRegion('bengal')">🐟 Bengali</button>
-  <button class="region-btn gujarat" data-r="gujarat" onclick="setRegion('gujarat')">🌿 Gujarati</button>
-</div>
 
 <div class="body">
   <button class="shuffle-btn" onclick="shuffleAll()"><span class="s-ico">⟳</span> Shuffle All Meals</button>
@@ -903,6 +969,32 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 
 <!-- ═══════════════ ONBOARDING OVERLAY ═══════════════ -->
 <div class="onboard-overlay" id="onboardOverlay">
+
+  <!-- Hero banner above the card -->
+  <div class="ob-hero">
+    <div class="ob-hero-logo">
+      <div class="ob-hero-mark">
+        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+          <circle cx="8"  cy="10" r="5" fill="#0F161C"/><circle cx="8"  cy="10" r="3.5" fill="#F0F6FF"/>
+          <circle cx="18" cy="10" r="5" fill="#0F161C"/><circle cx="18" cy="10" r="3.5" fill="#F0F6FF"/>
+          <circle cx="13" cy="18" r="5" fill="#0F161C"/><circle cx="13" cy="18" r="3.5" fill="#F0F6FF"/>
+          <circle cx="8"  cy="10" r="2.4" fill="#2EC4B2"/>
+          <circle cx="18" cy="10" r="2.4" fill="#D4885A"/>
+          <circle cx="13" cy="18" r="2.4" fill="#9480DC"/>
+          <circle cx="13" cy="13" r="2.8" fill="#0F161C"/><circle cx="13" cy="13" r="1.6" fill="#40C8F8"/>
+        </svg>
+      </div>
+      <span class="ob-hero-name">EatRight</span>
+    </div>
+    <div class="ob-hero-tagline">Your personal meal planner — built around <em>your</em> body & goals.</div>
+    <div class="ob-hero-pills">
+      <span class="ob-hero-pill">🔬 TDEE-calculated calories</span>
+      <span class="ob-hero-pill">🥗 High-protein meals</span>
+      <span class="ob-hero-pill">🩺 Low-GI & Treat Day modes</span>
+      <span class="ob-hero-pill">📅 7-day plan + grocery list</span>
+    </div>
+  </div>
+
   <div class="ob-card">
     <div class="ob-step-dots">
       <div class="ob-dot active" id="obDot0"></div>
@@ -958,14 +1050,30 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
             </select>
           </div>
         </div>
-        <div class="ob-row">
-          <div>
-            <div class="ob-field-label">Weight (kg)</div>
-            <input class="ob-input" id="obWeight" type="number" min="30" max="250" placeholder="70">
+        <!-- Weight row -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="ob-field-label" style="margin-bottom:0">Weight</div>
+            <div style="display:flex;background:rgba(255,255,255,.05);border-radius:6px;padding:2px;gap:2px;border:1px solid var(--ink4)">
+              <button class="ob-unit-btn on" id="wUnitKg" onclick="setWeightUnit('kg')">kg</button>
+              <button class="ob-unit-btn" id="wUnitLb" onclick="setWeightUnit('lb')">lbs</button>
+            </div>
           </div>
-          <div>
-            <div class="ob-field-label">Height (cm)</div>
-            <input class="ob-input" id="obHeight" type="number" min="130" max="220" placeholder="170">
+          <input class="ob-input" id="obWeight" type="number" min="30" max="600" placeholder="70">
+        </div>
+        <!-- Height row -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="ob-field-label" style="margin-bottom:0">Height</div>
+            <div style="display:flex;background:rgba(255,255,255,.05);border-radius:6px;padding:2px;gap:2px;border:1px solid var(--ink4)">
+              <button class="ob-unit-btn on" id="hUnitCm" onclick="setHeightUnit('cm')">cm</button>
+              <button class="ob-unit-btn" id="hUnitFt" onclick="setHeightUnit('ft')">ft/in</button>
+            </div>
+          </div>
+          <div id="heightCmRow"><input class="ob-input" id="obHeightCm" type="number" min="100" max="250" placeholder="170"></div>
+          <div id="heightFtRow" style="display:none;gap:6px">
+            <input class="ob-input" id="obHeightFt" type="number" min="4" max="8" placeholder="5" style="flex:1">
+            <input class="ob-input" id="obHeightIn" type="number" min="0" max="11" placeholder="7" style="flex:1">
           </div>
         </div>
         <div>
@@ -1037,11 +1145,13 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 <div class="week-panel" id="weekPanel" onclick="weekPanelBg(event)">
   <div class="week-sheet">
     <div class="week-hdr">
-      <div class="week-title">📅 Week Plan</div>
+      <div class="week-hdr-top">
+        <div class="week-title">📅 Week Plan</div>
+        <button class="week-close" onclick="closeWeekPanel()">✕</button>
+      </div>
       <div class="week-actions">
         <button class="week-action-btn" onclick="regenWeek()">⟳ Regen All</button>
-        <button class="week-action-btn" style="background:var(--teal)" onclick="showWeekTab('grocery')">🛒 Grocery</button>
-        <button class="week-close" onclick="closeWeekPanel()">✕</button>
+        <button class="week-action-btn" style="background:var(--teal)" onclick="showWeekTab('grocery')">🛒 Grocery List</button>
       </div>
     </div>
     <div class="week-tabs">
@@ -2219,11 +2329,49 @@ function obGoStep(n) {
   document.getElementById('obDot' + n).classList.add('active');
 }
 
+// ─── Unit helpers ───
+let weightUnit = 'kg';
+let heightUnit = 'cm';
+
+function setWeightUnit(u) {
+  weightUnit = u;
+  document.getElementById('wUnitKg').classList.toggle('on', u === 'kg');
+  document.getElementById('wUnitLb').classList.toggle('on', u === 'lb');
+  document.getElementById('obWeight').placeholder = u === 'kg' ? '70' : '154';
+  document.getElementById('obWeight').value = '';
+}
+
+function setHeightUnit(u) {
+  heightUnit = u;
+  document.getElementById('hUnitCm').classList.toggle('on', u === 'cm');
+  document.getElementById('hUnitFt').classList.toggle('on', u === 'ft');
+  document.getElementById('heightCmRow').style.display = u === 'cm' ? '' : 'none';
+  const ftRow = document.getElementById('heightFtRow');
+  ftRow.style.display = u === 'ft' ? 'flex' : 'none';
+}
+
+function getWeightKg() {
+  const v = parseFloat(document.getElementById('obWeight').value) || (weightUnit === 'kg' ? 70 : 154);
+  return weightUnit === 'lb' ? Math.round(v / 2.20462) : v;
+}
+
+function getHeightCm() {
+  if (heightUnit === 'cm') {
+    return parseFloat(document.getElementById('obHeightCm').value) || 170;
+  } else {
+    const ft = parseFloat(document.getElementById('obHeightFt').value) || 5;
+    const inches = parseFloat(document.getElementById('obHeightIn').value) || 7;
+    return Math.round((ft * 12 + inches) * 2.54);
+  }
+}
+window.setWeightUnit = setWeightUnit;
+window.setHeightUnit = setHeightUnit;
+
 function calcTDEE() {
   const age = parseInt(document.getElementById('obAge').value) || 30;
   const sex = document.getElementById('obSex').value;
-  const w = parseFloat(document.getElementById('obWeight').value) || 70;
-  const h = parseFloat(document.getElementById('obHeight').value) || 170;
+  const w = getWeightKg();
+  const h = getHeightCm();
   const act = obActivity || 1.375;
   // Mifflin-St Jeor
   let bmr = sex === 'm'
@@ -2252,8 +2400,8 @@ function finishOnboarding() {
     targets,
     diet: obDietPref || 'nv',
     age: parseInt(document.getElementById('obAge').value) || null,
-    weight: parseFloat(document.getElementById('obWeight').value) || null,
-    height: parseFloat(document.getElementById('obHeight').value) || null,
+    weight: getWeightKg(),
+    height: getHeightCm(),
     activity: obActivity || 1.375,
     allergies: getAllergies(),
   };
@@ -2284,10 +2432,11 @@ function applyProfile(p) {
     MODE_NOTE.C = `Treat Day · ~${p.targets.C} kcal · enjoy it — back on track tomorrow 💪`;
   }
   if(p.diet) diet = p.diet;
-  // Update TDEE badge
-  const badge = document.getElementById('tdeeBadge');
-  if(badge && p.tdee) {
-    badge.textContent = `TDEE: ${p.tdee} kcal · Goal: ${goalLabel(p.goal)}`;
+  // Update Profile button to reflect saved goal
+  const btn = document.getElementById('profileBtn');
+  if(btn && p.tdee) {
+    const goalEmoji = {lose:'🔥',maintain:'⚖️',muscle:'💪',health:'🌿'}[p.goal] || '⚖️';
+    btn.innerHTML = `👤 Profile <span class="profile-btn-sub">${goalEmoji} ${p.targets?.R || p.tdee} kcal</span>`;
   }
 }
 
@@ -2295,11 +2444,63 @@ function goalLabel(g) {
   return {lose:'Lose Weight', maintain:'Maintain', muscle:'Build Muscle', health:'Eat Healthy'}[g] || 'Maintain';
 }
 
+function openProfile() {
+  const p = getProfile();
+  // Reset step state
+  obCurrentStep = 0;
+  obGoal = p ? p.goal : null;
+  obActivity = p ? p.activity : null;
+  obDietPref = p ? p.diet : null;
+
+  // Show step 0, hide others
+  [0,1,2].forEach(i => {
+    document.getElementById('obStep'+i).style.display = i===0 ? '' : 'none';
+    document.getElementById('obDot'+i).className = 'ob-dot' + (i===0?' active':'');
+  });
+
+  // Pre-select goal
+  if(obGoal) {
+    document.querySelectorAll('#obStep0 .ob-option').forEach(b => {
+      b.classList.toggle('selected', b.dataset.goal === obGoal);
+    });
+    document.getElementById('obNext0').disabled = false;
+  }
+
+  // Pre-fill TDEE fields on next step show
+  if(p) {
+    setTimeout(() => {
+      if(p.age) document.getElementById('obAge').value = p.age;
+      if(p.weight) { document.getElementById('obWeight').value = p.weight; }
+      if(p.height) { document.getElementById('obHeightCm').value = p.height; }
+      if(p.activity) {
+        document.querySelectorAll('.ob-act-btn').forEach(b => {
+          b.classList.toggle('selected', parseFloat(b.dataset.act) === p.activity);
+        });
+      }
+    }, 50);
+  }
+
+  renderObAllergyGrid();
+  document.getElementById('onboardOverlay').classList.remove('hidden');
+}
+window.openProfile = openProfile;
+
 function resetProfile() {
   localStorage.removeItem(OB_KEY);
   location.reload();
 }
 window.resetProfile = resetProfile;
+
+// Expose all onboarding handlers globally (required for inline onclick attributes)
+window.selectGoal = selectGoal;
+window.selectActivity = selectActivity;
+window.selectDietPref = selectDietPref;
+window.obGoStep = obGoStep;
+window.finishOnboarding = finishOnboarding;
+window.skipOnboarding = skipOnboarding;
+window.clearObAllergies = clearObAllergies;
+window.toggleObAllergy = toggleObAllergy;
+window.renderObAllergyGrid = renderObAllergyGrid;
 
 // ═══════════════════════════════════════════════════════════════
 // RECIPE SYSTEM
