@@ -412,6 +412,70 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .modal-cancel{flex:1;padding:12px;background:var(--ink4);border:1px solid var(--ink4);border-radius:10px;
   font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:var(--ink3);cursor:pointer}
 
+
+/* ── ALLERGY PANEL ── */
+.allergy-zone{
+  background:var(--deep);border-bottom:1px solid var(--ink4);
+  padding:8px 14px 10px;
+}
+.allergy-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.allergy-lbl{font-size:9px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;flex-shrink:0}
+.allergy-chips{display:flex;gap:5px;flex-wrap:wrap;flex:1}
+.allergy-chip{
+  display:flex;align-items:center;gap:4px;
+  padding:3px 8px;border-radius:20px;
+  background:rgba(212,136,90,.15);border:1px solid rgba(212,136,90,.35);
+  font-size:9.5px;font-weight:800;color:#E8AA7A;
+  letter-spacing:.03em;
+}
+.allergy-chip-x{
+  background:none;border:none;color:#E8AA7A;
+  font-size:13px;cursor:pointer;padding:0;line-height:1;margin-left:1px;opacity:.7;
+}
+.allergy-chip-x:hover{opacity:1}
+.allergy-add-btn{
+  padding:4px 10px;border-radius:20px;
+  border:1.5px solid var(--border2);background:none;
+  color:var(--accent2);font-size:10px;font-weight:800;
+  font-family:'Nunito',sans-serif;cursor:pointer;
+  white-space:nowrap;transition:all .15s;flex-shrink:0;
+}
+.allergy-add-btn:hover{background:var(--accent-dim)}
+.allergy-none{font-size:10px;font-weight:600;color:var(--ink3);font-style:italic}
+
+/* Allergy dropdown */
+.allergy-dropdown-wrap{
+  position:relative;
+}
+.allergy-dropdown{
+  position:absolute;top:calc(100% + 6px);right:0;
+  background:var(--deep);border:1px solid var(--border2);
+  border-radius:12px;z-index:50;
+  min-width:220px;max-height:320px;overflow-y:auto;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);
+  padding:6px;
+}
+.allergy-dropdown.hidden{display:none}
+.allergy-opt{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:8px;cursor:pointer;
+  transition:background .12s;
+}
+.allergy-opt:hover{background:rgba(64,200,248,.08)}
+.allergy-opt-icon{font-size:16px;flex-shrink:0}
+.allergy-opt-name{font-size:12px;font-weight:800;color:var(--ink);flex:1}
+.allergy-opt-desc{font-size:9.5px;color:var(--ink3);font-weight:600}
+.allergy-opt.active{background:rgba(212,136,90,.12)}
+.allergy-opt.active .allergy-opt-name{color:#E8AA7A}
+
+/* Warning badge on meal card */
+.allergy-warn{
+  font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;
+  background:rgba(212,136,90,.18);color:#E8AA7A;
+  border:1px solid rgba(212,136,90,.30);
+  letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
+}
+
 </style>
 </head>
 <body>
@@ -484,6 +548,17 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   </div>
   <div style="font-size:9px;font-weight:700;color:var(--ink3);margin-top:5px;letter-spacing:.03em">
     ✓ = day you logged your meals &nbsp;·&nbsp; Blue = streak
+  </div>
+</div>
+
+<div class="allergy-zone">
+  <div class="allergy-row">
+    <span class="allergy-lbl">🚫 Allergies</span>
+    <div class="allergy-chips" id="allergyChips"><span class="allergy-none">None set</span></div>
+    <div class="allergy-dropdown-wrap">
+      <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">＋ Add</button>
+      <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
+    </div>
   </div>
 </div>
 
@@ -948,6 +1023,7 @@ function swapBev(){
   while(bevIdx===prev&&list.length>1) bevIdx=Math.floor(Math.random()*list.length);
   renderBev();
   renderWater();
+  renderAllergyUI();
   renderStreak();
   renderInsight();
 }
@@ -977,23 +1053,21 @@ function pool(t){
 // Filter disliked meals out (unless pool would shrink below 3)
 // Boost liked meals by duplicating them in the candidate list (appear 3x more often)
 function applyRatings(p, ratings){
-  const disliked=p.filter(m=>ratings[m.n]===-1);
-  const liked=p.filter(m=>ratings[m.n]===1);
-  const neutral=p.filter(m=>!ratings[m.n]);
+  // Step 1: Filter allergy conflicts (safety first)
+  const safe=p.filter(m=>!hasAllergyConflict(m));
+  const allergyFiltered=safe.length>=3?safe:p; // fallback if too many filtered
 
-  // Only filter disliked if enough remain
-  const filtered=(p.length - disliked.length)>=3
-    ? p.filter(m=>ratings[m.n]!==-1)
-    : p;
+  // Step 2: Filter disliked meals
+  const disliked=allergyFiltered.filter(m=>ratings[m.n]===-1);
+  const liked=allergyFiltered.filter(m=>ratings[m.n]===1);
+  const filtered=(allergyFiltered.length - disliked.length)>=3
+    ? allergyFiltered.filter(m=>ratings[m.n]!==-1)
+    : allergyFiltered;
 
-  // Boost liked meals — add them extra times so they appear more in random picks
+  // Step 3: Boost liked meals
   const boosted=[...filtered];
-  liked.forEach(m=>{
-    if(filtered.includes(m)){
-      boosted.push(m,m); // liked meals appear 3x total
-    }
-  });
-  return boosted.length?boosted:p;
+  liked.forEach(m=>{if(filtered.includes(m)) boosted.push(m,m);});
+  return boosted.length?boosted:allergyFiltered;
 }
 
 function rnd(arr){return arr[Math.floor(Math.random()*arr.length)]}
@@ -1122,6 +1196,9 @@ function render(){
     const isNV=!vegOn()&&(DB[t].nonveg||[]).includes(m);
     const isDone=!!checked[t];
     let tags='';
+    // Allergy warning tag
+    const allergyConflicts=getAllergyConflictNames(m);
+    if(allergyConflicts.length) tags+=`<span class="allergy-warn">⚠ ${allergyConflicts.join(', ')}</span>`;
     if(m.p>=20)tags+='<span class="tag t-pro">High Protein</span>';
     if(m.c<20)tags+='<span class="tag t-lc">Low Carb</span>';
     if(mode==='D')tags+='<span class="tag t-gi">Low GI</span>';
@@ -1505,6 +1582,101 @@ function resetRatings(){
   }
 }
 window.resetRatings=resetRatings;window.swap=swap;window.chgDay=chgDay;window.setMode=setMode;window.setDiet=setDiet;
+
+// ─────────────────────────────────────────────────────────────────────
+// ALLERGY SYSTEM
+// ─────────────────────────────────────────────────────────────────────
+const ALLERGY_KEY='eatright_allergies';
+
+const ALLERGY_LIST=[
+  {id:'gluten',    icon:'🌾', name:'Gluten',       desc:'wheat, roti, bread, oats',
+   keywords:['roti','bread','toast','oats','paratha','wheat','crackers','pita','wrap','pancake','muesli','granola','upma','semolina','dosa','idli']},
+  {id:'dairy',     icon:'🥛', name:'Dairy',         desc:'milk, yogurt, paneer, ghee',
+   keywords:['yogurt','curd','raita','paneer','milk','ghee','butter','cream','lassi','chaas']},
+  {id:'nuts',      icon:'🥜', name:'Tree Nuts',     desc:'almonds, walnuts, cashews, pistachios',
+   keywords:['almond','walnut','cashew','pistachio','mixed nuts','trail mix','nut butter']},
+  {id:'peanuts',   icon:'🫘', name:'Peanuts',       desc:'peanuts, peanut butter, kung pao',
+   keywords:['peanut','kung pao','satay','pad thai']},
+  {id:'eggs',      icon:'🥚', name:'Eggs',          desc:'eggs, omelette, scrambled, egg curry',
+   keywords:['egg','omelette','scrambled','shakshuka','egg curry','egg white','boiled egg']},
+  {id:'shellfish', icon:'🦐', name:'Shellfish',     desc:'shrimp, prawns, crab, lobster',
+   keywords:['shrimp','prawn','crab','lobster','shellfish']},
+  {id:'fish',      icon:'🐟', name:'Fish',          desc:'all fish, sardines, tuna, salmon',
+   keywords:['fish','salmon','tuna','sardine','mackerel','grilled fish','fish curry','fish taco','fish tikka']},
+  {id:'soy',       icon:'🫘', name:'Soy / Tofu',    desc:'tofu, soy sauce, edamame, soy milk',
+   keywords:['tofu','soy','edamame','miso','soya']},
+  {id:'sesame',    icon:'🌿', name:'Sesame',        desc:'sesame seeds, tahini, sesame oil',
+   keywords:['sesame','tahini','til']},
+  {id:'coconut',   icon:'🥥', name:'Coconut',       desc:'coconut milk, coconut chutney',
+   keywords:['coconut','thai curry','green curry','red curry']},
+  {id:'mustard',   icon:'🌱', name:'Mustard',       desc:'mustard seeds, mustard oil',
+   keywords:['mustard']},
+];
+
+function getAllergies(){try{return JSON.parse(localStorage.getItem(ALLERGY_KEY)||'[]')}catch{return[]}}
+function saveAllergies(arr){localStorage.setItem(ALLERGY_KEY,JSON.stringify(arr));}
+function toggleAllergy(id){
+  const cur=getAllergies();
+  const idx=cur.indexOf(id);
+  if(idx>=0) cur.splice(idx,1); else cur.push(id);
+  saveAllergies(cur);
+  renderAllergyUI();
+  renderAllergyDropdown();
+  seed(); render();
+}
+function removeAllergy(id){
+  saveAllergies(getAllergies().filter(a=>a!==id));
+  renderAllergyUI(); seed(); render();
+}
+function toggleAllergyDropdown(e){
+  e.stopPropagation();
+  const dd=document.getElementById('allergyDropdown');
+  dd.classList.toggle('hidden');
+  if(!dd.classList.contains('hidden')) renderAllergyDropdown();
+}
+document.addEventListener('click',()=>{
+  const dd=document.getElementById('allergyDropdown');
+  if(dd) dd.classList.add('hidden');
+});
+function renderAllergyDropdown(){
+  const cur=getAllergies();
+  const dd=document.getElementById('allergyDropdown');
+  if(!dd) return;
+  dd.innerHTML=ALLERGY_LIST.map(a=>`
+    <div class="allergy-opt${cur.includes(a.id)?' active':''}" onclick="toggleAllergy('${a.id}');event.stopPropagation()">
+      <span class="allergy-opt-icon">${a.icon}</span>
+      <div style="flex:1">
+        <div class="allergy-opt-name">${cur.includes(a.id)?'✓ ':''} ${a.name}</div>
+        <div class="allergy-opt-desc">${a.desc}</div>
+      </div>
+    </div>`).join('');
+}
+function renderAllergyUI(){
+  const cur=getAllergies();
+  const chips=document.getElementById('allergyChips');
+  if(!chips) return;
+  if(!cur.length){chips.innerHTML='<span class="allergy-none">None set</span>';return;}
+  chips.innerHTML=cur.map(id=>{
+    const a=ALLERGY_LIST.find(x=>x.id===id);
+    if(!a) return '';
+    return `<span class="allergy-chip">${a.icon} ${a.name}<button class="allergy-chip-x" onclick="removeAllergy('${id}');event.stopPropagation()">×</button></span>`;
+  }).join('');
+}
+function hasAllergyConflict(meal){
+  const cur=getAllergies();
+  if(!cur.length) return false;
+  const text=(meal.n+' '+meal.d).toLowerCase();
+  return cur.some(id=>{const a=ALLERGY_LIST.find(x=>x.id===id);return a&&a.keywords.some(kw=>text.includes(kw));});
+}
+function getAllergyConflictNames(meal){
+  const cur=getAllergies();
+  if(!cur.length) return [];
+  const text=(meal.n+' '+meal.d).toLowerCase();
+  return cur.filter(id=>{const a=ALLERGY_LIST.find(x=>x.id===id);return a&&a.keywords.some(kw=>text.includes(kw));})
+    .map(id=>ALLERGY_LIST.find(x=>x.id===id)?.name).filter(Boolean);
+}
+
+window.toggleAllergyDropdown=toggleAllergyDropdown;window.toggleAllergy=toggleAllergy;window.removeAllergy=removeAllergy;
 window.tapGlass=tapGlass;window.rateMeal=rateMeal;window.shareDay=shareDay;window.openCustomModal=openCustomModal;window.closeCustomModal=closeCustomModal;window.modalBgClick=modalBgClick;window.saveCustomMeal=saveCustomMeal;
 window.toggleCheck=toggleCheck;window.setBevCat=setBevCat;window.toggleBevCheck=toggleBevCheck;
 window.logDay=logDay;window.openLog=openLog;window.closeLog=closeLog;
