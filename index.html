@@ -36,13 +36,13 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   min-height:100vh;background:var(--night);
 }
 .app::before{
-  content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
+  content:'';position:fixed;top:env(safe-area-inset-top,0px);left:50%;transform:translateX(-50%);
   width:min(420px,100vw);height:2px;
   background:linear-gradient(90deg,transparent 5%,var(--teal) 25%,var(--accent2) 55%,rgba(125,211,248,.6) 75%,transparent 95%);
   opacity:.5;z-index:10;pointer-events:none;
 }
 
-.status-bar-spacer{background:var(--night);height:max(env(safe-area-inset-top),44px)}
+.status-bar-spacer{background:var(--night);height:max(env(safe-area-inset-top),52px)}
 .hdr{background:var(--night);padding:10px 14px 0;position:relative}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.15;}
 
@@ -538,7 +538,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .onboard-overlay{
   position:fixed;inset:0;background:var(--bg);z-index:1000;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  padding:32px 24px 40px;overflow-y:auto;
+  padding:max(env(safe-area-inset-top),32px) 24px 40px;overflow-y:auto;
 }
 .onboard-overlay.hidden{display:none}
 .ob-card{
@@ -1429,6 +1429,7 @@ snacks:{
   // Mexican snacks
   {n:'Guacamole + Black Bean Dip + Veggies',   d:'2 tbsp guacamole + 2 tbsp black bean dip + 1 cup veggie sticks + 6 baked tortilla chips',                   cal:210,p:7,c:22,f:12,m:'RDC'},
   {n:'Elote Cup (Street Corn) — Lightened',    d:'½ cup corn with lime juice, chilli powder, cotija-style cheese & light yogurt instead of crema',              cal:180,p:7,c:26,f:6,m:'RC'},
+ ],
  nonveg:[
   {n:'Boiled Eggs + Almonds + Apple',           d:'2 boiled eggs + 15g almonds + 1 small apple',                                                            cal:230,p:16,c:14,f:14,m:'RDC'},
   {n:'Greek Yogurt + Berries + Boiled Egg + Nuts',d:'150g plain Greek yogurt + ½ cup mixed berries + 1 boiled egg + 10g walnuts',                           cal:250,p:20,c:18,f:10,m:'RDC'},
@@ -1462,6 +1463,8 @@ snacks:{
   // Mexican nonveg snacks
   {n:'Chicken & Bean Tostada Bite',             d:'1 small corn tostada + ¼ cup shredded chicken + 2 tbsp black beans + salsa + slice of avocado',             cal:210,p:18,c:18,f:8,m:'RC'},
   {n:'Shrimp Ceviche + Tortilla Chips (Small)', d:'100g shrimp ceviche with lime, tomato, onion & coriander + 8 baked corn chips',                             cal:200,p:18,c:18,f:4,m:'RDC'},
+ ]
+},
 
 // ══════════════════ DINNER (protein-led, Indian-first) ══════════════════
 dinner:{
@@ -2361,7 +2364,10 @@ function saveProfile(p) { localStorage.setItem(OB_KEY, JSON.stringify(p)); }
 
 function checkOnboarding() {
   const p = getProfile();
-  if (!p) {
+  const isValid = p && p.goal && p.targets && p.targets.R && p.diet;
+  if (!isValid) {
+    // Clear any corrupt/incomplete profile
+    if (p && !isValid) localStorage.removeItem(OB_KEY);
     document.getElementById('onboardOverlay').classList.remove('hidden');
     renderObAllergyGrid();
   } else {
