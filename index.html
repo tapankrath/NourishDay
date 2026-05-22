@@ -3329,44 +3329,177 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
   }
 }
 
-window._nearbyList = [];
+// Progressive nearby state
+window._nearbyList   = [];   // all shown so far
+window._nearbyLat    = null;
+window._nearbyLng    = null;
+window._nearbyArea   = '';
+// Radius rings in metres: 0-2mi, 2-5mi, 5-10mi (stop here)
+var RADIUS_RINGS = [3200, 8000, 16000];
+var RING_LABELS  = ['within 2 miles', '2–5 miles', '5–10 miles'];
+window._nearbyRing   = 0;    // which ring we've searched up to
+
+function restoRowHTML(p, globalIdx) {
+  const oc  = p.isOpen===true?'#2EC4B2':p.isOpen===false?'#E05C5C':'var(--ink3)';
+  const ol  = p.isOpen===true?(p.closes||'Open now'):p.isOpen===false?'Closed':'Hours unknown';
+  const dist = p.dist!==null ? p.dist.toFixed(1)+' mi' : '';
+  const stars = p.rating ? '&#11088; '+p.rating.toFixed(1) : '';
+  return '<div onclick="showRestoDetail(' + globalIdx + ')" style="display:flex;align-items:center;gap:10px;' +
+    'padding:13px 14px;background:var(--card);cursor:pointer;border-bottom:1px solid var(--ink4)">' +
+    '<div style="width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;' +
+    'font-size:11px;font-weight:900;color:#fff;background:' + (globalIdx===0?'var(--orange)':'var(--accent)') + '">' + (globalIdx+1) + '</div>' +
+    '<div style="flex:1;min-width:0">' +
+    '<div style="font-size:13px;font-weight:900;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(p.name) + '</div>' +
+    '<div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap">' +
+    '<div style="width:6px;height:6px;border-radius:50%;background:' + oc + ';flex-shrink:0"></div>' +
+    '<span style="font-size:9.5px;font-weight:900;color:' + oc + '">' + ol + '</span>' +
+    (dist ? '<span style="font-size:9.5px;font-weight:700;color:var(--ink3)"> &middot; ' + dist + '</span>' : '') +
+    (stars ? '<span style="font-size:9.5px;font-weight:900;color:#F4C430"> &middot; ' + stars + '</span>' : '') +
+    '</div></div>' +
+    '<span style="color:var(--ink3);font-size:20px;line-height:1">&rsaquo;</span></div>';
+}
 
 function showRestoList(list, userLat, userLng, area, mealShort) {
-  const openCount = list.filter(function(p) { return p.isOpen === true; }).length;
-  const allUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(mealShort + ' restaurant') + '/@' + userLat + ',' + userLng + ',14z';
+  // Reset state for fresh search
+  window._nearbyList = list;
+  window._nearbyLat  = userLat;
+  window._nearbyLng  = userLng;
+  window._nearbyArea = area || '';
+  window._nearbyRing = 0;
 
-  let h = '<div style="display:flex;align-items:center;justify-content:space-between;' +
-    'padding:8px 12px;background:var(--ink4);border-radius:10px;margin-bottom:12px">' +
-    '<span style="font-size:11px;font-weight:800;color:var(--ink3)">&#128205; ' +
-    '<strong style="color:var(--ink)">' + openCount + ' open</strong> of ' + list.length +
-    (area ? ' &middot; ' + escHtml(area) : '') + '</span>' +
-    '<a href="' + allUrl + '" target="_blank" rel="noopener" ' +
-    'style="font-size:10px;font-weight:900;color:var(--accent2);text-decoration:none">See all &rarr;</a></div>';
+  const body = document.getElementById('nearbyBody');
+  body.innerHTML = '';
 
-  h += '<div style="border-radius:14px;overflow:hidden;border:1px solid var(--border)">';
-  list.forEach(function(p, i) {
-    const oc = p.isOpen===true?'#2EC4B2':p.isOpen===false?'#E05C5C':'var(--ink3)';
-    const ol = p.isOpen===true?(p.closes||'Open now'):p.isOpen===false?'Closed':'Hours unknown';
-    const dist = p.dist!==null ? p.dist.toFixed(1)+' mi' : '';
-    const stars = p.rating ? '&#11088; '+p.rating.toFixed(1) : '';
-    const bb = i < list.length-1 ? 'border-bottom:1px solid var(--ink4);' : '';
-    h += '<div onclick="showRestoDetail(' + i + ')" style="display:flex;align-items:center;gap:10px;' +
-      'padding:13px 14px;background:var(--card);cursor:pointer;' + bb + '">' +
-      '<div style="width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;' +
-      'font-size:11px;font-weight:900;color:#fff;background:' + (i===0?'var(--orange)':'var(--accent)') + '">' + (i+1) + '</div>' +
-      '<div style="flex:1;min-width:0">' +
-      '<div style="font-size:13px;font-weight:900;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(p.name) + '</div>' +
-      '<div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap">' +
-      '<div style="width:6px;height:6px;border-radius:50%;background:' + oc + ';flex-shrink:0"></div>' +
-      '<span style="font-size:9.5px;font-weight:900;color:' + oc + '">' + ol + '</span>' +
-      (dist ? '<span style="font-size:9.5px;font-weight:700;color:var(--ink3)"> &middot; ' + dist + '</span>' : '') +
-      (stars ? '<span style="font-size:9.5px;font-weight:900;color:#F4C430"> &middot; ' + stars + '</span>' : '') +
-      '</div></div>' +
-      '<span style="color:var(--ink3);font-size:20px;line-height:1">&rsaquo;</span></div>';
-  });
-  h += '</div>';
-  document.getElementById('nearbyBody').innerHTML = h;
+  // Header pill
+  const pill = document.createElement('div');
+  pill.id = 'nearbyPill';
+  pill.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--ink4);border-radius:10px;margin-bottom:12px;font-size:11px;font-weight:800;color:var(--ink3)';
+  pill.innerHTML = '&#128205; <strong style="color:var(--ink);margin:0 4px">' + list.length + ' open</strong> ' + RING_LABELS[0] + (area ? ' &middot; ' + escHtml(area) : '');
+  body.appendChild(pill);
+
+  // List container
+  const listWrap = document.createElement('div');
+  listWrap.id = 'restoListWrap';
+  listWrap.style.cssText = 'border-radius:14px;overflow:hidden;border:1px solid var(--border)';
+  list.forEach(function(p, i) { listWrap.innerHTML += restoRowHTML(p, i); });
+  body.appendChild(listWrap);
+
+  // Show More button (only if more rings available)
+  renderShowMoreBtn();
 }
+
+function renderShowMoreBtn() {
+  var old = document.getElementById('showMoreBtn');
+  if (old) old.remove();
+
+  const nextRing = window._nearbyRing + 1;
+  if (nextRing >= RADIUS_RINGS.length) {
+    // All rings exhausted — show end message
+    const end = document.createElement('div');
+    end.style.cssText = 'text-align:center;padding:14px 0 4px;font-size:11px;font-weight:700;color:var(--ink3)';
+    end.textContent = '✓ All results within 10 miles shown';
+    document.getElementById('nearbyBody').appendChild(end);
+    return;
+  }
+
+  const btn = document.createElement('button');
+  btn.id = 'showMoreBtn';
+  btn.textContent = 'Show More · ' + RING_LABELS[nextRing];
+  btn.style.cssText = 'width:100%;margin-top:10px;padding:12px;background:var(--deep);border:1.5px solid var(--border2);' +
+    'border-radius:12px;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;color:var(--accent2);' +
+    'cursor:pointer;letter-spacing:.04em;text-transform:uppercase';
+  btn.onclick = loadMoreNearby;
+  document.getElementById('nearbyBody').appendChild(btn);
+}
+
+async function loadMoreNearby() {
+  const btn = document.getElementById('showMoreBtn');
+  if (btn) { btn.textContent = 'Searching…'; btn.disabled = true; }
+
+  const lat   = window._nearbyLat;
+  const lng   = window._nearbyLng;
+  const area  = window._nearbyArea;
+  const day   = new Date().getDay();
+  const nextRing = window._nearbyRing + 1;
+  const radius   = RADIUS_RINGS[nextRing];
+  const areaStr  = area ? ' near ' + area : '';
+
+  try {
+    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, radius);
+    const p2   = await placesSearch('healthy cafe' + areaStr, lat, lng, radius);
+    const seen = new Set(places.map(function(p){ return p.id; }));
+    p2.forEach(function(p){ if(!seen.has(p.id)) places.push(p); });
+
+    // Dedupe against already-shown
+    const shownNames = new Set(window._nearbyList.map(function(p){ return p.name; }));
+
+    const newOnes = places.map(function(p) {
+      const lat2 = p.location ? p.location.latitude : null;
+      const lng2 = p.location ? p.location.longitude : null;
+      const dist = (lat2&&lng2) ? haversineMi(lat, lng, lat2, lng2) : null;
+      const curH = p.currentOpeningHours, regH = p.regularOpeningHours;
+      const isOpen = curH ? curH.openNow : (regH ? regH.openNow : null);
+      const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
+      return {
+        name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        address: p.formattedAddress || '',
+        phone: p.internationalPhoneNumber || null,
+        rating: p.rating || null,
+        ratingCount: p.userRatingCount || null,
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+      };
+    }).filter(function(p){
+      return p.isOpen === true && !shownNames.has(p.name);
+    }).sort(function(a,b){ return (a.dist||99)-(b.dist||99); }).slice(0, 10);
+
+    window._nearbyRing = nextRing;
+
+    if (!newOnes.length) {
+      // No new results at this ring — skip to next
+      if (nextRing + 1 < RADIUS_RINGS.length) {
+        renderShowMoreBtn();
+        // Auto-click to try next ring
+        var nextBtn = document.getElementById('showMoreBtn');
+        if (nextBtn) nextBtn.click();
+      } else {
+        if (btn) btn.remove();
+        const end = document.createElement('div');
+        end.style.cssText = 'text-align:center;padding:14px 0 4px;font-size:11px;font-weight:700;color:var(--ink3)';
+        end.textContent = 'No more open restaurants within 10 miles';
+        document.getElementById('nearbyBody').appendChild(end);
+      }
+      return;
+    }
+
+    // Append new rows to list
+    const startIdx = window._nearbyList.length;
+    window._nearbyList = window._nearbyList.concat(newOnes);
+
+    // Add ring separator label
+    const listWrap = document.getElementById('restoListWrap');
+    const sep = document.createElement('div');
+    sep.style.cssText = 'padding:8px 14px;background:var(--deep);font-size:9px;font-weight:900;' +
+      'color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;border-top:1px solid var(--ink4)';
+    sep.textContent = RING_LABELS[nextRing];
+    listWrap.appendChild(sep);
+
+    newOnes.forEach(function(p, i) {
+      listWrap.innerHTML += restoRowHTML(p, startIdx + i);
+    });
+
+    // Update pill count
+    const pill = document.getElementById('nearbyPill');
+    if (pill) pill.innerHTML = '&#128205; <strong style="color:var(--ink);margin:0 4px">' +
+      window._nearbyList.length + ' open</strong> up to ' + RING_LABELS[nextRing] +
+      (area ? ' &middot; ' + escHtml(area) : '');
+
+    renderShowMoreBtn();
+
+  } catch(e) {
+    if (btn) { btn.textContent = 'Failed — tap to retry'; btn.disabled = false; }
+  }
+}
+window.loadMoreNearby = loadMoreNearby;
 
 function showRestoDetail(idx) {
   const p = window._nearbyList[idx];
@@ -3647,8 +3780,7 @@ async function findHealthyNearby(lat, lng) {
 
     // Sort by distance, cap at 5
     enriched.sort(function(a,b) { return (a.dist||99)-(b.dist||99); });
-    window._nearbyList = enriched.slice(0, 10);
-    showRestoList(window._nearbyList, lat, lng, area, 'Healthy Restaurants');
+    showRestoList(enriched.slice(0, 10), lat, lng, area, 'Healthy & Open Now');
 
   } catch(e) {
     document.getElementById('nearbyBody').innerHTML =
