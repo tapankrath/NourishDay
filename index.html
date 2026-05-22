@@ -719,7 +719,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .nearby-sheet{
   background:var(--night);border:1px solid var(--frame);
   border-radius:20px 20px 0 0;width:100%;max-width:420px;
-  max-height:88vh;display:flex;flex-direction:column;overflow:hidden;
+  max-height:92vh;display:flex;flex-direction:column;overflow:hidden;
 }
 .nearby-hdr{
   display:flex;align-items:center;justify-content:space-between;
@@ -3450,38 +3450,58 @@ function escHtml(s) {
 
 
 function showApiKeySetup() {
-  document.getElementById('nearbyBody').innerHTML =
-    '<div style="padding:4px 0 20px">' +
-    '<div style="font-size:15px;font-weight:900;color:var(--ink);margin-bottom:6px">Enter your Google API Key</div>' +
-    '<div style="font-size:11px;color:var(--ink3);line-height:1.6;margin-bottom:14px">' +
-    '1. Go to <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2)">console.cloud.google.com</a><br>' +
+  // Show as a separate modal on top of the nearby sheet
+  var old = document.getElementById('apiKeyModal');
+  if (old) old.remove();
+
+  var modal = document.createElement('div');
+  modal.id = 'apiKeyModal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);z-index:700;display:flex;align-items:flex-end;justify-content:center';
+
+  var sheet = document.createElement('div');
+  sheet.style.cssText = 'background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;width:100%;max-width:420px;padding:24px 18px 44px';
+
+  sheet.innerHTML =
+    '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:0 auto 18px"></div>' +
+    '<div style="font-size:18px;font-weight:900;color:var(--ink);margin-bottom:6px">Google Places API Key</div>' +
+    '<div style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-bottom:16px">' +
+    'Required to search restaurants inside the app.<br>' +
+    '1. Go to <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2);font-weight:800">console.cloud.google.com</a><br>' +
     '2. Enable <strong style="color:var(--ink)">Places API (New)</strong><br>' +
-    '3. Create an API key and paste it below</div>' +
-    '<input id="apiKeyInput" type="text" placeholder="AIzaSy..." ' +
-    'style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);' +
-    'border-radius:11px;color:var(--ink);font-size:13px;font-weight:700;font-family:Nunito,sans-serif;' +
-    'outline:none;margin-bottom:10px;letter-spacing:.03em" ' +
-    'value="' + (getApiKey()||'') + '">' +
-    '<button onclick="saveKeyAndSearch()" ' +
-    'style="width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;' +
-    'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px">' +
-    '&#10003; Save &amp; Search Nearby</button>' +
-    '<button onclick="openNearby(window._nearbyMealType)" ' +
-    'style="width:100%;padding:10px;background:none;border:1.5px solid var(--ink4);border-radius:12px;' +
-    'font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer">Cancel</button></div>';
-  setTimeout(function() {
-    const inp = document.getElementById('apiKeyInput');
-    if (inp) inp.focus();
-  }, 100);
+    '3. Create a key &amp; paste below</div>' +
+    '<input id="apiKeyInput" type="text" placeholder="AIzaSy..." autocomplete="off" ' +
+    'style="width:100%;padding:13px 14px;background:var(--deep);border:1.5px solid var(--border2);' +
+    'border-radius:12px;color:var(--ink);font-size:14px;font-weight:700;font-family:Nunito,sans-serif;' +
+    'outline:none;margin-bottom:12px;letter-spacing:.03em;box-sizing:border-box" ' +
+    'value="' + escHtml(getApiKey()||'') + '">' +
+    '<button id="saveKeyBtn" onclick="saveKeyAndSearch()" ' +
+    'style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;' +
+    'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;letter-spacing:.03em">' +
+    '✓ Save &amp; Search</button>' +
+    '<button onclick="closeApiKeyModal()" ' +
+    'style="width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;' +
+    'font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer">Cancel</button>';
+
+  modal.appendChild(sheet);
+  modal.onclick = function(e) { if(e.target === modal) modal.remove(); };
+  document.body.appendChild(modal);
+
+  var inp = document.getElementById('apiKeyInput');
+  if (inp) { setTimeout(function(){ inp.focus(); inp.select(); }, 150); }
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') saveKeyAndSearch(); });
 }
 
 function saveKeyAndSearch() {
   const inp = document.getElementById('apiKeyInput');
   const key = inp ? inp.value.trim() : '';
-  if (!key) { inp.style.borderColor='#E05C5C'; return; }
+  if (!key) { if(inp) inp.style.borderColor='#E05C5C'; return; }
   saveApiKey(key);
-  openNearby(window._nearbyMealType, window._nearbyMealN);
+  const modal = document.getElementById('apiKeyModal');
+  if (modal) modal.remove();
+  openNearby();
 }
+function closeApiKeyModal(){var m=document.getElementById("apiKeyModal");if(m)m.remove();}
+window.closeApiKeyModal=closeApiKeyModal;
 window.showApiKeySetup = showApiKeySetup;
 window.saveKeyAndSearch = saveKeyAndSearch;
 
@@ -3627,7 +3647,7 @@ async function findHealthyNearby(lat, lng) {
 
     // Sort by distance, cap at 5
     enriched.sort(function(a,b) { return (a.dist||99)-(b.dist||99); });
-    window._nearbyList = enriched.slice(0, 5);
+    window._nearbyList = enriched.slice(0, 10);
     showRestoList(window._nearbyList, lat, lng, area, 'Healthy Restaurants');
 
   } catch(e) {
