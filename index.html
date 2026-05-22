@@ -3838,9 +3838,22 @@ window.closeNearby = closeNearby;
 window.nearbyOverlayClick = nearbyOverlayClick;
 
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/NourishDay/sw.js',{scope:'/NourishDay/',updateViaCache:'none'})
-      .catch(err=>console.warn('SW reg failed:',err));
+  window.addEventListener('load', async () => {
+    try {
+      // Unregister ALL existing service workers — clears any stale/broken cached SW
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map(r => r.unregister()));
+      // Clear all caches
+      const keys = await caches.keys();
+      await Promise.all(keys.map(k => caches.delete(k)));
+      // Re-register fresh
+      await navigator.serviceWorker.register(
+        '/NourishDay/sw.js',
+        { scope: '/NourishDay/', updateViaCache: 'none' }
+      );
+    } catch(e) {
+      console.warn('SW setup error:', e);
+    }
   });
 }
 </script>

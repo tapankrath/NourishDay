@@ -1,48 +1,50 @@
-const CACHE = 'eatright-v4';
+const CACHE = 'eatright-v5';
 
 const CACHE_URLS = [
   '/NourishDay/index.html',
-  '/NourishDay/manifest.json',
-  '/NourishDay/icon-192.svg',
-  '/NourishDay/icon-512.svg',
-  '/NourishDay/apple-touch-icon.svg',
-  '/NourishDay/favicon-32.svg'
+  '/NourishDay/manifest.json'
 ];
 
 self.addEventListener('install', e => {
+  // Skip waiting immediately — don't hold back behind old SW
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE).then(c =>
       Promise.allSettled(CACHE_URLS.map(url => c.add(url)))
     )
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {
+  // Take control of all clients immediately
   e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    )
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      if (cached) return cached;
-      return fetch(e.request).then(response => {
-        if (response.ok && response.type === 'basic') {
-          const clone = response.clone();
+
+  const url = new URL(e.request.url);
+
+  // For navigation requests (opening the app) — always go network first, fallback to cache
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request)
+        .then(r => {
+          const clone = r.clone();
           caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return response;
-      }).catch(() => {
-        if (e.request.mode === 'navigate') {
-          return caches.match('/NourishDay/index.html');
-        }
-      });
-    })
+          return r;
+        })
+        .catch(() => caches.match('/NourishDay/index.html'))
+    );
+    return;
+  }
+
+  // For everything else — cache first, then network
+  e.respondWith(
+    caches.match(e.request).then(cached => cached || fetch(e.request))
   );
 });
