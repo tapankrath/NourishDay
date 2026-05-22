@@ -3222,7 +3222,7 @@ async function placesSearch(query, lat, lng, radius) {
     headers: {
       'Content-Type': 'application/json',
       'X-Goog-Api-Key': getApiKey(),
-      'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.internationalPhoneNumber,places.currentOpeningHours,places.regularOpeningHours,places.location,places.businessStatus,places.websiteUri'
+      'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.internationalPhoneNumber,places.currentOpeningHours,places.regularOpeningHours,places.location,places.businessStatus,places.websiteUri,places.delivery,places.takeout'
     },
     body: JSON.stringify({
       textQuery: query,
@@ -3293,6 +3293,8 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
         website: p.websiteUri || null,
+        delivery: p.delivery || false,
+        takeout: p.takeout || false,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     });
@@ -3448,6 +3450,8 @@ async function loadMoreNearby() {
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
         website: p.websiteUri || null,
+        delivery: p.delivery || false,
+        takeout: p.takeout || false,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     }).filter(function(p){
@@ -3559,6 +3563,10 @@ function showRestoDetail(idx) {
     'style="flex:1;padding:11px 6px;border-radius:12px;background:#1a0808;border:1.5px solid #ff3008;' +
     'color:#ff3008;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">&#128308; DoorDash</a>' +
+    (!p.delivery && !p.takeout ? '' : '<div style="font-size:9px;font-weight:700;color:var(--ink3);text-align:center;margin-top:6px">' +
+    (p.delivery ? '✓ Delivery available' : '') +
+    (p.delivery && p.takeout ? ' · ' : '') +
+    (p.takeout ? '✓ Takeout available' : '') + '</div>') +
     '</div>' +
     // Details below buttons
     '<div style="border-top:1px solid var(--ink4);padding-top:12px">' +
@@ -3716,6 +3724,8 @@ async function searchHealthyAlt(lat, lng) {
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
         website: p.websiteUri || null,
+        delivery: p.delivery || false,
+        takeout: p.takeout || false,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     }).filter(function(p) { return p.isOpen !== false; }); // only open ones
@@ -3787,6 +3797,8 @@ async function findHealthyNearby(lat, lng) {
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
         website: p.websiteUri || null,
+        delivery: p.delivery || false,
+        takeout: p.takeout || false,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     }).filter(function(p) { return p.isOpen === true; }); // OPEN ONLY
