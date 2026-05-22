@@ -3523,7 +3523,7 @@ function showRestoDetail(idx) {
 
   wrap.innerHTML =
     '<div style="background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;' +
-    'width:100%;max-width:420px;padding:0 18px 44px;max-height:88vh;overflow-y:auto">' +
+    'width:100%;max-width:420px;padding:0 18px 48px">' +
     '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:14px auto 18px"></div>' +
     '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">' +
     '<div style="font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-.4px;line-height:1.2;flex:1">' + escHtml(p.name) + '</div>' +
@@ -3543,22 +3543,23 @@ function showRestoDetail(idx) {
     (p.phone ? '<div style="display:flex;gap:10px;margin-bottom:12px;align-items:center">' +
       '<span style="font-size:17px;flex-shrink:0">&#128222;</span>' +
       '<span style="font-size:12.5px;font-weight:700;color:var(--ink2)">'+escHtml(p.phone)+'</span></div>' : '') +
-    '<div style="display:flex;gap:10px;margin-top:20px">' +
+    // Call + Directions
+    '<div style="display:flex;gap:10px;margin-top:16px">' +
     (p.phone ? '<a href="tel:'+phoneClean+'" style="flex:1;padding:13px;border-radius:12px;border:1.5px solid rgba(46,196,178,.4);background:rgba(46,196,178,.1);color:#2EC4B2;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px">&#128222; Call</a>' : '') +
     '<a href="'+navUrl+'" target="_blank" rel="noopener" style="flex:2;padding:13px;border-radius:12px;background:var(--accent);color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 12px rgba(14,143,204,.35)">&#128506; Get Directions</a>' +
     '</div>' +
-    '<div style="margin-top:10px">' +
-    '<div style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:8px;text-align:center">Order Delivery</div>' +
+    // Delivery section — always visible below
+    '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--ink4)">' +
+    '<div style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:10px;text-align:center">Order for Delivery</div>' +
     '<div style="display:flex;gap:8px">' +
     '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'" target="_blank" rel="noopener" ' +
-    'style="flex:1;padding:11px 6px;border-radius:12px;background:#142328;border:1.5px solid #1cbf5e;' +
-    'color:#1cbf5e;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
+    'style="flex:1;padding:12px 6px;border-radius:12px;background:#0a1a12;border:1.5px solid #06c167;' +
+    'color:#06c167;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">🟢 Uber Eats</a>' +
     '<a href="https://www.doordash.com/search/store/'+encodeURIComponent(p.name)+'/" target="_blank" rel="noopener" ' +
-    'style="flex:1;padding:11px 6px;border-radius:12px;background:#1a0a0a;border:1.5px solid #ff3008;' +
+    'style="flex:1;padding:12px 6px;border-radius:12px;background:#1a0808;border:1.5px solid #ff3008;' +
     'color:#ff3008;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">🔴 DoorDash</a>' +
-    '</div></div>' +
     '</div></div>';
 
   document.body.appendChild(wrap);
