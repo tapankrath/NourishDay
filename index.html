@@ -1046,6 +1046,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
     <button class="log-btn history" onclick="openLog()">📅 History</button>
   </div>
   <div class="log-btn-row" style="padding-top:6px">
+    <button class="log-btn" onclick="openNearby()" style="flex:1;padding:11px;border-radius:12px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;background:#2EC4B2;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 12px rgba(46,196,178,.30)">📍 Healthy Options Nearby</button>
+  </div>
     <button class="share-btn" onclick="shareDay()" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border2);background:none;color:var(--ink2);font-family:Nunito,sans-serif;font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">📤 Share Today's Plan</button>
   </div>
   <button class="add-meal-btn" onclick="openCustomModal()">＋ Add My Own Meal</button>
@@ -1877,12 +1879,7 @@ function render(){
       </div>
       <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')" title="Mark as eaten"></button>
     </div>
-    <div style="padding:0 10px 10px">
-      <button class="order-btn" onclick="openNearby('${t}','${m.n}')" style="width:100%;padding:12px 14px;background:rgba(212,136,90,.12);border:1.5px solid rgba(212,136,90,.45);color:#E8AA7A;font-size:12px;font-weight:900;border-radius:11px;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:8px">
-        <span>Can't Cook? Find Nearby</span>
-        <span>›</span>
-      </button>
-    </div>
+
   </div>
 </div>`;
     wrap.appendChild(c);
@@ -3137,37 +3134,28 @@ function cuisineFromMeal(mealName) {
 
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 
-function openNearby(mealType, mealName) {
-  window._nearbyMealN = mealName || picks[mealType]?.n || '';
-  _nearbyMealType = mealType;
-  const meal = picks[mealType];
-  const cuisine = cuisineFromMeal(meal?.n);
-  document.getElementById('nearbyTitle').textContent = 'Nearby Restaurants';
+function openNearby() {
+  document.getElementById('nearbyTitle').textContent = 'Healthy Options Nearby';
   document.getElementById('nearbyBody').innerHTML =
     '<div class="nearby-loading"><div class="nearby-spinner"></div>' +
-    '<div class="nearby-loading-text">Getting your location\u2026<br>' +
-    '<span style="font-size:11px;opacity:.55">Please allow location access if prompted</span></div></div>';
+    '<div class="nearby-loading-text">Finding open healthy restaurants…<br>' +
+    '<span style="font-size:11px;opacity:.55">Allow location access if prompted</span></div></div>';
   document.getElementById('nearbyOverlay').classList.add('open');
 
   if (!navigator.geolocation) {
-    renderNearbyError('Not Supported', "Your browser doesn't support location. Try on Chrome or Safari.", false);
+    showManualLocation(null, null);
     return;
   }
-
-  // Watch for location — works reliably on mobile
   var watchId = navigator.geolocation.watchPosition(
     function(pos) {
       navigator.geolocation.clearWatch(watchId);
-      fetchNearbyRestaurants(pos.coords.latitude, pos.coords.longitude, meal, cuisine);
+      findHealthyNearby(pos.coords.latitude, pos.coords.longitude);
     },
-    function(err) {
+    function() {
       navigator.geolocation.clearWatch(watchId);
-      var msg = err.code === 1
-        ? 'Location access was denied. Please tap Allow when prompted, or enable Location in your phone Settings.'
-        : 'Could not get your location. Please make sure Location Services are on and try again.';
-      renderNearbyError('Location Needed', msg, true);
+      showManualLocation(null, null);
     },
-    { timeout: 15000, maximumAge: 60000, enableHighAccuracy: false }
+    { timeout: 10000, maximumAge: 60000, enableHighAccuracy: false }
   );
 }
 
@@ -3192,20 +3180,24 @@ function haversineMi(lat1, lon1, lat2, lon2) {
 function getApiKey() { return localStorage.getItem('eatright_google_key') || ''; }
 function saveApiKey(k) { localStorage.setItem('eatright_google_key', k.trim()); }
 
-function mealToQuery(mealName) {
+function mealToQueries(mealName) {
+  // Returns [specificQuery, fallbackQuery]
+  // Use the actual meal name directly for best results
   const n = (mealName||'').toLowerCase();
-  if (/biryani/.test(n)) return 'biryani restaurant';
-  if (/grilled chicken|chicken tikka|tandoori/.test(n)) return 'Indian grilled chicken restaurant';
-  if (/fish curry|fish tikka/.test(n)) return 'fish curry restaurant';
-  if (/prawn|shrimp/.test(n)) return 'prawn seafood restaurant';
-  if (/dal|rajma|chole|paneer|palak/.test(n)) return 'Indian vegetarian restaurant';
-  if (/pad thai|thai/.test(n)) return 'Thai restaurant';
-  if (/kung pao|fried rice/.test(n)) return 'Chinese restaurant';
-  if (/burrito|taco|mexican/.test(n)) return 'Mexican restaurant';
-  if (/salmon|seafood/.test(n)) return 'seafood restaurant';
-  if (/salad|quinoa/.test(n)) return 'healthy restaurant';
-  if (/omelette|scrambled egg/.test(n)) return 'breakfast cafe';
-  return 'healthy restaurant';
+  const main = mealName.split('+')[0].trim(); // e.g. "Grilled Chicken" from "Grilled Chicken + Rice + Raita"
+
+  // Cuisine-based fallback
+  let fallback = 'healthy restaurant';
+  if (/biryani|dal|roti|paneer|rajma|chole|palak|tikka|masala|curry|sambar|idli|dosa|upma|paratha|khichdi|keema|tandoori|makhani|rogan|korma|chaas|raita/.test(n)) fallback = 'Indian restaurant';
+  else if (/pad thai|thai|lemongrass|basil chicken|green curry/.test(n)) fallback = 'Thai restaurant';
+  else if (/kung pao|fried rice|stir.fry|bok choy|chinese|dim sum/.test(n)) fallback = 'Chinese restaurant';
+  else if (/burrito|taco|fajita|mexican/.test(n)) fallback = 'Mexican restaurant';
+  else if (/salmon|prawn|shrimp|fish|seafood|tuna|sardine/.test(n)) fallback = 'seafood restaurant';
+  else if (/salad|quinoa|grain bowl/.test(n)) fallback = 'healthy cafe';
+  else if (/omelette|scrambled egg|shakshuka|egg/.test(n)) fallback = 'breakfast cafe';
+  else if (/smoothie|yogurt|acai/.test(n)) fallback = 'healthy cafe';
+
+  return [main, fallback]; // [specific, fallback]
 }
 
 function fmtClose(periods, day) {
@@ -3563,6 +3555,88 @@ async function searchHealthyAlt(lat, lng) {
   }
 }
 window.searchHealthyAlt = searchHealthyAlt;
+
+async function findHealthyNearby(lat, lng) {
+  if (!getApiKey()) {
+    document.getElementById('nearbyBody').innerHTML =
+      '<div style="text-align:center;padding:28px 16px">' +
+      '<div style="font-size:40px;margin-bottom:14px">🔑</div>' +
+      '<div style="font-size:17px;font-weight:900;color:var(--ink);margin-bottom:8px">API Key Required</div>' +
+      '<div style="font-size:12px;color:var(--ink3);line-height:1.7;margin-bottom:22px">' +
+      'Add a free Google Places API key to search restaurants inside the app.</div>' +
+      '<button onclick="showApiKeySetup()" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;' +
+      'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px">' +
+      '🔑 Enter API Key</button>' +
+      '<a href="https://console.cloud.google.com/apis/library/places-backend.googleapis.com" target="_blank" rel="noopener" ' +
+      'style="display:block;font-size:11px;font-weight:700;color:var(--accent2);text-decoration:none">Get a free key →</a></div>';
+    return;
+  }
+
+  const day = new Date().getDay();
+  document.getElementById('nearbyBody').innerHTML =
+    '<div class="nearby-loading"><div class="nearby-spinner"></div>' +
+    '<div class="nearby-loading-text">Searching open healthy restaurants…<br>' +
+    '<span style="font-size:11px;opacity:.5">Within 2 miles</span></div></div>';
+
+  try {
+    const area = await reverseGeocode(lat, lng);
+    const areaStr = area ? ' near ' + area : '';
+
+    // Search healthy restaurants — try multiple queries and merge
+    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, 3200);
+    const p2 = await placesSearch('healthy cafe' + areaStr, lat, lng, 3200);
+    const seen = new Set(places.map(function(p) { return p.id; }));
+    p2.forEach(function(p) { if (!seen.has(p.id)) places.push(p); });
+
+    if (!places.length) throw new Error('No restaurants found nearby');
+
+    // Enrich + filter OPEN ONLY
+    const enriched = places.map(function(p) {
+      const lat2 = p.location ? p.location.latitude : null;
+      const lng2 = p.location ? p.location.longitude : null;
+      const dist = (lat2 && lng2) ? haversineMi(lat, lng, lat2, lng2) : null;
+      const curH = p.currentOpeningHours, regH = p.regularOpeningHours;
+      const isOpen = curH ? curH.openNow : (regH ? regH.openNow : null);
+      const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
+      return {
+        name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        address: p.formattedAddress || '',
+        phone: p.internationalPhoneNumber || null,
+        rating: p.rating || null,
+        ratingCount: p.userRatingCount || null,
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+      };
+    }).filter(function(p) { return p.isOpen === true; }); // OPEN ONLY
+
+    if (!enriched.length) {
+      document.getElementById('nearbyBody').innerHTML =
+        '<div style="text-align:center;padding:28px 16px">' +
+        '<div style="font-size:40px;margin-bottom:12px">🌟</div>' +
+        '<div style="font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px">Nothing Open Right Now</div>' +
+        '<div style="font-size:12px;color:var(--ink3);margin-bottom:16px">No healthy restaurants found open near you at this time.</div>' +
+        '<a href="https://www.google.com/maps/search/healthy+restaurant/@' + lat + ',' + lng + ',14z" ' +
+        'target="_blank" rel="noopener" style="display:block;padding:13px;background:var(--orange);' +
+        'border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none">🗺️ Search on Google Maps</a></div>';
+      return;
+    }
+
+    // Sort by distance, cap at 5
+    enriched.sort(function(a,b) { return (a.dist||99)-(b.dist||99); });
+    window._nearbyList = enriched.slice(0, 5);
+    showRestoList(window._nearbyList, lat, lng, area, 'Healthy Restaurants');
+
+  } catch(e) {
+    document.getElementById('nearbyBody').innerHTML =
+      '<div style="text-align:center;padding:28px 16px">' +
+      '<div style="font-size:32px;margin-bottom:10px">😕</div>' +
+      '<div style="font-size:15px;font-weight:900;color:var(--ink);margin-bottom:8px">Search Failed</div>' +
+      '<div style="font-size:11px;color:var(--ink3);margin-bottom:16px">' + escHtml(e.message) + '</div>' +
+      '<a href="https://www.google.com/maps/search/healthy+restaurant/@' + lat + ',' + lng + ',14z" ' +
+      'target="_blank" rel="noopener" style="display:block;padding:13px;background:var(--orange);' +
+      'border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none">🗺️ Search on Google Maps</a></div>';
+  }
+}
+window.findHealthyNearby = findHealthyNearby;
 
 function closeNearby() { document.getElementById('nearbyOverlay').classList.remove('open'); }
 function nearbyOverlayClick(e) { if (e.target === document.getElementById('nearbyOverlay')) closeNearby(); }
