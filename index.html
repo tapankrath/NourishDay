@@ -3558,7 +3558,7 @@ function showRestoDetail(idx) {
     'style="flex:1;padding:11px 6px;border-radius:12px;background:#0a1a12;border:1.5px solid #06c167;' +
     'color:#06c167;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">&#129001; Uber Eats</a>' +
-    '<a href="#" onclick="iosDeepLink(\'doordash://\',\'https://www.doordash.com/search?q='+encodeURIComponent(p.name)+'\')" ' +
+    '<a href="#" onclick="iosDeepLink(\'doordash://\',\'https://www.doordash.com/\')" ' +
     'style="flex:1;padding:11px 6px;border-radius:12px;background:#1a0808;border:1.5px solid #ff3008;' +
     'color:#ff3008;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">&#128308; DoorDash</a>' +
@@ -3842,12 +3842,8 @@ function iosDeepLink(appUrl, webUrl) {
   iframe.style.display = 'none';
   iframe.src = appUrl;
   document.body.appendChild(iframe);
-  setTimeout(function() {
-    document.body.removeChild(iframe);
-  }, 500);
-  setTimeout(function() {
-    window.open(webUrl, '_blank');
-  }, 1500);
+  setTimeout(function() { document.body.removeChild(iframe); }, 500);
+  setTimeout(function() { window.open(webUrl, '_blank'); }, 1500);
 }
 window.iosDeepLink = iosDeepLink;
 
