@@ -1009,7 +1009,14 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 
 
 <div class="body">
-  <button class="shuffle-btn" onclick="shuffleAll()"><span class="s-ico">⟳</span> Shuffle All Meals</button>
+  <div style="display:flex;gap:8px;margin-bottom:10px">
+    <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0">
+      <span class="s-ico">⟳</span> Shuffle
+    </button>
+    <button class="shuffle-btn" onclick="openNearby()" style="flex:1;margin-bottom:0">
+      📍 Healthy Nearby
+    </button>
+  </div>
   <div class="diet-toggle-row">
     <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
     <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
@@ -1045,9 +1052,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
     <button class="log-btn save" onclick="logDay()">📋 Log Today</button>
     <button class="log-btn history" onclick="openLog()">📅 History</button>
   </div>
-  <div class="log-btn-row" style="padding-top:6px">
-    <button class="log-btn" onclick="openNearby()" style="flex:1;padding:11px;border-radius:12px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;background:#2EC4B2;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 12px rgba(46,196,178,.30)">📍 Healthy Options Nearby</button>
-  </div>
+
     <button class="share-btn" onclick="shareDay()" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border2);background:none;color:var(--ink2);font-family:Nunito,sans-serif;font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">📤 Share Today's Plan</button>
   </div>
   <button class="add-meal-btn" onclick="openCustomModal()">＋ Add My Own Meal</button>
