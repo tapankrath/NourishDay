@@ -3222,7 +3222,7 @@ async function placesSearch(query, lat, lng, radius) {
     headers: {
       'Content-Type': 'application/json',
       'X-Goog-Api-Key': getApiKey(),
-      'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.internationalPhoneNumber,places.currentOpeningHours,places.regularOpeningHours,places.location,places.businessStatus'
+      'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.internationalPhoneNumber,places.currentOpeningHours,places.regularOpeningHours,places.location,places.businessStatus,places.websiteUri'
     },
     body: JSON.stringify({
       textQuery: query,
@@ -3292,6 +3292,7 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
+        website: p.websiteUri || null,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     });
@@ -3446,6 +3447,7 @@ async function loadMoreNearby() {
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
+        website: p.websiteUri || null,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     }).filter(function(p){
@@ -3550,8 +3552,11 @@ function showRestoDetail(idx) {
     '</div>' +
     // Delivery section — always visible below
     '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--ink4)">' +
-    '<div style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:6px;text-align:center">Order for Delivery</div>' +
-    '<div style="font-size:10px;font-weight:700;color:var(--ink3);text-align:center;margin-bottom:10px">↩ Swipe right to return to EatRight</div>' +
+    (p.website ? '<a href="'+p.website+'" target="_blank" rel="noopener" ' +
+    'style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px;border-radius:12px;' +
+    'background:var(--deep);border:1.5px solid var(--border2);color:var(--ink2);font-family:Nunito,sans-serif;' +
+    'font-size:13px;font-weight:900;text-decoration:none;margin-bottom:10px;box-sizing:border-box">🌐 View Menu / Website</a>' : '') +
+    '<div style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:10px;text-align:center">Order for Delivery</div>' +
     '<div style="display:flex;gap:8px">' +
     '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name+' '+p.address)+'" target="_blank" rel="noopener" ' +
     'style="flex:1;padding:12px 6px;border-radius:12px;background:#0a1a12;border:1.5px solid #06c167;' +
@@ -3707,6 +3712,7 @@ async function searchHealthyAlt(lat, lng) {
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
+        website: p.websiteUri || null,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     }).filter(function(p) { return p.isOpen !== false; }); // only open ones
@@ -3777,6 +3783,7 @@ async function findHealthyNearby(lat, lng) {
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
         ratingCount: p.userRatingCount || null,
+        website: p.websiteUri || null,
         isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
       };
     }).filter(function(p) { return p.isOpen === true; }); // OPEN ONLY
