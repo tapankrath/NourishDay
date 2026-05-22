@@ -36,13 +36,13 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   min-height:100vh;background:var(--night);
 }
 .app::before{
-  content:'';position:fixed;top:env(safe-area-inset-top,0px);left:50%;transform:translateX(-50%);
+  content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
   width:min(420px,100vw);height:2px;
   background:linear-gradient(90deg,transparent 5%,var(--teal) 25%,var(--accent2) 55%,rgba(125,211,248,.6) 75%,transparent 95%);
   opacity:.5;z-index:10;pointer-events:none;
 }
 
-.status-bar-spacer{background:var(--night);height:max(env(safe-area-inset-top),52px)}
+.status-bar-spacer{background:var(--night);height:max(env(safe-area-inset-top),44px)}
 .hdr{background:var(--night);padding:10px 14px 0;position:relative}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.15;}
 
@@ -538,7 +538,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .onboard-overlay{
   position:fixed;inset:0;background:var(--bg);z-index:1000;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  padding:max(env(safe-area-inset-top),32px) 24px 40px;overflow-y:auto;
+  padding:32px 24px 40px;overflow-y:auto;
 }
 .onboard-overlay.hidden{display:none}
 .ob-card{
@@ -696,6 +696,127 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   padding:10px 12px;font-size:11.5px;font-weight:700;color:var(--ink3);
   line-height:1.5;display:flex;gap:8px;align-items:flex-start;
 }
+/* Order Out button on card */
+.order-btn{
+  flex:1;min-width:0;background:var(--deep);border:1.5px solid rgba(212,136,90,.35);
+  color:var(--orange);font-size:10.5px;font-weight:900;
+  padding:7px 8px;border-radius:9px;cursor:pointer;
+  font-family:'Nunito',sans-serif;letter-spacing:.03em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  transition:all .14s;white-space:nowrap;
+}
+.order-btn:active{transform:scale(.96);background:rgba(212,136,90,.08)}
+.order-btn:hover{background:rgba(212,136,90,.1);border-color:var(--orange)}
+
+/* ═══════════════════════════════════════════════════════
+   NEARBY RESTAURANTS PANEL
+═══════════════════════════════════════════════════════ */
+.nearby-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(7px);
+  z-index:300;display:none;align-items:flex-end;justify-content:center;
+}
+.nearby-overlay.open{display:flex}
+.nearby-sheet{
+  background:var(--night);border:1px solid var(--frame);
+  border-radius:20px 20px 0 0;width:100%;max-width:420px;
+  max-height:88vh;display:flex;flex-direction:column;overflow:hidden;
+}
+.nearby-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0;
+}
+.nearby-hdr-left{}
+.nearby-eyebrow{font-size:9px;font-weight:900;color:var(--orange);text-transform:uppercase;letter-spacing:.14em;margin-bottom:4px}
+.nearby-title{font-size:18px;font-weight:900;color:var(--ink);letter-spacing:-.4px;line-height:1.1}
+.nearby-close{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--ink4);
+  background:none;color:var(--ink3);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.nearby-body{overflow-y:auto;flex:1;padding:12px 14px 20px}
+
+/* Loading state */
+.nearby-loading{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 20px;gap:14px;
+}
+.nearby-spinner{
+  width:36px;height:36px;border:3px solid var(--ink4);
+  border-top-color:var(--orange);border-radius:50%;
+  animation:spin .75s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nearby-loading-text{font-size:13px;font-weight:700;color:var(--ink3);text-align:center;line-height:1.5}
+
+/* Restaurant card */
+.resto-card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:14px;margin-bottom:10px;transition:border-color .15s;
+}
+.resto-card:last-child{margin-bottom:0}
+.resto-card:active{border-color:var(--orange)}
+.resto-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.resto-name{font-size:15px;font-weight:900;color:var(--ink);letter-spacing:-.3px;line-height:1.2}
+.resto-rating{
+  display:flex;align-items:center;gap:4px;flex-shrink:0;
+  background:var(--deep);border-radius:8px;padding:4px 8px;
+}
+.resto-rating-val{font-size:13px;font-weight:900;color:#F4C430}
+.resto-rating-count{font-size:9px;font-weight:700;color:var(--ink3)}
+.resto-status{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-bottom:8px;
+}
+.resto-open-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.resto-open-dot.open{background:#2EC4B2}
+.resto-open-dot.closed{background:#E05C5C}
+.resto-open-text{font-size:11px;font-weight:800}
+.resto-open-text.open{color:#2EC4B2}
+.resto-open-text.closed{color:#E05C5C}
+.resto-hours{font-size:10.5px;font-weight:700;color:var(--ink3);margin-left:4px}
+.resto-meta{display:flex;flex-direction:column;gap:6px}
+.resto-row{display:flex;align-items:flex-start;gap:8px}
+.resto-row-icon{font-size:13px;flex-shrink:0;margin-top:1px;width:16px;text-align:center}
+.resto-row-text{font-size:11.5px;font-weight:700;color:var(--ink2);line-height:1.4;flex:1}
+.resto-addr-link{
+  font-size:11.5px;font-weight:700;color:var(--accent2);
+  text-decoration:none;line-height:1.4;
+  border-bottom:1px dashed rgba(64,200,248,.35);
+}
+.resto-addr-link:active{opacity:.7}
+.resto-actions{display:flex;gap:8px;margin-top:12px}
+.resto-call-btn{
+  flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(46,196,178,.35);
+  background:rgba(46,196,178,.08);color:#2EC4B2;
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
+  text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
+  transition:all .14s;
+}
+.resto-call-btn:active{background:rgba(46,196,178,.18)}
+.resto-map-btn{
+  flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(212,136,90,.35);
+  background:rgba(212,136,90,.08);color:var(--orange);
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
+  text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
+  transition:all .14s;
+}
+.resto-map-btn:active{background:rgba(212,136,90,.18)}
+
+/* Error / permission denied state */
+.nearby-error{
+  text-align:center;padding:30px 20px;
+}
+.nearby-error-icon{font-size:40px;margin-bottom:12px}
+.nearby-error-title{font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px}
+.nearby-error-sub{font-size:12px;font-weight:700;color:var(--ink3);line-height:1.6;margin-bottom:20px}
+.nearby-retry-btn{
+  padding:11px 24px;background:var(--orange);border:none;border-radius:12px;
+  font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:#fff;
+  cursor:pointer;letter-spacing:.04em;
+}
+
 /* Recipe button on card */
 .recipe-btn{
   flex:1;min-width:0;background:var(--deep);border:1.5px solid var(--border2);
@@ -1217,16 +1338,6 @@ breakfast:{
   {n:'Masala Dosa + Sambar + Coffee',               d:'Crispy rice-lentil crepe with spiced potato filling + sambar + coconut chutney · paired with 1 filter coffee',                                  cal:420,p:10,c:62,f:12,m:'RC'},
   {n:'Idli (3) + Sambar + Coconut Chutney + Tea',   d:'3 steamed fermented rice-lentil cakes + lentil-veg sambar + coconut chutney · paired with 1 cup ginger tea',                                   cal:360,p:12,c:58,f:4,m:'RDC'},
   {n:'Upma + Fruit Bowl + Chai',                    d:'¾ cup semolina upma with mixed veg & curry leaves + ½ cup fresh fruit bowl · paired with 1 cup masala chai (no sugar)',                         cal:380,p:10,c:52,f:10,m:'RC'},
-  // American
-  {n:'Veggie Breakfast Burrito Bowl + Coffee',       d:'2 scrambled eggs + ½ cup black beans + salsa + ¼ avocado + corn tortilla strips (baked) · paired with 1 black coffee',                        cal:420,p:18,c:36,f:18,m:'RC'},
-  {n:'Peanut Butter Banana Smoothie Bowl + Tea',     d:'Blended banana + PB + oat milk base, topped with granola, sliced banana & chia seeds · paired with 1 cup green tea',                           cal:400,p:14,c:52,f:14,m:'RC'},
-  {n:'Avocado Toast + Poached Egg + Feta + Coffee',  d:'2 wholegrain slices + ½ smashed avocado + 2 poached eggs + crumbled feta + chilli flakes · paired with 1 americano',                          cal:440,p:20,c:30,f:22,m:'RC'},
-  // Thai
-  {n:'Thai-Style Egg & Veggie Stir-Fry + Rice',     d:'2 eggs stir-fried with tofu, bok choy & fish-free soy sauce + ½ cup jasmine rice + sliced mango · paired with 1 jasmine tea',                  cal:380,p:18,c:42,f:12,m:'RC'},
-  {n:'Mango Sticky Rice (Light) + Green Tea',        d:'½ cup sticky rice + ¼ cup light coconut milk + ½ fresh mango + sesame seeds — Thai morning classic · paired with 1 green tea',                 cal:360,p:6,c:58,f:10,m:'C'},
-  // Mexican
-  {n:'Veggie Chilaquiles + Yogurt + Coffee',         d:'4 baked corn tortilla pieces in mild salsa verde + 2 fried eggs + 3 tbsp Greek yogurt + sliced avocado · paired with 1 black coffee',          cal:430,p:20,c:36,f:20,m:'RC'},
-  {n:'Bean & Corn Breakfast Tostada + Coffee',       d:'1 corn tortilla (toasted) + ¼ cup refried black beans + corn + salsa + ¼ avocado + 2 scrambled eggs · paired with 1 black coffee',             cal:410,p:18,c:36,f:18,m:'RC'},
   // More Low-GI veg breakfasts
   {n:'Flaxseed Chilla (2) + Mint Yogurt + Tea',     d:'2 flaxseed & besan chillas (high omega-3, low GI) + 3 tbsp mint yogurt · paired with 1 cup green tea',                                        cal:310,p:16,c:22,f:14,m:'RDC'},
   {n:'Barley Porridge + Almonds + Berries + Chai',  d:'¾ cup cooked pearl barley with cinnamon + 15g almonds + ½ cup mixed berries · paired with 1 cup masala chai (no sugar)',                       cal:340,p:10,c:46,f:10,m:'RD'},
@@ -1257,16 +1368,6 @@ breakfast:{
   {n:'Egg Bhurji + 2 Rotis + Chai',                 d:'3 eggs scrambled masala-style with onion, tomato & green chilli + 2 small wholegrain rotis · paired with 1 cup masala chai (no sugar)',        cal:460,p:26,c:36,f:20,m:'RDC'},
   {n:'Chicken Keema Paratha + Curd + Coffee',        d:'1 whole wheat paratha stuffed with spiced chicken mince + 100g plain curd · paired with 1 filter coffee',                                     cal:520,p:32,c:42,f:20,m:'RC'},
   {n:'Full English Breakfast + Tea',             d:'2 eggs (any style) + grilled tomato + mushrooms + baked beans + 1 wholegrain toast — no processed meat · paired with 1 cup black tea',           cal:480,p:26,c:38,f:18,m:'RC'},
-  // American
-  {n:'Chicken & Egg Breakfast Bowl + Coffee',    d:'90g shredded rotisserie chicken + 2 scrambled eggs + ½ cup black beans + salsa + ¼ avocado · paired with 1 black coffee',                         cal:450,p:36,c:22,f:20,m:'RDC'},
-  {n:'Smoked Salmon Bagel + Cream Cheese + Tea', d:'½ wholegrain bagel + 60g smoked salmon + 1 tbsp light cream cheese + capers + sliced cucumber · paired with 1 green tea',                          cal:380,p:26,c:28,f:14,m:'RC'},
-  {n:'Turkey & Egg White Omelette + Toast',      d:'80g lean ground turkey + 3 egg whites + spinach & bell pepper + 1 wholegrain toast + sliced tomato · paired with 1 black coffee',                  cal:390,p:38,c:22,f:12,m:'RDC'},
-  // Thai
-  {n:'Shrimp Congee + Ginger + Green Onion',     d:'1.5 cups Thai-style rice porridge with 100g shrimp + ginger, garlic & sesame oil + hard-boiled egg · paired with 1 jasmine tea',                  cal:370,p:28,c:36,f:10,m:'RDC'},
-  {n:'Thai Fish Omelette + Jasmine Rice + Tea',  d:'3-egg omelette with 80g white fish & fish sauce + ½ cup steamed jasmine rice + sliced cucumber & chilli · paired with 1 green tea',               cal:420,p:30,c:32,f:16,m:'RDC'},
-  // Mexican
-  {n:'Huevos Rancheros + Beans + Coffee',        d:'2 fried eggs on 1 corn tortilla + ¼ cup black beans + tomato salsa + ¼ avocado + sprinkle of cotija-style cheese · paired with 1 black coffee',   cal:440,p:24,c:30,f:24,m:'RC'},
-  {n:'Breakfast Burrito Bowl + Coffee',          d:'2 scrambled eggs + 80g grilled chicken + ½ cup black beans + salsa + ¼ avocado (no tortilla) · paired with 1 black coffee',                       cal:430,p:34,c:22,f:20,m:'RDC'},
   // Cheat-Day nonveg breakfasts
   {n:'Egg & Chicken Frankie Roll + Chai',            d:'3-egg omelette + 100g spiced chicken wrapped in 2 rumali-style rotis with chutney & onion · paired with 1 cup masala chai',                   cal:580,p:38,c:48,f:22,m:'C'},
   {n:'Prawn Omelette + Buttered Toast + Coffee',     d:'3-egg omelette with 80g prawns, garlic & herbs + 2 slices buttered wholegrain toast + sliced tomato · paired with 1 black coffee',             cal:540,p:36,c:30,f:28,m:'C'},
@@ -1306,19 +1407,6 @@ lunch:{
   {n:'Lentil Soup + Wholegrain Bread + Salad',  d:'2 cups thick lentil soup + 1 slice wholegrain bread + green salad with lemon-olive oil dressing',        cal:400,p:18,c:46,f:8,m:'RDC'},
   {n:'Stuffed Peppers + Quinoa + Yogurt Dip',   d:'2 peppers stuffed with quinoa, black beans & herbs (baked) + ½ cup yogurt-herb dip + side salad',       cal:430,p:16,c:46,f:10,m:'RDC'},
   {n:'Cauliflower Bowl + Chickpeas + Tahini',   d:'200g roasted cauliflower + ½ cup chickpeas + greens + 2 tbsp tahini + sliced cucumber & tomato',         cal:390,p:14,c:36,f:16,m:'RDC'},
-  // More American
-  {n:'Sweet Potato & Black Bean Bowl + Salad',  d:'½ cup roasted sweet potato + ½ cup black beans + kale + salsa + 2 tbsp yogurt lime dressing + pepitas',  cal:420,p:14,c:50,f:10,m:'RDC'},
-  {n:'Grilled Veggie Wrap + Hummus + Apple',    d:'1 wholegrain wrap + grilled zucchini, peppers & mushrooms + 2 tbsp hummus + spinach + 1 apple on side',  cal:400,p:12,c:50,f:10,m:'RC'},
-  {n:'Classic Minestrone + Whole Wheat Bread',  d:'2 cups rich minestrone with beans & veggies + 1 slice whole wheat bread + side green salad',             cal:390,p:14,c:52,f:8,m:'RDC'},
-  {n:'Kale Caesar + Croutons + Parmesan',       d:'2 cups kale + ½ cup chickpeas + ¼ cup wholegrain croutons + 2 tbsp light Caesar + shaved parmesan alt', cal:400,p:16,c:38,f:14,m:'RC'},
-  // More Thai
-  {n:'Pad Thai Tofu (Light) + Papaya Salad',    d:'100g tofu pad thai (light sauce) + 1 cup green papaya salad + crushed peanuts + lime wedge',             cal:430,p:18,c:44,f:14,m:'RC'},
-  {n:'Thai Pumpkin Curry + ½ Cup Rice',         d:'1.5 cups light coconut pumpkin curry with lemongrass & kaffir lime + ½ cup jasmine rice + Thai basil',   cal:400,p:10,c:52,f:14,m:'RC'},
-  {n:'Larb Hed (Mushroom Larb) + Sticky Rice',  d:'150g mushroom & herb larb with mint, lime & chilli + ½ cup sticky rice + sliced cucumber',               cal:360,p:12,c:50,f:8,m:'RC'},
-  // More Mexican
-  {n:'Enchilada Bowl + Yogurt + Salsa',         d:'2 corn tortillas + ½ cup black beans + corn + enchilada sauce + 3 tbsp Greek yogurt + shredded lettuce', cal:420,p:14,c:54,f:10,m:'RC'},
-  {n:'Quesadilla (Veggie) + Guacamole + Salad', d:'1 wholegrain tortilla + black beans + corn + peppers + 2 tbsp guacamole + side mixed green salad',       cal:440,p:14,c:50,f:16,m:'RC'},
-  {n:'Mexican Street Corn Bowl + Beans',        d:'½ cup elote-style corn + ½ cup pinto beans + shredded cabbage + lime-chipotle yogurt dressing + tortilla chips (small)', cal:410,p:14,c:50,f:12,m:'RC'},
   // More Low-GI veg lunches
   {n:'Rajma + Salad (No Rice)',                  d:'1 cup spiced rajma curry + 2 cups mixed salad with lemon-olive oil dressing + 3 tbsp plain yogurt',        cal:380,p:18,c:38,f:8,m:'RD'},
   {n:'Moong Dal Soup + Rye Bread + Salad',       d:'1.5 cups thick moong dal soup with cumin & ginger + 1 slice rye bread + large green salad',               cal:370,p:18,c:40,f:6,m:'RD'},
@@ -1359,19 +1447,6 @@ lunch:{
   {n:'Tuna Salad Bowl + Crackers + Apple',      d:'120g canned tuna + 2 cups mixed greens + yogurt dressing + 4 wholegrain crackers + 1 apple',             cal:410,p:34,c:28,f:12,m:'RDC'},
   {n:'Salmon + Greens + Quinoa + Nuts',         d:'140g baked salmon + 2 cups mixed greens + ½ cup quinoa + 10g walnuts + lemon-herb dressing',            cal:470,p:40,c:30,f:20,m:'RDC'},
   {n:'Shrimp & Avocado Salad Bowl',             d:'150g grilled shrimp + 2 cups mixed greens + ½ avocado + cherry tomatoes + lemon vinaigrette + 10g nuts', cal:390,p:32,c:14,f:20,m:'RDC'},
-  // More American
-  {n:'Turkey Club Salad Bowl + Crackers',       d:'120g sliced turkey breast + 2 cups romaine + cherry tomatoes + cucumber + mustard vinaigrette + 4 Ryvita',cal:400,p:38,c:20,f:14,m:'RDC'},
-  {n:'Grilled Chicken + Sweet Potato + Greens', d:'150g herb-grilled chicken + ½ cup roasted sweet potato cubes + 2 cups mixed greens + balsamic drizzle',  cal:440,p:38,c:28,f:12,m:'RDC'},
-  {n:'Egg Salad + Avocado + Whole Wheat Wrap',  d:'3 boiled eggs chopped with light mayo & mustard + ½ avocado + spinach in 1 wholegrain wrap',             cal:420,p:24,c:28,f:20,m:'RC'},
-  {n:'BBQ Shrimp Bowl + Brown Rice + Slaw',     d:'150g BBQ grilled shrimp + ½ cup brown rice + 1 cup apple-cabbage slaw + yogurt-lime drizzle',            cal:440,p:32,c:38,f:10,m:'RC'},
-  // More Thai
-  {n:'Tom Kha Chicken + ½ Cup Rice',            d:'150g chicken in coconut-galangal-lemongrass broth + bok choy + mushrooms + ½ cup jasmine rice',          cal:440,p:34,c:32,f:16,m:'RC'},
-  {n:'Pad See Ew Chicken + Salad',              d:'150g chicken + wide rice noodles stir-fried in sweet soy & egg + 1 cup mixed greens + lime',             cal:460,p:34,c:40,f:12,m:'RC'},
-  {n:'Spicy Thai Prawn Salad + ½ Rice',         d:'150g poached prawns with mint, lime, chilli & lemongrass on 2 cups greens + ½ cup jasmine rice',         cal:390,p:30,c:32,f:8,m:'RDC'},
-  // More Mexican
-  {n:'Carne Asada Bowl (Lean) + Beans + Rice',  d:'130g grilled lean beef strips + ¼ cup brown rice + ½ cup pinto beans + salsa + shredded cabbage + lime', cal:480,p:40,c:36,f:14,m:'RC'},
-  {n:'Shrimp Taco Bowl + Avocado + Slaw',       d:'150g lime-chilli grilled shrimp + ¼ cup brown rice + corn + cabbage slaw + ¼ avocado + salsa',           cal:430,p:32,c:34,f:14,m:'RDC'},
-  {n:'Chicken Pozole Verde (Lighter)',           d:'1.5 cups green tomatillo chicken pozole with hominy & shredded chicken + cabbage + radish + lime garnish',cal:440,p:36,c:36,f:10,m:'RC'},
   // More Low-GI nonveg lunches
   {n:'Grilled Fish + Salad (No Rice)',           d:'180g marinated grilled fish fillet + 2 cups mixed greens + cucumber, tomato & lemon vinaigrette + 3 tbsp curd',cal:360,p:36,c:8,f:14,m:'D'},
   {n:'Chicken Clear Soup + Egg + Salad',         d:'1.5 cups clear chicken soup with veg + 2 boiled eggs + 2 cups mixed salad + lemon-olive oil dressing',    cal:340,p:32,c:10,f:14,m:'D'},
@@ -1418,17 +1493,6 @@ snacks:{
   {n:'Bhel Puri (Large)',                       d:'2 cups puffed rice with onion, tomato, chaat masala, tamarind & mint chutney + sev & peanuts',              cal:340,p:8,c:50,f:12,m:'C'},
   {n:'Masala Chai + 2 Biscuits + Namkeen',      d:'1 cup masala chai + 2 digestive biscuits + ¼ cup spiced namkeen mix',                                      cal:280,p:5,c:40,f:10,m:'C'},
   {n:'Vada Pav',                                d:'1 fluffy pav bun + spiced potato vada + dry garlic chutney + green chutney — Mumbai classic',               cal:380,p:8,c:52,f:16,m:'C'},
-  // American snacks
-  {n:'Celery + Peanut Butter + Raisins',        d:'4 celery stalks + 2 tbsp natural peanut butter + 1 tbsp raisins — "ants on a log"',                         cal:200,p:6,c:18,f:12,m:'RDC'},
-  {n:'Cottage Cheese + Pineapple + Almonds',    d:'½ cup low-fat cottage cheese + ½ cup fresh pineapple chunks + 10g sliced almonds',                           cal:195,p:16,c:16,f:6,m:'RDC'},
-  {n:'Popcorn + Parmesan + Black Pepper',       d:'2 cups air-popped popcorn + 1 tbsp grated parmesan + cracked black pepper — high fibre, low cal',            cal:130,p:5,c:18,f:4,m:'RDC'},
-  {n:'Guacamole + Veggie Sticks + Corn Chips',  d:'3 tbsp guacamole + 1 cup carrot, celery & pepper sticks + 10 baked corn chips',                             cal:210,p:4,c:20,f:14,m:'RC'},
-  // Thai snacks
-  {n:'Mango + Sticky Rice Balls (Mini)',        d:'2 small coconut sticky rice balls with fresh mango — Thai-inspired light treat',                              cal:200,p:3,c:36,f:4,m:'C'},
-  {n:'Thai Cucumber Salad + Peanuts',           d:'1 cup sliced cucumber & onion in lime-chilli-rice vinegar dressing + 15g crushed peanuts',                  cal:150,p:5,c:12,f:8,m:'RDC'},
-  // Mexican snacks
-  {n:'Guacamole + Black Bean Dip + Veggies',   d:'2 tbsp guacamole + 2 tbsp black bean dip + 1 cup veggie sticks + 6 baked tortilla chips',                   cal:210,p:7,c:22,f:12,m:'RDC'},
-  {n:'Elote Cup (Street Corn) — Lightened',    d:'½ cup corn with lime juice, chilli powder, cotija-style cheese & light yogurt instead of crema',              cal:180,p:7,c:26,f:6,m:'RC'},
  ],
  nonveg:[
   {n:'Boiled Eggs + Almonds + Apple',           d:'2 boiled eggs + 15g almonds + 1 small apple',                                                            cal:230,p:16,c:14,f:14,m:'RDC'},
@@ -1452,17 +1516,6 @@ snacks:{
   {n:'Chicken Wings (6) + Dip',                 d:'6 grilled spiced chicken wings + 3 tbsp yogurt-herb dip + sliced celery & carrot',                         cal:400,p:32,c:8,f:26,m:'C'},
   {n:'Egg Roll + Chai',                         d:'2-egg omelette rolled in a thin roti with chutney, onion & chilli sauce + 1 cup masala chai',              cal:380,p:18,c:40,f:16,m:'C'},
   {n:'Prawn Koliwada (6 pcs)',                  d:'6 crispy fried spiced prawns with lemon, raw onion & mint chutney — coastal street snack',                  cal:320,p:24,c:18,f:16,m:'C'},
-  // American nonveg snacks
-  {n:'Turkey Roll-Ups + Cream Cheese + Pickles',d:'4 slices lean turkey breast rolled with 1 tbsp light cream cheese + pickle spear + cherry tomatoes',        cal:190,p:22,c:6,f:8,m:'RDC'},
-  {n:'Tuna + Avocado Rice Cakes',               d:'70g canned tuna mixed with ¼ avocado + lemon on 2 plain rice cakes + sliced cucumber',                      cal:210,p:20,c:18,f:8,m:'RDC'},
-  {n:'Beef Jerky + Apple + Walnuts',            d:'25g low-sodium beef jerky + 1 medium apple + 10g walnuts — high protein, portable snack',                   cal:210,p:16,c:22,f:8,m:'RDC'},
-  {n:'Cottage Cheese + Boiled Egg + Veggies',   d:'½ cup cottage cheese + 1 boiled egg + 1 cup carrot & cucumber sticks + cracked pepper',                    cal:195,p:22,c:8,f:7,m:'RDC'},
-  // Thai nonveg snacks
-  {n:'Thai Chicken Satay (3 sticks) + Peanut Dip',d:'3 small chicken satay skewers (90g) + 2 tbsp light peanut dipping sauce + sliced cucumber & onion',     cal:220,p:24,c:8,f:10,m:'RDC'},
-  {n:'Thai Shrimp Skewers + Lime-Chilli Dip',   d:'100g grilled lemongrass-shrimp skewers + lime-fish sauce-chilli dip + cucumber slices',                    cal:180,p:22,c:6,f:6,m:'RDC'},
-  // Mexican nonveg snacks
-  {n:'Chicken & Bean Tostada Bite',             d:'1 small corn tostada + ¼ cup shredded chicken + 2 tbsp black beans + salsa + slice of avocado',             cal:210,p:18,c:18,f:8,m:'RC'},
-  {n:'Shrimp Ceviche + Tortilla Chips (Small)', d:'100g shrimp ceviche with lime, tomato, onion & coriander + 8 baked corn chips',                             cal:200,p:18,c:18,f:4,m:'RDC'},
  ]
 },
 
@@ -1494,17 +1547,6 @@ dinner:{
   {n:'Roasted Veg Platter + Hummus + Nuts',     d:'300g roasted mixed vegetables + 4 tbsp hummus + ½ mini wholegrain pita + 10g almonds',                  cal:360,p:12,c:32,f:16,m:'RDC'},
   {n:'Cauliflower Steak + Lentils + Greens',    d:'250g roasted cauliflower steak + ½ cup red lentils + 1 cup sautéed spinach + 2 tbsp yogurt on the side', cal:360,p:18,c:30,f:10,m:'RDC'},
   {n:'Egg Fried Cauliflower Rice + Fruit',      d:'2 eggs scrambled into 200g cauliflower rice with spring onion & sesame + side salad + seasonal fruit',   cal:310,p:18,c:18,f:16,m:'RDC'},
-  // More American
-  {n:'Black Bean Burger Bowl + Sweet Potato',   d:'Black bean patty (crumbled) + ½ cup roasted sweet potato + kale + chipotle-yogurt dressing + pumpkin seeds',cal:400,p:16,c:44,f:12,m:'RDC'},
-  {n:'Baked Mac & Cheese (Lightened)',          d:'¾ cup wholegrain pasta + light cheddar-yogurt sauce + steamed broccoli + roasted cherry tomatoes',       cal:420,p:18,c:48,f:12,m:'C'},
-  {n:'Veggie Chili + Cornbread Muffin + Salad', d:'1.5 cups three-bean veggie chili with peppers & corn + 1 mini cornbread muffin + large green salad',     cal:430,p:18,c:52,f:10,m:'RC'},
-  // More Thai
-  {n:'Tom Yum Tofu Soup + ½ Cup Rice',          d:'2 cups hot-sour lemongrass-mushroom soup with firm tofu + ½ cup jasmine rice + lime & coriander',        cal:310,p:14,c:32,f:8,m:'RDC'},
-  {n:'Green Mango Salad + Tofu + Peanuts',      d:'2 cups shredded green mango & herb salad + 130g grilled tofu + 15g crushed peanuts + lime dressing',     cal:330,p:18,c:22,f:14,m:'RDC'},
-  {n:'Massaman Veggie Curry + ½ Cup Rice',      d:'1.5 cups mild massaman curry with potato, chickpea & light coconut milk + ½ cup jasmine rice',           cal:420,p:12,c:54,f:14,m:'RC'},
-  // More Mexican
-  {n:'Veggie Taco Bowl + Cauliflower Rice',     d:'Spiced roasted cauliflower + ½ cup black beans + corn + salsa + ¼ avocado + lime cauliflower rice',      cal:360,p:14,c:36,f:14,m:'RDC'},
-  {n:'Black Bean Enchiladas + Yogurt Drizzle',  d:'2 corn tortillas rolled with black beans & corn in mild enchilada sauce + 3 tbsp Greek yogurt + salsa',  cal:400,p:16,c:52,f:10,m:'RC'},
   // More Low-GI veg dinners
   {n:'Soya Chunk Curry + Salad (No Rice)',       d:'½ cup soya chunk curry in spiced tomato gravy + 2 cups large salad + 3 tbsp curd — high protein, low GI',cal:340,p:26,c:18,f:8,m:'D'},
   {n:'Paneer Soup + Salad',                      d:'1.5 cups paneer & spinach clear soup + 2 cups mixed salad with seeds + lemon dressing — light & filling', cal:300,p:18,c:12,f:16,m:'D'},
@@ -1542,20 +1584,6 @@ dinner:{
   {n:'Herb Chicken + Kale Salad + Walnuts',     d:'150g herb-baked chicken breast + 2 cups kale with 15g walnuts, cranberries & balsamic dressing',        cal:410,p:38,c:14,f:18,m:'RDC'},
   {n:'Garlic Shrimp + Zucchini Noodles + Nuts', d:'150g garlic shrimp + 200g zucchini noodles + cherry tomatoes + fresh basil + 10g pine nuts',            cal:350,p:30,c:12,f:18,m:'RDC'},
   {n:'Tuna Niçoise Salad + Fruit',              d:'120g tuna + 2 boiled eggs + green beans + olives + cherry tomatoes + Dijon vinaigrette + sliced orange', cal:400,p:36,c:16,f:20,m:'RDC'},
-  // More American
-  {n:'Baked Lemon Chicken + Asparagus + Quinoa',d:'180g lemon-herb baked chicken breast + 200g roasted asparagus + ½ cup quinoa + lemon-dijon drizzle',    cal:450,p:42,c:28,f:14,m:'RDC'},
-  {n:'Cajun Shrimp & Cauliflower Rice Bowl',    d:'180g Cajun-spiced grilled shrimp + 200g cauliflower rice + roasted peppers & corn + lime yogurt dip',   cal:360,p:32,c:18,f:12,m:'RDC'},
-  {n:'Turkey Meatballs + Zucchini Noodles',     d:'5 lean turkey meatballs in marinara + 200g zucchini noodles + sautéed spinach + 2 tbsp parmesan alt',   cal:400,p:38,c:18,f:16,m:'RDC'},
-  {n:'Grilled Tilapia + Sweet Potato + Greens', d:'180g grilled tilapia with lemon & herbs + ½ cup roasted sweet potato + 2 cups sautéed kale & garlic',   cal:420,p:38,c:28,f:10,m:'RDC'},
-  // More Thai
-  {n:'Thai Red Curry Chicken + Cauli Rice',     d:'150g chicken in light red coconut curry + kaffir lime + ½ cup jasmine rice subbed with cauliflower rice',cal:370,p:34,c:16,f:16,m:'RDC'},
-  {n:'Ginger Fish in Banana Leaf + Salad',      d:'180g steamed fish with galangal, lemongrass & kaffir lime + 1.5 cups green mango-herb salad',           cal:330,p:34,c:12,f:12,m:'RDC'},
-  {n:'Thai Minced Chicken Salad (Larb Gai)',    d:'180g minced chicken with mint, lime, chilli & fish sauce on lettuce cups + 10g crushed peanuts + rice',  cal:380,p:36,c:14,f:16,m:'RDC'},
-  {n:'Coconut Prawn Soup + ½ Rice',             d:'150g prawns in tom kha-style coconut broth with mushrooms + ½ cup jasmine rice + coriander & lime',      cal:360,p:28,c:28,f:12,m:'RDC'},
-  // More Mexican
-  {n:'Chicken Tinga Taco Bowl (No Tortilla)',   d:'180g shredded chipotle-tomato chicken + ½ cup black beans + shredded cabbage + salsa + ¼ avocado',      cal:420,p:38,c:22,f:16,m:'RDC'},
-  {n:'Grilled Salmon Tacos (2) + Slaw',         d:'2 corn tortillas + 140g grilled salmon + lime-chipotle yogurt + shredded cabbage slaw + salsa',          cal:430,p:36,c:28,f:18,m:'RC'},
-  {n:'Shrimp & Veggie Fajita Bowl',             d:'150g grilled shrimp + roasted peppers & onion + ½ cup black beans + ¼ avocado + salsa + lime — no rice',cal:380,p:32,c:24,f:14,m:'RDC'},
   // More Low-GI nonveg dinners
   {n:'Clear Chicken Soup + 2 Boiled Eggs',      d:'2 cups clear spiced chicken broth with veg + 2 boiled eggs + large salad + lemon dressing',               cal:310,p:32,c:8,f:12,m:'D'},
   {n:'Steamed Fish + Sautéed Spinach (No Grain)',d:'200g steamed fish fillet with ginger & garlic + 200g sautéed spinach + 2 tbsp yogurt dip + lemon',       cal:340,p:38,c:8,f:12,m:'D'},
@@ -1848,6 +1876,12 @@ function render(){
         <button class="rate-btn dn${ratings[m.n]===-1?' on':''}" onclick="rateMeal('${m.n}',${ratings[m.n]===-1?0:-1})" title="Dislike this meal">👎</button>
       </div>
       <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')" title="Mark as eaten"></button>
+    </div>
+    <div style="padding:0 10px 10px">
+      <button class="order-btn" onclick="openNearby('${t}','${m.n}')" style="width:100%;padding:12px 14px;background:rgba(212,136,90,.12);border:1.5px solid rgba(212,136,90,.45);color:#E8AA7A;font-size:12px;font-weight:900;border-radius:11px;cursor:pointer;font-family:'Nunito',sans-serif;display:flex;align-items:center;gap:8px">
+        <span>Can't Cook? Find Nearby</span>
+        <span>›</span>
+      </button>
     </div>
   </div>
 </div>`;
@@ -2364,10 +2398,7 @@ function saveProfile(p) { localStorage.setItem(OB_KEY, JSON.stringify(p)); }
 
 function checkOnboarding() {
   const p = getProfile();
-  const isValid = p && p.goal && p.targets && p.targets.R && p.diet;
-  if (!isValid) {
-    // Clear any corrupt/incomplete profile
-    if (p && !isValid) localStorage.removeItem(OB_KEY);
+  if (!p) {
     document.getElementById('onboardOverlay').classList.remove('hidden');
     renderObAllergyGrid();
   } else {
@@ -3070,6 +3101,475 @@ setTimeout(() => {
 }, 50);
 
 
+
+// ═══════════════════════════════════════════════════════════════
+// NEARBY RESTAURANTS FEATURE
+// ═══════════════════════════════════════════════════════════════
+
+let _nearbyMealType = null;
+
+// Derive cuisine type + search terms from the meal name
+function cuisineFromMeal(mealName) {
+  if (!mealName) return { label: 'restaurant', emoji: '🍽️', maps: 'restaurant' };
+  const n = mealName.toLowerCase();
+  if (/idli|dosa|sambar|uttapam|rasam|pongal|upma|appam|chettinad|avial|filter coffee/.test(n))
+    return { label: 'South Indian restaurant', emoji: '🌴', maps: 'south+indian+restaurant' };
+  if (/palak|paneer|dal|roti|paratha|rajma|chole|chana|sabzi|biryani|khichdi|kadhi|saag|aloo|gobi|matar|korma|butter chicken|tikka|naan|kulcha|lassi|raita/.test(n))
+    return { label: 'Indian restaurant', emoji: '🇮🇳', maps: 'indian+restaurant' };
+  if (/pasta|pizza|risotto|lasagna|carbonara/.test(n))
+    return { label: 'Italian restaurant', emoji: '🇮🇹', maps: 'italian+restaurant' };
+  if (/sushi|ramen|udon|miso|teriyaki|tempura/.test(n))
+    return { label: 'Japanese restaurant', emoji: '🇯🇵', maps: 'japanese+restaurant' };
+  if (/pad thai|green curry|tom yum|satay/.test(n))
+    return { label: 'Thai restaurant', emoji: '🇹🇭', maps: 'thai+restaurant' };
+  if (/taco|burrito|quesadilla|enchilada|guacamole/.test(n))
+    return { label: 'Mexican restaurant', emoji: '🇲🇽', maps: 'mexican+restaurant' };
+  if (/fried rice|noodle|dim sum|dumpling|wonton|kung pao/.test(n))
+    return { label: 'Chinese restaurant', emoji: '🇨🇳', maps: 'chinese+restaurant' };
+  if (/hummus|falafel|shawarma|kebab|pita|mezze/.test(n))
+    return { label: 'Middle Eastern restaurant', emoji: '🧆', maps: 'middle+eastern+restaurant' };
+  if (/salad|smoothie|grain bowl|acai|quinoa|avocado toast/.test(n))
+    return { label: 'healthy cafe', emoji: '🥗', maps: 'healthy+restaurant' };
+  if (/omelette|scrambled egg|egg bhurji|frittata|pancake|waffle/.test(n))
+    return { label: 'breakfast cafe', emoji: '🍳', maps: 'breakfast+cafe' };
+  return { label: 'restaurant', emoji: '🍽️', maps: 'restaurant' };
+}
+
+function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+function openNearby(mealType, mealName) {
+  window._nearbyMealN = mealName || picks[mealType]?.n || '';
+  _nearbyMealType = mealType;
+  const meal = picks[mealType];
+  const cuisine = cuisineFromMeal(meal?.n);
+  document.getElementById('nearbyTitle').textContent = 'Nearby Restaurants';
+  document.getElementById('nearbyBody').innerHTML =
+    '<div class="nearby-loading"><div class="nearby-spinner"></div>' +
+    '<div class="nearby-loading-text">Getting your location\u2026<br>' +
+    '<span style="font-size:11px;opacity:.55">Please allow location access if prompted</span></div></div>';
+  document.getElementById('nearbyOverlay').classList.add('open');
+
+  if (!navigator.geolocation) {
+    renderNearbyError('Not Supported', "Your browser doesn't support location. Try on Chrome or Safari.", false);
+    return;
+  }
+
+  // Watch for location — works reliably on mobile
+  var watchId = navigator.geolocation.watchPosition(
+    function(pos) {
+      navigator.geolocation.clearWatch(watchId);
+      fetchNearbyRestaurants(pos.coords.latitude, pos.coords.longitude, meal, cuisine);
+    },
+    function(err) {
+      navigator.geolocation.clearWatch(watchId);
+      var msg = err.code === 1
+        ? 'Location access was denied. Please tap Allow when prompted, or enable Location in your phone Settings.'
+        : 'Could not get your location. Please make sure Location Services are on and try again.';
+      renderNearbyError('Location Needed', msg, true);
+    },
+    { timeout: 15000, maximumAge: 60000, enableHighAccuracy: false }
+  );
+}
+
+async function reverseGeocode(lat, lng) {
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`, { headers: { 'Accept-Language': 'en' } });
+    const d = await r.json();
+    const a = d.address || {};
+    return a.suburb || a.neighbourhood || a.city_district || a.town || a.city || a.county || '';
+  } catch { return ''; }
+}
+
+function haversineMi(lat1, lon1, lat2, lon2) {
+  const R = 3958.8;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// API key stored in localStorage — user enters via Settings
+function getApiKey() { return localStorage.getItem('eatright_google_key') || ''; }
+function saveApiKey(k) { localStorage.setItem('eatright_google_key', k.trim()); }
+
+function mealToQuery(mealName) {
+  const n = (mealName||'').toLowerCase();
+  if (/biryani/.test(n)) return 'biryani restaurant';
+  if (/grilled chicken|chicken tikka|tandoori/.test(n)) return 'Indian grilled chicken restaurant';
+  if (/fish curry|fish tikka/.test(n)) return 'fish curry restaurant';
+  if (/prawn|shrimp/.test(n)) return 'prawn seafood restaurant';
+  if (/dal|rajma|chole|paneer|palak/.test(n)) return 'Indian vegetarian restaurant';
+  if (/pad thai|thai/.test(n)) return 'Thai restaurant';
+  if (/kung pao|fried rice/.test(n)) return 'Chinese restaurant';
+  if (/burrito|taco|mexican/.test(n)) return 'Mexican restaurant';
+  if (/salmon|seafood/.test(n)) return 'seafood restaurant';
+  if (/salad|quinoa/.test(n)) return 'healthy restaurant';
+  if (/omelette|scrambled egg/.test(n)) return 'breakfast cafe';
+  return 'healthy restaurant';
+}
+
+function fmtClose(periods, day) {
+  if (!periods) return null;
+  const p = periods.find(function(x) { return x.open && x.open.day === day; });
+  if (!p || !p.close) return 'Open 24h';
+  const t = p.close.time || '';
+  if (!t) return null;
+  const h = parseInt(t.slice(0,2)), m = t.slice(2);
+  const h12 = h > 12 ? h-12 : h === 0 ? 12 : h;
+  return 'Closes ' + h12 + ':' + m + (h >= 12 ? 'pm' : 'am');
+}
+
+async function placesSearch(query, lat, lng, radius) {
+  const resp = await fetch('https://places.googleapis.com/v1/places:searchText', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': getApiKey(),
+      'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.userRatingCount,places.formattedAddress,places.internationalPhoneNumber,places.currentOpeningHours,places.regularOpeningHours,places.location,places.businessStatus'
+    },
+    body: JSON.stringify({
+      textQuery: query,
+      maxResultCount: 8,
+      locationBias: { circle: { center: { latitude: lat, longitude: lng }, radiusMeters: radius } }
+    })
+  });
+  const d = await resp.json();
+  if (d.error) throw new Error(d.error.message);
+  return (d.places || []).filter(function(p) { return p.businessStatus !== 'CLOSED_PERMANENTLY'; });
+}
+
+async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
+  const mealN = window._nearbyMealN || (meal ? meal.n : '') || '';
+  const mealShort = mealN.split('+')[0].trim();
+  const day = new Date().getDay();
+
+  document.getElementById('nearbyBody').innerHTML =
+    '<div class="nearby-loading"><div class="nearby-spinner"></div>' +
+    '<div class="nearby-loading-text">Searching for restaurants near you…' +
+    '<br><span style="font-size:11px;opacity:.5">Open now · within 2 miles</span></div></div>';
+
+  if (!getApiKey()) {
+    document.getElementById('nearbyBody').innerHTML =
+      '<div style="text-align:center;padding:28px 16px">' +
+      '<div style="font-size:40px;margin-bottom:14px">🔑</div>' +
+      '<div style="font-size:17px;font-weight:900;color:var(--ink);margin-bottom:8px">Google API Key Required</div>' +
+      '<div style="font-size:12px;color:var(--ink3);line-height:1.7;margin-bottom:22px">' +
+      'A free Google Places API key lets us find restaurants near you — right inside the app.</div>' +
+      '<button onclick="showApiKeySetup()" ' +
+      'style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;' +
+      'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;' +
+      'letter-spacing:.03em;margin-bottom:10px">🔑 Enter API Key</button>' +
+      '<a href="https://console.cloud.google.com/apis/library/places-backend.googleapis.com" ' +
+      'target="_blank" rel="noopener" ' +
+      'style="display:block;font-size:11px;font-weight:700;color:var(--accent2);text-decoration:none">' +
+      'Get a free key from Google →</a></div>';
+    return;
+  }
+
+  try {
+    const area = await reverseGeocode(lat, lng);
+    const areaStr = area ? ' near ' + area : '';
+
+    let places = await placesSearch(mealToQuery(mealN) + areaStr, lat, lng, 2400);
+    if (places.length < 3) {
+      const p2 = await placesSearch('healthy restaurant' + areaStr, lat, lng, 3200);
+      const seen = new Set(places.map(function(p) { return p.id; }));
+      p2.forEach(function(p) { if (!seen.has(p.id)) places.push(p); });
+    }
+    if (!places.length) {
+      window._nearbyLat = lat; window._nearbyLng = lng;
+      showNotFoundWithAlt(lat, lng, mealShort);
+      return;
+    }
+
+    const list = places.slice(0, 8).map(function(p) {
+      const lat2 = p.location ? p.location.latitude : null;
+      const lng2 = p.location ? p.location.longitude : null;
+      const dist = (lat2 && lng2) ? haversineMi(lat, lng, lat2, lng2) : null;
+      const curH = p.currentOpeningHours, regH = p.regularOpeningHours;
+      const isOpen = curH ? curH.openNow : (regH ? regH.openNow : null);
+      const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
+      return {
+        name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        address: p.formattedAddress || '',
+        phone: p.internationalPhoneNumber || null,
+        rating: p.rating || null,
+        ratingCount: p.userRatingCount || null,
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+      };
+    });
+
+    list.sort(function(a,b) {
+      const aO = a.isOpen===true?0:a.isOpen===false?2:1;
+      const bO = b.isOpen===true?0:b.isOpen===false?2:1;
+      if (aO !== bO) return aO-bO;
+      return (a.dist||99)-(b.dist||99);
+    });
+
+    // Show open places first, limit to 5 total
+    const openOnes = list.filter(function(p) { return p.isOpen === true; });
+    const closedOnes = list.filter(function(p) { return p.isOpen !== true; });
+    const final = openOnes.concat(closedOnes).slice(0, 5);
+    window._nearbyList = final;
+    showRestoList(final, lat, lng, area, mealShort);
+
+  } catch(err) {
+    console.error('fetchNearby:', err);
+    const q = encodeURIComponent(mealShort + ' restaurant near me');
+    document.getElementById('nearbyBody').innerHTML =
+      '<div style="text-align:center;padding:24px 16px">' +
+      '<div style="font-size:32px;margin-bottom:10px">&#128517;</div>' +
+      '<div style="font-size:15px;font-weight:900;color:var(--ink);margin-bottom:6px">Could not load results</div>' +
+      '<div style="font-size:11px;color:var(--ink3);margin-bottom:16px">' + escHtml(err.message) + '</div>' +
+      '<a href="https://www.google.com/maps/search/' + q + '/@' + lat + ',' + lng + ',15z" ' +
+      'target="_blank" rel="noopener" style="display:block;padding:13px;background:var(--orange);' +
+      'border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none;margin-bottom:10px">' +
+      '&#128269; Search on Google Maps</a>' +
+      '<button onclick="openNearby(window._nearbyMealType)" ' +
+      'style="width:100%;padding:11px;background:var(--deep);border:1.5px solid var(--border2);' +
+      'border-radius:12px;font-size:12px;font-weight:800;color:var(--ink2);cursor:pointer;' +
+      'font-family:Nunito,sans-serif">&#8634; Try Again</button></div>';
+  }
+}
+
+window._nearbyList = [];
+
+function showRestoList(list, userLat, userLng, area, mealShort) {
+  const openCount = list.filter(function(p) { return p.isOpen === true; }).length;
+  const allUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(mealShort + ' restaurant near me');
+
+  let h = '<div style="display:flex;align-items:center;justify-content:space-between;' +
+    'padding:8px 12px;background:var(--ink4);border-radius:10px;margin-bottom:12px">' +
+    '<span style="font-size:11px;font-weight:800;color:var(--ink3)">&#128205; ' +
+    '<strong style="color:var(--ink)">' + openCount + ' open</strong> of ' + list.length +
+    (area ? ' &middot; ' + escHtml(area) : '') + '</span>' +
+    '<a href="' + allUrl + '" target="_blank" rel="noopener" ' +
+    'style="font-size:10px;font-weight:900;color:var(--accent2);text-decoration:none">See all &rarr;</a></div>';
+
+  h += '<div style="border-radius:14px;overflow:hidden;border:1px solid var(--border)">';
+  list.forEach(function(p, i) {
+    const oc = p.isOpen===true?'#2EC4B2':p.isOpen===false?'#E05C5C':'var(--ink3)';
+    const ol = p.isOpen===true?(p.closes||'Open now'):p.isOpen===false?'Closed':'Hours unknown';
+    const dist = p.dist!==null ? p.dist.toFixed(1)+' mi' : '';
+    const stars = p.rating ? '&#11088; '+p.rating.toFixed(1) : '';
+    const bb = i < list.length-1 ? 'border-bottom:1px solid var(--ink4);' : '';
+    h += '<div onclick="showRestoDetail(' + i + ')" style="display:flex;align-items:center;gap:10px;' +
+      'padding:13px 14px;background:var(--card);cursor:pointer;' + bb + '">' +
+      '<div style="width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;' +
+      'font-size:11px;font-weight:900;color:#fff;background:' + (i===0?'var(--orange)':'var(--accent)') + '">' + (i+1) + '</div>' +
+      '<div style="flex:1;min-width:0">' +
+      '<div style="font-size:13px;font-weight:900;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(p.name) + '</div>' +
+      '<div style="display:flex;align-items:center;gap:5px;margin-top:3px;flex-wrap:wrap">' +
+      '<div style="width:6px;height:6px;border-radius:50%;background:' + oc + ';flex-shrink:0"></div>' +
+      '<span style="font-size:9.5px;font-weight:900;color:' + oc + '">' + ol + '</span>' +
+      (dist ? '<span style="font-size:9.5px;font-weight:700;color:var(--ink3)"> &middot; ' + dist + '</span>' : '') +
+      (stars ? '<span style="font-size:9.5px;font-weight:900;color:#F4C430"> &middot; ' + stars + '</span>' : '') +
+      '</div></div>' +
+      '<span style="color:var(--ink3);font-size:20px;line-height:1">&rsaquo;</span></div>';
+  });
+  h += '</div>';
+  document.getElementById('nearbyBody').innerHTML = h;
+}
+
+function showRestoDetail(idx) {
+  const p = window._nearbyList[idx];
+  if (!p) return;
+  const old = document.getElementById('restoDetailWrap');
+  if (old) old.remove();
+
+  const oc = p.isOpen===true?'#2EC4B2':p.isOpen===false?'#E05C5C':'var(--ink3)';
+  const ol = p.isOpen===true?('&#9679; Open'+(p.closes?' &middot; '+p.closes:'')):p.isOpen===false?'&#9679; Closed':'&#9679; Hours unknown';
+  const rc = p.ratingCount ? (p.ratingCount>999?(p.ratingCount/1000).toFixed(1)+'k':String(p.ratingCount)) : '';
+  const navUrl = (p.lat&&p.lng)
+    ? 'https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng
+    : 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(p.address);
+  const mapsQ = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.name+' '+p.address);
+  const phoneClean = p.phone ? p.phone.replace(/[\s\-(). ]/g,'') : '';
+
+  const wrap = document.createElement('div');
+  wrap.id = 'restoDetailWrap';
+  wrap.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);z-index:600;display:flex;align-items:flex-end;justify-content:center';
+  wrap.onclick = function(e) { if(e.target===wrap) wrap.remove(); };
+
+  wrap.innerHTML =
+    '<div style="background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;' +
+    'width:100%;max-width:420px;padding:0 18px 44px">' +
+    '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:14px auto 18px"></div>' +
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">' +
+    '<div style="font-size:20px;font-weight:900;color:var(--ink);letter-spacing:-.4px;line-height:1.2;flex:1">' + escHtml(p.name) + '</div>' +
+    '<button onclick="document.getElementById(\'restoDetailWrap\').remove()" ' +
+    'style="width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;' +
+    'color:var(--ink3);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2715;</button></div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">' +
+    '<span style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;' +
+    'font-size:11px;font-weight:900;color:'+oc+';border:1px solid '+oc+'44;background:'+oc+'18">'+ol+'</span>' +
+    (p.rating ? '<span style="padding:5px 12px;border-radius:20px;background:var(--deep);border:1px solid var(--ink4);font-size:11px;font-weight:900;color:#F4C430">&#11088; '+p.rating.toFixed(1)+(rc?' ('+rc+')':'')+'</span>' : '') +
+    (p.dist!==null ? '<span style="padding:5px 10px;border-radius:20px;background:var(--ink4);font-size:10px;font-weight:800;color:var(--ink3)">'+p.dist.toFixed(1)+' mi</span>' : '') +
+    '</div>' +
+    (p.address ? '<div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">' +
+      '<span style="font-size:17px;flex-shrink:0;margin-top:1px">&#128205;</span>' +
+      '<a href="'+mapsQ+'" target="_blank" rel="noopener" style="font-size:12.5px;font-weight:700;color:var(--accent2);' +
+      'text-decoration:none;line-height:1.5;border-bottom:1px dashed rgba(64,200,248,.3)">'+escHtml(p.address)+'</a></div>' : '') +
+    (p.phone ? '<div style="display:flex;gap:10px;margin-bottom:12px;align-items:center">' +
+      '<span style="font-size:17px;flex-shrink:0">&#128222;</span>' +
+      '<span style="font-size:12.5px;font-weight:700;color:var(--ink2)">'+escHtml(p.phone)+'</span></div>' : '') +
+    '<div style="display:flex;gap:10px;margin-top:20px">' +
+    (p.phone ? '<a href="tel:'+phoneClean+'" style="flex:1;padding:13px;border-radius:12px;border:1.5px solid rgba(46,196,178,.4);background:rgba(46,196,178,.1);color:#2EC4B2;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px">&#128222; Call</a>' : '') +
+    '<a href="'+navUrl+'" target="_blank" rel="noopener" style="flex:2;padding:13px;border-radius:12px;background:var(--accent);color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 3px 12px rgba(14,143,204,.35)">&#128506; Get Directions</a>' +
+    '</div></div>';
+
+  document.body.appendChild(wrap);
+}
+window.showRestoDetail = showRestoDetail;
+
+function renderNearbyFallback(lat, lng, cuisine) {
+  const q = encodeURIComponent((cuisine&&cuisine.label?cuisine.label:'restaurant') + ' near me');
+  document.getElementById('nearbyBody').innerHTML =
+    '<div class="nearby-error">' +
+    '<div class="nearby-error-icon">&#128506;</div>' +
+    '<div class="nearby-error-title">No Results Found</div>' +
+    '<div class="nearby-error-sub">Try searching on Google Maps directly.</div>' +
+    '<a href="https://www.google.com/maps/search/'+q+'/@'+lat+','+lng+',15z" target="_blank" rel="noopener" ' +
+    'style="display:inline-block;padding:12px 28px;background:var(--orange);border-radius:12px;' +
+    'font-size:13px;font-weight:900;color:#fff;text-decoration:none;margin-top:4px">&#128506; Open Google Maps</a>' +
+    '<div style="margin-top:14px"><button class="nearby-retry-btn" style="background:var(--deep);border:1.5px solid var(--border2);color:var(--ink2)" ' +
+    'onclick="openNearby(window._nearbyMealType)">&#8634; Try Again</button></div></div>';
+}
+
+function renderNearbyError(title, sub, showRetry) {
+  document.getElementById('nearbyBody').innerHTML =
+    '<div class="nearby-error">' +
+    '<div class="nearby-error-icon">&#128205;</div>' +
+    '<div class="nearby-error-title">'+escHtml(title)+'</div>' +
+    '<div class="nearby-error-sub">'+escHtml(sub)+'</div>' +
+    (showRetry ? '<button class="nearby-retry-btn" onclick="openNearby(window._nearbyMealType)">&larr; Try Again</button>' : '') +
+    '</div>';
+}
+
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+
+function showApiKeySetup() {
+  document.getElementById('nearbyBody').innerHTML =
+    '<div style="padding:4px 0 20px">' +
+    '<div style="font-size:15px;font-weight:900;color:var(--ink);margin-bottom:6px">Enter your Google API Key</div>' +
+    '<div style="font-size:11px;color:var(--ink3);line-height:1.6;margin-bottom:14px">' +
+    '1. Go to <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2)">console.cloud.google.com</a><br>' +
+    '2. Enable <strong style="color:var(--ink)">Places API (New)</strong><br>' +
+    '3. Create an API key and paste it below</div>' +
+    '<input id="apiKeyInput" type="text" placeholder="AIzaSy..." ' +
+    'style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);' +
+    'border-radius:11px;color:var(--ink);font-size:13px;font-weight:700;font-family:Nunito,sans-serif;' +
+    'outline:none;margin-bottom:10px;letter-spacing:.03em" ' +
+    'value="' + (getApiKey()||'') + '">' +
+    '<button onclick="saveKeyAndSearch()" ' +
+    'style="width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;' +
+    'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px">' +
+    '&#10003; Save &amp; Search Nearby</button>' +
+    '<button onclick="openNearby(window._nearbyMealType)" ' +
+    'style="width:100%;padding:10px;background:none;border:1.5px solid var(--ink4);border-radius:12px;' +
+    'font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer">Cancel</button></div>';
+  setTimeout(function() {
+    const inp = document.getElementById('apiKeyInput');
+    if (inp) inp.focus();
+  }, 100);
+}
+
+function saveKeyAndSearch() {
+  const inp = document.getElementById('apiKeyInput');
+  const key = inp ? inp.value.trim() : '';
+  if (!key) { inp.style.borderColor='#E05C5C'; return; }
+  saveApiKey(key);
+  openNearby(window._nearbyMealType, window._nearbyMealN);
+}
+window.showApiKeySetup = showApiKeySetup;
+window.saveKeyAndSearch = saveKeyAndSearch;
+
+function showNotFoundWithAlt(lat, lng, mealShort) {
+  window._nearbyLat = lat; window._nearbyLng = lng;
+  var el = document.getElementById('nearbyBody');
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'text-align:center;padding:28px 16px';
+  var icon = document.createElement('div');
+  icon.style.cssText = 'font-size:40px;margin-bottom:12px';
+  icon.textContent = '😕';
+  var title = document.createElement('div');
+  title.style.cssText = 'font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px';
+  title.textContent = 'Not Found Nearby';
+  var sub = document.createElement('div');
+  sub.style.cssText = 'font-size:12px;color:var(--ink3);line-height:1.7;margin-bottom:22px';
+  sub.innerHTML = 'No restaurants serving <strong style="color:var(--ink)">' + escHtml(mealShort) + '</strong> found within 2 miles.';
+  var b1 = document.createElement('button');
+  b1.textContent = '🥗 Find Healthy Restaurants Nearby';
+  b1.style.cssText = 'width:100%;padding:14px;background:#2EC4B2;border:none;border-radius:13px;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;display:block';
+  b1.onclick = function() { searchHealthyAlt(lat, lng); };
+  var b2 = document.createElement('button');
+  b2.textContent = '↺ Try Again';
+  b2.style.cssText = 'width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer';
+  b2.onclick = function() { openNearby(window._nearbyMealType); };
+  wrap.appendChild(icon); wrap.appendChild(title); wrap.appendChild(sub);
+  wrap.appendChild(b1); wrap.appendChild(b2);
+  el.innerHTML = ''; el.appendChild(wrap);
+}
+
+
+async function searchHealthyAlt(lat, lng) {
+  const day = new Date().getDay();
+  document.getElementById('nearbyBody').innerHTML =
+    '<div class="nearby-loading"><div class="nearby-spinner"></div>' +
+    '<div class="nearby-loading-text">Searching for open restaurants nearby…' +
+    '<br><span style="font-size:11px;opacity:.5">Within 2 miles</span></div></div>';
+  try {
+    const area = await reverseGeocode(lat, lng);
+    const areaStr = area ? ' near ' + area : '';
+    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, 3200);
+    if (places.length < 2) places = await placesSearch('restaurant' + areaStr, lat, lng, 3200);
+    if (!places.length) throw new Error('No restaurants found');
+
+    const list = places.slice(0, 8).map(function(p) {
+      const lat2 = p.location ? p.location.latitude : null;
+      const lng2 = p.location ? p.location.longitude : null;
+      const dist = (lat2 && lng2) ? haversineMi(lat, lng, lat2, lng2) : null;
+      const curH = p.currentOpeningHours, regH = p.regularOpeningHours;
+      const isOpen = curH ? curH.openNow : (regH ? regH.openNow : null);
+      const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
+      return {
+        name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        address: p.formattedAddress || '',
+        phone: p.internationalPhoneNumber || null,
+        rating: p.rating || null,
+        ratingCount: p.userRatingCount || null,
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+      };
+    }).filter(function(p) { return p.isOpen !== false; }); // only open ones
+
+    list.sort(function(a,b) { return (a.dist||99)-(b.dist||99); });
+    window._nearbyList = list.slice(0,5);
+    if (!window._nearbyList.length) throw new Error('No open restaurants found');
+    showRestoList(window._nearbyList, lat, lng, area, 'Healthy Restaurants');
+  } catch(err) {
+    document.getElementById('nearbyBody').innerHTML =
+      '<div style="text-align:center;padding:28px 16px">' +
+      '<div style="font-size:36px;margin-bottom:10px">🗺️</div>' +
+      '<div style="font-size:15px;font-weight:900;color:var(--ink);margin-bottom:8px">Nothing Found Nearby</div>' +
+      '<div style="font-size:12px;color:var(--ink3);margin-bottom:16px">Try expanding your search on Google Maps.</div>' +
+      '<a href="https://www.google.com/maps/search/healthy+restaurant+near+me/@' + lat + ',' + lng + ',15z" ' +
+      'target="_blank" rel="noopener" ' +
+      'style="display:block;padding:13px;background:var(--orange);border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none">' +
+      '🗺️ Open Google Maps</a></div>';
+  }
+}
+window.searchHealthyAlt = searchHealthyAlt;
+
+function closeNearby() { document.getElementById('nearbyOverlay').classList.remove('open'); }
+function nearbyOverlayClick(e) { if (e.target === document.getElementById('nearbyOverlay')) closeNearby(); }
+window.openNearby = openNearby;
+window.closeNearby = closeNearby;
+window.nearbyOverlayClick = nearbyOverlayClick;
+
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
     navigator.serviceWorker.register('/sw.js',{scope:'/'})
@@ -3077,5 +3577,30 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
+<!-- ═══════════════ NEARBY RESTAURANTS PANEL ═══════════════ -->
+<div class="nearby-overlay" id="nearbyOverlay" onclick="nearbyOverlayClick(event)">
+  <div class="nearby-sheet">
+    <div class="nearby-hdr">
+      <div class="nearby-hdr-left">
+        <div class="nearby-eyebrow">🍽️ Can't Cook? Order Nearby</div>
+        <div class="nearby-title" id="nearbyTitle">Nearby Restaurants</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <button onclick="showApiKeySetup()" title="API Key Settings"
+          style="background:var(--deep);border:1px solid var(--border2);border-radius:8px;
+          padding:5px 10px;color:var(--ink3);font-size:10px;font-weight:900;cursor:pointer;
+          font-family:Nunito,sans-serif;letter-spacing:.04em;text-transform:uppercase">⚙ Key</button>
+        <button class="nearby-close" onclick="closeNearby()">✕</button>
+      </div>
+    </div>
+    <div class="nearby-body" id="nearbyBody">
+      <div class="nearby-loading">
+        <div class="nearby-spinner"></div>
+        <div class="nearby-loading-text">Finding restaurants near you…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
