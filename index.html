@@ -3230,7 +3230,7 @@ async function placesSearch(query, lat, lng, radius) {
     body: JSON.stringify({
       textQuery: query,
       maxResultCount: 8,
-      locationBias: { circle: { center: { latitude: lat, longitude: lng }, radiusMeters: radius } }
+      locationBias: { circle: { center: { latitude: lat, longitude: lng }, radius: radius } }
     })
   });
   const d = await resp.json();
@@ -3336,7 +3336,7 @@ window._nearbyList = [];
 
 function showRestoList(list, userLat, userLng, area, mealShort) {
   const openCount = list.filter(function(p) { return p.isOpen === true; }).length;
-  const allUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(mealShort + ' restaurant near me');
+  const allUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(mealShort + ' restaurant') + '/@' + userLat + ',' + userLng + ',14z';
 
   let h = '<div style="display:flex;align-items:center;justify-content:space-between;' +
     'padding:8px 12px;background:var(--ink4);border-radius:10px;margin-bottom:12px">' +
