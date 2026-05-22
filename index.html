@@ -1014,7 +1014,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
       <span class="s-ico">⟳</span> Shuffle
     </button>
     <button class="shuffle-btn" onclick="openNearby()" style="flex:1;margin-bottom:0">
-      📍 Healthy Nearby
+      📍 Healthy &amp; Open Now
     </button>
   </div>
   <div class="diet-toggle-row">
@@ -3140,7 +3140,7 @@ function cuisineFromMeal(mealName) {
 function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 
 function openNearby() {
-  document.getElementById('nearbyTitle').textContent = 'Healthy Options Nearby';
+  document.getElementById('nearbyTitle').textContent = 'Healthy & Open Now';
   document.getElementById('nearbyBody').innerHTML =
     '<div class="nearby-loading"><div class="nearby-spinner"></div>' +
     '<div class="nearby-loading-text">Finding open healthy restaurants…<br>' +
