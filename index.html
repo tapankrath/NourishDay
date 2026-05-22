@@ -3839,7 +3839,7 @@ window.nearbyOverlayClick = nearbyOverlayClick;
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('/sw.js',{scope:'/'})
+    navigator.serviceWorker.register('/NourishDay/sw.js',{scope:'/NourishDay/',updateViaCache:'none'})
       .catch(err=>console.warn('SW reg failed:',err));
   });
 }
