@@ -3554,11 +3554,11 @@ function showRestoDetail(idx) {
     'background:var(--deep);border:1.5px solid var(--border2);color:var(--ink2);font-family:Nunito,sans-serif;' +
     'font-size:13px;font-weight:900;text-decoration:none;margin-bottom:8px;box-sizing:border-box">&#127760; Menu / Website</a>' : '') +
     '<div style="display:flex;gap:8px;margin-bottom:14px">' +
-    '<a href="#" onclick="(function(){var n='+JSON.stringify(p.name)+';var q=encodeURIComponent(n);var t=Date.now();window.location=\'ubereats://search?q=\'+q;setTimeout(function(){if(Date.now()-t<2000)window.open(\'https://www.ubereats.com/search?q=\'+q,\'_blank\');},1200);return false;})()" ' +
+    '<a href="#" onclick="iosDeepLink(\'ubereats://\',\'https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'\')" ' +
     'style="flex:1;padding:11px 6px;border-radius:12px;background:#0a1a12;border:1.5px solid #06c167;' +
     'color:#06c167;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">&#129001; Uber Eats</a>' +
-    '<a href="#" onclick="(function(){var n='+JSON.stringify(p.name)+';var q=encodeURIComponent(n);var t=Date.now();window.location=\'doordash://search?q=\'+q;setTimeout(function(){if(Date.now()-t<2000)window.open(\'https://www.doordash.com/search?q=\'+q,\'_blank\');},1200);return false;})()" ' +
+    '<a href="#" onclick="iosDeepLink(\'doordash://\',\'https://www.doordash.com/search?q='+encodeURIComponent(p.name)+'\')" ' +
     'style="flex:1;padding:11px 6px;border-radius:12px;background:#1a0808;border:1.5px solid #ff3008;' +
     'color:#ff3008;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">&#128308; DoorDash</a>' +
@@ -3836,6 +3836,20 @@ function nearbyOverlayClick(e) { if (e.target === document.getElementById('nearb
 window.openNearby = openNearby;
 window.closeNearby = closeNearby;
 window.nearbyOverlayClick = nearbyOverlayClick;
+
+function iosDeepLink(appUrl, webUrl) {
+  var iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = appUrl;
+  document.body.appendChild(iframe);
+  setTimeout(function() {
+    document.body.removeChild(iframe);
+  }, 500);
+  setTimeout(function() {
+    window.open(webUrl, '_blank');
+  }, 1500);
+}
+window.iosDeepLink = iosDeepLink;
 
 if('serviceWorker' in navigator){
   window.addEventListener('load', async () => {
