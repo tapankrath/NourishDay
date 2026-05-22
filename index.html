@@ -3550,7 +3550,8 @@ function showRestoDetail(idx) {
     '</div>' +
     // Delivery section — always visible below
     '<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--ink4)">' +
-    '<div style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:10px;text-align:center">Order for Delivery</div>' +
+    '<div style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:6px;text-align:center">Order for Delivery</div>' +
+    '<div style="font-size:10px;font-weight:700;color:var(--ink3);text-align:center;margin-bottom:10px">↩ Swipe right to return to EatRight</div>' +
     '<div style="display:flex;gap:8px">' +
     '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name+' '+p.address)+'" target="_blank" rel="noopener" ' +
     'style="flex:1;padding:12px 6px;border-radius:12px;background:#0a1a12;border:1.5px solid #06c167;' +
@@ -3560,8 +3561,6 @@ function showRestoDetail(idx) {
     'style="flex:1;padding:12px 6px;border-radius:12px;background:#1a0808;border:1.5px solid #ff3008;' +
     'color:#ff3008;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;text-decoration:none;' +
     'display:flex;align-items:center;justify-content:center;gap:5px">🔴 DoorDash</a>' +
-    '</div>' +
-    '<div style="text-align:center;margin-top:8px;font-size:10px;font-weight:700;color:var(--ink3)">Swipe right or tap back to return to EatRight</div>' +
     '</div></div>';
 
   document.body.appendChild(wrap);
