@@ -3316,7 +3316,7 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
         website: p.websiteUri || null,
         delivery: p.delivery || false,
         takeout: p.takeout || false,
-        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist, types: p.types||[]
       };
     });
 
@@ -3474,7 +3474,7 @@ async function loadMoreNearby() {
         website: p.websiteUri || null,
         delivery: p.delivery || false,
         takeout: p.takeout || false,
-        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist, types: p.types||[]
       };
     }).filter(function(p){
       return p.isOpen === true && !shownNames.has(p.name);
@@ -3584,7 +3584,8 @@ function showRestoDetail(idx) {
   window._dishTarget = {
     name: p.name, cuisine: p.cuisine||'', address: p.address||'',
     googleRating: p.rating ? p.rating.toFixed(1) : '',
-    googleReviews: p.ratingCount ? (p.ratingCount > 999 ? (p.ratingCount/1000).toFixed(1)+'k' : p.ratingCount) : ''
+    googleReviews: p.ratingCount ? (p.ratingCount > 999 ? (p.ratingCount/1000).toFixed(1)+'k' : p.ratingCount) : '',
+    types: (p.types||[]).filter(function(t){return !['point_of_interest','establishment','food'].includes(t);}).join(', ')
   };
   loadTopDishes();
 }
@@ -3617,10 +3618,16 @@ async function loadTopDishes() {
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,
-        messages:[{role:'user',content:'List the 5 most popular menu items at "'+t.name+'"'+(t.cuisine?' ('+t.cuisine+')':'')+(t.address?' in '+t.address:'')+
-          (t.googleRating?' Google rating: '+t.googleRating+'/5 ('+t.googleReviews+' reviews).':'')+
-          (t.beliRating?' Beli community rating: '+t.beliRating+'.':'')+
-          ' Use these ratings as signals of what dishes are most loved. For each dish: name, one short description max 10 words, price if known (~$X) else omit. Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]})
+        messages:[{role:'user',content:
+          'You are a restaurant menu expert. List the 5 most popular ACTUAL menu items at "'+t.name+'"'+
+          (t.address?' located at '+t.address:'')+'.'+
+          (t.cuisine||t.types?' Google Places identifies this as: '+(t.cuisine||'')+(t.types?' ['+t.types+']':'')+' — use this as the primary signal for cuisine type.':' Do NOT guess the cuisine from the restaurant name alone.')+
+          (t.googleRating?' It has a Google rating of '+t.googleRating+'/5 ('+t.googleReviews+' reviews).':'')+
+          (t.beliRating?' Beli rating: '+t.beliRating+'.':'')+
+          ' IMPORTANT: Base your answer on what this specific restaurant actually serves, not on what the name sounds like.'+
+          ' If you are not confident about the actual menu, say so in desc. Do not invent dishes.'+
+          ' For each: name, one short description max 10 words, price if known (~$X) else omit.'+
+          ' Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]})
     });
     if (!resp.ok) throw new Error('HTTP '+resp.status);
     var data = await resp.json();
@@ -3785,7 +3792,7 @@ async function searchHealthyAlt(lat, lng) {
         website: p.websiteUri || null,
         delivery: p.delivery || false,
         takeout: p.takeout || false,
-        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist, types: p.types||[]
       };
     }).filter(function(p) { return p.isOpen !== false; }); // only open ones
 
@@ -3859,7 +3866,7 @@ async function findHealthyNearby(lat, lng) {
         website: p.websiteUri || null,
         delivery: p.delivery || false,
         takeout: p.takeout || false,
-        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist
+        isOpen: isOpen, closes: closes, lat: lat2, lng: lng2, dist: dist, types: p.types||[]
       };
     }).filter(function(p) { return p.isOpen === true; }); // OPEN ONLY
 
