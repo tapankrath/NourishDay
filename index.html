@@ -3550,17 +3550,7 @@ function showRestoDetail(idx) {
     '<a href="'+navUrl+'" target="_blank" rel="noopener" style="padding:11px 4px;border-radius:12px;background:var(--accent);color:#fff;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:11.5px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;box-shadow:0 3px 12px rgba(255,77,61,.28)">↗ Directions</a>' +
     (p.website ? '<a href="'+p.website+'" target="_blank" rel="noopener" style="padding:11px 4px;border-radius:12px;background:var(--deep);border:1.5px solid var(--border2);color:var(--ink2);font-family:\'Plus Jakarta Sans\',sans-serif;font-size:11.5px;font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;box-sizing:border-box">🌐 Menu</a>' : '') +
     '</div>' +
-    '<div style="margin-bottom:14px">' +
-    '<div style="display:flex;gap:8px;margin-bottom:8px">' +
-    '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#071810;border:2px solid #06c167;color:#06c167;font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#06c167"/><rect x="5" y="9" width="10" height="2" rx="1" fill="#000"/><rect x="9" y="5" width="2" height="10" rx="1" fill="#000"/></svg>Uber Eats</a>' +
-    '<a href="https://www.doordash.com/" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#1a0404;border:2px solid #ff3008;color:#ff3008;font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#ff3008"/><path d="M6 10c0-2.2 1.8-4 4-4h4v2h-4c-1.1 0-2 .9-2 2s.9 2 2 2h4v2h-4c-2.2 0-4-1.8-4-4z" fill="#fff"/></svg>DoorDash</a>' +
-    '</div>' +
-    (!p.delivery && !p.takeout ? '' :
-    '<div style="display:flex;gap:8px;">' +
-    '<div style="flex:1;text-align:center;font-size:10px;font-weight:700;color:#E0F0FF;">' + (p.delivery ? '✓ Delivery' : '') + '</div>' +
-    '<div style="flex:1;text-align:center;font-size:10px;font-weight:700;color:#E0F0FF;">' + (p.takeout ? '✓ Takeout' : '') + '</div>' +
-    '</div>') +
-    '</div>' +
+    '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:12px;background:#071810;border:2px solid #06c167;color:#06c167;font-family:Plus Jakarta Sans,sans-serif;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:14px;box-sizing:border-box"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#06c167"/><rect x="5" y="9" width="10" height="2" rx="1" fill="#000"/><rect x="9" y="5" width="2" height="10" rx="1" fill="#000"/></svg>Order?</a>' +
     '<div style="border-top:1px solid var(--ink4);padding-top:14px;margin-top:4px">' +
     '<div style="font-size:9px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px">🍽 Popular Dishes</div>' +
     '<div id="topDishesList" style="display:flex;flex-direction:column;gap:7px">' +
@@ -3910,7 +3900,7 @@ if('serviceWorker' in navigator){
   <div class="nearby-sheet">
     <div class="nearby-hdr">
       <div class="nearby-hdr-left">
-        <div class="nearby-eyebrow">🍽️ Can't Cook? Order Nearby</div>
+        
         <div class="nearby-title" id="nearbyTitle">Nearby Restaurants</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
