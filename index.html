@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EatRight">
-<meta name="theme-color" content="#0ABFB0">
+<meta name="theme-color" content="#ff4d3d">
 <meta name="description" content="Daily meal plans — high protein, low carb. Regular, Low-GI & Treat Day modes.">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.svg">
@@ -16,29 +16,28 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --night:#141C22;--deep:#1A2530;--card:#1C2A38;--bg:#0F161C;
-  --accent:#0E8FCC;
-  --accent2:#40C8F8;
-  --accent-dim:rgba(64,200,248,.14);
-  --accent-border:rgba(64,200,248,.28);
-  --orange:#D4885A;--blue:#0E8FCC;--teal:#2EC4B2;--purple:#9480DC;
-  /* Sharper, brighter text — no faded ghost text */
-  --ink:#F0F6FF;--ink2:#C8DCF0;--ink3:#9BBCD8;--ink4:rgba(200,220,240,.10);
-  --border:rgba(64,200,248,.12);--border2:rgba(64,200,248,.24);
-  --frame:rgba(64,200,248,.18);
-  --green:#0E8FCC;--lime:#40C8F8;
+  --night:#fdf8f2;--deep:#f6ede1;--card:#ffffff;--bg:#fdf8f2;
+  --accent:#ff4d3d;
+  --accent2:#e63320;
+  --accent-dim:rgba(255,77,61,.10);
+  --accent-border:rgba(255,77,61,.28);
+  --orange:#f2a93b;--blue:#ff4d3d;--teal:#1faa6b;--purple:#e63320;
+  --ink:#1f1a17;--ink2:#3a322b;--ink3:#6b6057;--ink4:rgba(31,26,23,.08);
+  --border:rgba(236,226,212,.80);--border2:rgba(255,77,61,.25);
+  --frame:rgba(255,77,61,.15);
+  --green:#1faa6b;--lime:#f2a93b;
 }
 html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100%;overscroll-behavior:none}
 
 .app{
   max-width:420px;margin:0 auto;padding-bottom:56px;position:relative;
-  box-shadow:0 0 0 1px var(--frame),0 0 40px rgba(64,200,248,.05);
+  box-shadow:0 0 0 1px var(--frame),0 0 40px rgba(255,77,61,.04);
   min-height:100vh;background:var(--night);
 }
 .app::before{
   content:'';position:fixed;top:0;left:50%;transform:translateX(-50%);
   width:min(420px,100vw);height:2px;
-  background:linear-gradient(90deg,transparent 5%,var(--teal) 25%,var(--accent2) 55%,rgba(125,211,248,.6) 75%,transparent 95%);
+  background:linear-gradient(90deg,transparent 5%,var(--accent) 25%,var(--orange) 55%,rgba(255,77,61,.6) 75%,transparent 95%);
   opacity:.5;z-index:10;pointer-events:none;
 }
 
@@ -49,9 +48,9 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .logo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
 .logo{display:flex;align-items:center;gap:9px;min-width:0;flex-shrink:1}
 .logo-mark{
-  width:36px;height:36px;background:var(--accent);border-radius:10px;
+  width:36px;height:36px;background:linear-gradient(145deg,#ff4d3d,#e63320);border-radius:10px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  box-shadow:0 2px 14px rgba(14,143,204,.40);
+  box-shadow:0 2px 14px rgba(255,77,61,.40);
 }
 .logo-mark svg{width:20px;height:20px}
 .logo-text{min-width:0}
@@ -78,7 +77,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   color:var(--ink3);background:none;transition:all .18s;
   white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;text-align:center;
 }
-.mode-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(14,143,204,.40)}
+.mode-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(255,77,61,.30)}
 
 .subnav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 10px}
 .diet-row{display:flex;gap:5px}
@@ -88,8 +87,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   font-family:'Nunito',sans-serif;color:var(--ink3);background:none;
   transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
 }
-.diet-btn.veg-on{background:var(--teal);color:#fff;border-color:var(--teal);box-shadow:0 2px 10px rgba(46,196,178,.35)}
-.diet-btn.nv-on{background:var(--orange);color:#fff;border-color:var(--orange);box-shadow:0 2px 10px rgba(212,136,90,.30)}
+.diet-btn.veg-on{background:#1faa6b;color:#fff;border-color:#1faa6b;box-shadow:0 2px 10px rgba(31,170,107,.30)}
+.diet-btn.nv-on{background:#f2a93b;color:#fff;border-color:#f2a93b;box-shadow:0 2px 10px rgba(242,169,59,.28)}
 
 .day-nav{display:flex;align-items:center;gap:6px}
 .day-arrow{
@@ -119,7 +118,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
   font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;
   color:#fff;letter-spacing:.05em;text-transform:uppercase;
-  box-shadow:0 3px 16px rgba(14,143,204,.35);transition:all .16s;margin-bottom:10px;
+  box-shadow:0 3px 16px rgba(255,77,61,.28);transition:all .16s;margin-bottom:10px;
 }
 .shuffle-btn:active{transform:scale(.97) translateY(1px)}
 .s-ico{font-size:17px;display:inline-block;transition:transform .4s}
@@ -197,8 +196,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   transition:all .14s;opacity:.5;
 }
 .rate-btn.on{opacity:1;border-color:var(--border2);background:var(--card)}
-.rate-btn.up.on{border-color:rgba(46,196,178,.4);background:rgba(46,196,178,.1)}
-.rate-btn.dn.on{border-color:rgba(212,136,90,.4);background:rgba(212,136,90,.1)}
+.rate-btn.up.on{border-color:rgba(31,170,107,.4);background:rgba(31,170,107,.1)}
+.rate-btn.dn.on{border-color:rgba(242,169,59,.4);background:rgba(242,169,59,.1)}
 .rate-btn:active{transform:scale(.88)}
 
 /* Tags row */
@@ -208,69 +207,69 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   flex-wrap:wrap;vertical-align:middle;margin-left:4px;
 }
 .tag{font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
-.t-pro{background:rgba(64,200,248,.12);color:#80DEFF;border:1px solid rgba(64,200,248,.20)}
-.t-lc{background:rgba(46,196,178,.13);color:#5EDCD2;border:1px solid rgba(46,196,178,.22)}
-.t-gi{background:rgba(212,136,90,.13);color:#E8AA7A;border:1px solid rgba(212,136,90,.22)}
-.t-cheat{background:rgba(148,128,220,.13);color:#C0B4F0;border:1px solid rgba(148,128,220,.22)}
-.t-veg{background:rgba(46,196,178,.13);color:#5EDCD2;border:1px solid rgba(46,196,178,.22)}
-.t-nv{background:rgba(212,136,90,.13);color:#E8AA7A;border:1px solid rgba(212,136,90,.22)}
+.t-pro{background:rgba(255,77,61,.09);color:#e63320;border:1px solid rgba(255,77,61,.22)}
+.t-lc{background:rgba(31,170,107,.10);color:#167a4d;border:1px solid rgba(31,170,107,.22)}
+.t-gi{background:rgba(242,169,59,.12);color:#c47d20;border:1px solid rgba(242,169,59,.25)}
+.t-cheat{background:rgba(230,51,32,.10);color:#b82010;border:1px solid rgba(230,51,32,.22)}
+.t-veg{background:rgba(31,170,107,.10);color:#167a4d;border:1px solid rgba(31,170,107,.22)}
+.t-nv{background:rgba(242,169,59,.12);color:#c47d20;border:1px solid rgba(242,169,59,.25)}
 .t-prep{background:rgba(226,235,240,.07);color:var(--ink3);border:1px solid var(--ink4)}
 
-[data-t=breakfast] .card-accent{background:#D4885A;box-shadow:2px 0 10px rgba(212,136,90,.28)}
-[data-t=breakfast] .card-type{color:#E8AA7A}
-[data-t=breakfast] .ct-dot{background:#D4885A}
-[data-t=breakfast] .card-kcal{background:rgba(212,136,90,.12);color:#E8AA7A;border:1px solid rgba(212,136,90,.20)}
-[data-t=lunch] .card-accent{background:#0E8FCC;box-shadow:2px 0 10px rgba(14,143,204,.35)}
-[data-t=lunch] .card-type{color:#40C8F8}
-[data-t=lunch] .ct-dot{background:#0E8FCC}
-[data-t=lunch] .card-kcal{background:rgba(64,200,248,.12);color:#80DEFF;border:1px solid rgba(64,200,248,.20)}
-[data-t=snacks] .card-accent{background:#2EC4B2;box-shadow:2px 0 10px rgba(46,196,178,.30)}
-[data-t=snacks] .card-type{color:#5EDCD2}
-[data-t=snacks] .ct-dot{background:#2EC4B2}
-[data-t=snacks] .card-kcal{background:rgba(46,196,178,.12);color:#5EDCD2;border:1px solid rgba(46,196,178,.20)}
-[data-t=dinner] .card-accent{background:#9480DC;box-shadow:2px 0 10px rgba(148,128,220,.30)}
-[data-t=dinner] .card-type{color:#C0B4F0}
-[data-t=dinner] .ct-dot{background:#9480DC}
-[data-t=dinner] .card-kcal{background:rgba(148,128,220,.12);color:#C0B4F0;border:1px solid rgba(148,128,220,.20)}
-[data-t=beverage] .card-accent{background:#1A6B8A;box-shadow:2px 0 10px rgba(26,107,138,.28)}
-[data-t=beverage] .card-type{color:#5AAEC4}
-[data-t=beverage] .ct-dot{background:#1A6B8A}
-[data-t=beverage] .card-kcal{background:rgba(26,107,138,.12);color:#5AAEC4;border:1px solid rgba(26,107,138,.20)}
+[data-t=breakfast] .card-accent{background:#f2a93b;box-shadow:2px 0 10px rgba(242,169,59,.25)}
+[data-t=breakfast] .card-type{color:#c47d20}
+[data-t=breakfast] .ct-dot{background:#f2a93b}
+[data-t=breakfast] .card-kcal{background:rgba(242,169,59,.12);color:#c47d20;border:1px solid rgba(242,169,59,.28)}
+[data-t=lunch] .card-accent{background:#ff4d3d;box-shadow:2px 0 10px rgba(255,77,61,.30)}
+[data-t=lunch] .card-type{color:#e63320}
+[data-t=lunch] .ct-dot{background:#ff4d3d}
+[data-t=lunch] .card-kcal{background:rgba(255,77,61,.10);color:#e63320;border:1px solid rgba(255,77,61,.22)}
+[data-t=snacks] .card-accent{background:#1faa6b;box-shadow:2px 0 10px rgba(31,170,107,.28)}
+[data-t=snacks] .card-type{color:#167a4d}
+[data-t=snacks] .ct-dot{background:#1faa6b}
+[data-t=snacks] .card-kcal{background:rgba(31,170,107,.10);color:#167a4d;border:1px solid rgba(31,170,107,.22)}
+[data-t=dinner] .card-accent{background:#e63320;box-shadow:2px 0 10px rgba(230,51,32,.28)}
+[data-t=dinner] .card-type{color:#b82010}
+[data-t=dinner] .ct-dot{background:#e63320}
+[data-t=dinner] .card-kcal{background:rgba(230,51,32,.10);color:#b82010;border:1px solid rgba(230,51,32,.22)}
+[data-t=beverage] .card-accent{background:#f2a93b;box-shadow:2px 0 10px rgba(242,169,59,.25)}
+[data-t=beverage] .card-type{color:#c47d20}
+[data-t=beverage] .ct-dot{background:#f2a93b}
+[data-t=beverage] .card-kcal{background:rgba(242,169,59,.12);color:#c47d20;border:1px solid rgba(242,169,59,.22)}
 
-.card.checked{border-color:rgba(46,196,178,.30)}
+.card.checked{border-color:rgba(31,170,107,.35)}
 
 .check-btn{
   flex-shrink:0;width:28px;height:28px;border-radius:7px;
-  border:2px solid #9BBCD8;
-  background:rgba(155,188,216,.10);
+  border:2px solid #ece2d4;
+  background:rgba(236,226,212,.30);
   cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:all .18s;margin-left:6px;font-size:0;
 }
 .check-btn.done{
   background:var(--teal);border-color:var(--teal);
-  box-shadow:0 0 12px rgba(46,196,178,.55);
+  box-shadow:0 0 12px rgba(31,170,107,.45);
   font-size:14px;font-weight:900;color:#fff;font-family:'Nunito',sans-serif;
 }
 .check-btn.done::after{content:'✓'}
-.check-btn:not(.done):hover{border-color:#fff;background:rgba(255,255,255,.14)}
+.check-btn:not(.done):hover{border-color:var(--accent);background:rgba(255,77,61,.08)}
 .check-btn:active{transform:scale(.84)}
 
-.bev-card{background:var(--card);border-radius:14px;border:1px solid rgba(26,107,138,.20);overflow:hidden}
+.bev-card{background:var(--card);border-radius:14px;border:1px solid rgba(242,169,59,.25);overflow:hidden}
 .bev-inner{display:flex;align-items:stretch}
-.bev-accent{width:4px;background:#1A6B8A;box-shadow:2px 0 8px rgba(26,107,138,.28);flex-shrink:0}
+.bev-accent{width:4px;background:#f2a93b;box-shadow:2px 0 8px rgba(242,169,59,.25);flex-shrink:0}
 .bev-body{flex:1;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .bev-label{display:flex;align-items:center;gap:6px}
-.bev-title{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#5AAEC4}
+.bev-title{font-size:9.5px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#c47d20}
 .bev-name{font-size:16px;font-weight:900;color:var(--ink);letter-spacing:-.3px;cursor:pointer}
 .bev-right{display:flex;align-items:center;gap:6px}
 .bev-pills{display:flex;gap:4px;flex-wrap:wrap}
 .bev-pill{
-  padding:4px 10px;border-radius:20px;border:1.5px solid rgba(64,200,248,.16);
+  padding:4px 10px;border-radius:20px;border:1.5px solid rgba(242,169,59,.25);
   background:none;color:var(--ink3);
   font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
   cursor:pointer;transition:all .15s;letter-spacing:.04em;
 }
-.bev-pill.on{background:#0E8FCC;color:#fff;border-color:#0E8FCC;box-shadow:0 1px 8px rgba(14,143,204,.30)}
+.bev-pill.on{background:#f2a93b;color:#fff;border-color:#f2a93b;box-shadow:0 1px 8px rgba(242,169,59,.30)}
 
 .log-btn-row{padding:10px 12px 0;display:flex;gap:8px}
 .log-btn{
@@ -279,7 +278,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
   display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.log-btn.save{background:var(--accent);color:#fff;box-shadow:0 3px 14px rgba(14,143,204,.32)}
+.log-btn.save{background:var(--accent);color:#fff;box-shadow:0 3px 14px rgba(255,77,61,.28)}
 .log-btn.save:active{transform:scale(.97)}
 .log-btn.history{background:var(--ink4);color:var(--ink2);border:1px solid var(--border2)}
 .log-btn.history:active{transform:scale(.97)}
@@ -298,8 +297,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .log-entry-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 8px;border-bottom:1px solid var(--ink4)}
 .log-date{font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.2px}
 .log-kcal{font-size:11px;font-weight:800;color:var(--accent2)}
-.log-del-btn{width:26px;height:26px;border-radius:50%;border:1px solid rgba(212,136,90,.28);background:none;color:rgba(212,136,90,.7);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s}
-.log-del-btn:active{background:rgba(212,136,90,.14);transform:scale(.88)}
+.log-del-btn{width:26px;height:26px;border-radius:50%;border:1px solid rgba(242,169,59,.25);background:none;color:rgba(242,169,59,.7);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .14s}
+.log-del-btn:active{background:rgba(242,169,59,.14);transform:scale(.88)}
 .log-meals{padding:8px 12px 10px;display:flex;flex-direction:column;gap:4px}
 .log-meal-row{display:flex;align-items:baseline;gap:6px}
 .log-meal-icon{font-size:12px;flex-shrink:0}
@@ -334,7 +333,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   border:1px solid var(--ink4);color:var(--ink3);background:none;
   flex-direction:column;gap:1px;position:relative;
 }
-.sd.logged{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(14,143,204,.35)}
+.sd.logged{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(255,77,61,.28)}
 .sd.logged::after{content:'✓';position:absolute;bottom:-1px;right:2px;font-size:7px;opacity:.7}
 .sd.today{border-color:var(--accent2);color:var(--accent2);border-width:2px}
 .streak-count{font-size:10px;font-weight:900;color:var(--accent2);display:flex;align-items:center;gap:3px}
@@ -438,12 +437,12 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .allergy-chip{
   display:flex;align-items:center;gap:4px;
   padding:3px 8px;border-radius:20px;
-  background:rgba(212,136,90,.15);border:1px solid rgba(212,136,90,.35);
-  font-size:9.5px;font-weight:800;color:#E8AA7A;
+  background:rgba(242,169,59,.12);border:1px solid rgba(242,169,59,.30);
+  font-size:9.5px;font-weight:800;color:#c47d20;
   letter-spacing:.03em;
 }
 .allergy-chip-x{
-  background:none;border:none;color:#E8AA7A;
+  background:none;border:none;color:#c47d20;
   font-size:13px;cursor:pointer;padding:0;line-height:1;margin-left:1px;opacity:.7;
 }
 .allergy-chip-x:hover{opacity:1}
@@ -475,18 +474,18 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   padding:8px 10px;border-radius:8px;cursor:pointer;
   transition:background .12s;
 }
-.allergy-opt:hover{background:rgba(64,200,248,.08)}
+.allergy-opt:hover{background:rgba(255,77,61,.06)}
 .allergy-opt-icon{font-size:16px;flex-shrink:0}
 .allergy-opt-name{font-size:12px;font-weight:800;color:var(--ink);flex:1}
 .allergy-opt-desc{font-size:9.5px;color:var(--ink3);font-weight:600}
-.allergy-opt.active{background:rgba(212,136,90,.12)}
-.allergy-opt.active .allergy-opt-name{color:#E8AA7A}
+.allergy-opt.active{background:rgba(242,169,59,.10)}
+.allergy-opt.active .allergy-opt-name{color:#c47d20}
 
 /* Warning badge on meal card */
 .allergy-warn{
   font-size:8.5px;font-weight:900;padding:2px 7px;border-radius:4px;
-  background:rgba(212,136,90,.18);color:#E8AA7A;
-  border:1px solid rgba(212,136,90,.30);
+  background:rgba(242,169,59,.14);color:#c47d20;
+  border:1px solid rgba(242,169,59,.25);
   letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
 }
 
@@ -504,9 +503,9 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   margin-bottom:10px;
 }
 .ob-hero-mark{
-  width:48px;height:48px;background:var(--accent);border-radius:14px;
+  width:48px;height:48px;background:linear-gradient(145deg,#ff4d3d,#e63320);border-radius:14px;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(14,143,204,.50);
+  box-shadow:0 4px 20px rgba(255,77,61,.40);
   flex-shrink:0;
 }
 .ob-hero-name{
@@ -516,7 +515,6 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .ob-hero-tagline{
   font-size:14px;font-weight:600;color:var(--ink2);
   line-height:1.55;margin-bottom:14px;
-  text-shadow:0 1px 12px rgba(0,0,0,.3);
 }
 .ob-hero-tagline em{
   color:var(--accent2);font-style:normal;font-weight:900;
@@ -526,8 +524,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 }
 .ob-hero-pill{
   padding:5px 12px;border-radius:20px;
-  background:rgba(64,200,248,.08);
-  border:1px solid rgba(64,200,248,.20);
+  background:rgba(255,77,61,.06);
+  border:1px solid rgba(255,77,61,.20);
   font-size:10.5px;font-weight:800;color:var(--ink3);
   letter-spacing:.02em;white-space:nowrap;
 }
@@ -571,7 +569,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   cursor:pointer;text-align:center;transition:all .16s;background:none;
   font-family:'Nunito',sans-serif;
 }
-.ob-allergy-item.selected{border-color:var(--orange);background:rgba(212,136,90,.12)}
+.ob-allergy-item.selected{border-color:var(--orange);background:rgba(242,169,59,.10)}
 .ob-allergy-item-icon{font-size:20px;display:block;margin-bottom:4px}
 .ob-allergy-item-label{font-size:9px;font-weight:900;color:var(--ink);letter-spacing:.03em}
 .ob-none-btn{
@@ -613,7 +611,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;
   cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;
   color:#fff;letter-spacing:.05em;text-transform:uppercase;
-  box-shadow:0 4px 18px rgba(14,143,204,.4);transition:all .16s;
+  box-shadow:0 4px 18px rgba(255,77,61,.35);transition:all .16s;
 }
 .ob-next-btn:active{transform:scale(.97)}
 .ob-skip{
@@ -629,14 +627,14 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   display:inline-flex;align-items:center;gap:4px;
   margin-top:5px;
   padding:3px 8px;border-radius:20px;
-  background:rgba(64,200,248,.10);
-  border:1px solid rgba(64,200,248,.22);
+  background:rgba(255,77,61,.08);
+  border:1px solid rgba(255,77,61,.20);
   font-size:9.5px;font-weight:800;color:var(--accent2);
   letter-spacing:.04em;cursor:pointer;
   transition:all .15s;white-space:nowrap;
   max-width:180px;overflow:hidden;text-overflow:ellipsis;
 }
-.tdee-badge:hover{background:rgba(64,200,248,.18);border-color:rgba(64,200,248,.4)}
+.tdee-badge:hover{background:rgba(255,77,61,.12);border-color:rgba(255,77,61,.35)}
 
 /* ═══════════════════════════════════════════════════════
    RECIPE MODAL
@@ -698,15 +696,15 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 }
 /* Order Out button on card */
 .order-btn{
-  flex:1;min-width:0;background:var(--deep);border:1.5px solid rgba(212,136,90,.35);
+  flex:1;min-width:0;background:var(--deep);border:1.5px solid rgba(242,169,59,.30);
   color:var(--orange);font-size:10.5px;font-weight:900;
   padding:7px 8px;border-radius:9px;cursor:pointer;
   font-family:'Nunito',sans-serif;letter-spacing:.03em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:4px;
   transition:all .14s;white-space:nowrap;
 }
-.order-btn:active{transform:scale(.96);background:rgba(212,136,90,.08)}
-.order-btn:hover{background:rgba(212,136,90,.1);border-color:var(--orange)}
+.order-btn:active{transform:scale(.96);background:rgba(242,169,59,.08)}
+.order-btn:hover{background:rgba(242,169,59,.1);border-color:var(--orange)}
 
 /* ═══════════════════════════════════════════════════════
    NEARBY RESTAURANTS PANEL
@@ -761,17 +759,17 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   display:flex;align-items:center;gap:4px;flex-shrink:0;
   background:var(--deep);border-radius:8px;padding:4px 8px;
 }
-.resto-rating-val{font-size:13px;font-weight:900;color:#F4C430}
+.resto-rating-val{font-size:13px;font-weight:900;color:#f2a93b}
 .resto-rating-count{font-size:9px;font-weight:700;color:var(--ink3)}
 .resto-status{
   display:inline-flex;align-items:center;gap:5px;
   margin-bottom:8px;
 }
 .resto-open-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.resto-open-dot.open{background:#2EC4B2}
+.resto-open-dot.open{background:#1faa6b}
 .resto-open-dot.closed{background:#E05C5C}
 .resto-open-text{font-size:11px;font-weight:800}
-.resto-open-text.open{color:#2EC4B2}
+.resto-open-text.open{color:#1faa6b}
 .resto-open-text.closed{color:#E05C5C}
 .resto-hours{font-size:10.5px;font-weight:700;color:var(--ink3);margin-left:4px}
 .resto-meta{display:flex;flex-direction:column;gap:6px}
@@ -781,28 +779,28 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .resto-addr-link{
   font-size:11.5px;font-weight:700;color:var(--accent2);
   text-decoration:none;line-height:1.4;
-  border-bottom:1px dashed rgba(64,200,248,.35);
+  border-bottom:1px dashed rgba(255,77,61,.25);
 }
 .resto-addr-link:active{opacity:.7}
 .resto-actions{display:flex;gap:8px;margin-top:12px}
 .resto-call-btn{
-  flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(46,196,178,.35);
-  background:rgba(46,196,178,.08);color:#2EC4B2;
+  flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(31,170,107,.30);
+  background:rgba(31,170,107,.08);color:#1faa6b;
   font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
   text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
   transition:all .14s;
 }
-.resto-call-btn:active{background:rgba(46,196,178,.18)}
+.resto-call-btn:active{background:rgba(31,170,107,.15)}
 .resto-map-btn{
-  flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(212,136,90,.35);
-  background:rgba(212,136,90,.08);color:var(--orange);
+  flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(242,169,59,.30);
+  background:rgba(242,169,59,.08);color:var(--orange);
   font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
   text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
   transition:all .14s;
 }
-.resto-map-btn:active{background:rgba(212,136,90,.18)}
+.resto-map-btn:active{background:rgba(242,169,59,.14)}
 
 /* Error / permission denied state */
 .nearby-error{
@@ -812,7 +810,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .nearby-error-title{font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px}
 .nearby-error-sub{font-size:12px;font-weight:700;color:var(--ink3);line-height:1.6;margin-bottom:20px}
 .nearby-retry-btn{
-  padding:11px 24px;background:var(--orange);border:none;border-radius:12px;
+  padding:11px 24px;background:#f2a93b;border:none;border-radius:12px;
   font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:#fff;
   cursor:pointer;letter-spacing:.04em;
 }
@@ -846,11 +844,11 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap;
   transition:all .15s;letter-spacing:.03em;flex-shrink:0;
 }
-.region-btn.on{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 10px rgba(14,143,204,.35)}
-.region-btn.south.on{background:#2EC4B2;border-color:#2EC4B2}
-.region-btn.punjab.on{background:#D4885A;border-color:#D4885A}
-.region-btn.bengal.on{background:#9480DC;border-color:#9480DC}
-.region-btn.gujarat.on{background:#F4C430;border-color:#F4C430;color:#141C22}
+.region-btn.on{background:var(--accent);color:#fff;border-color:var(--accent);box-shadow:0 2px 10px rgba(255,77,61,.28)}
+.region-btn.south.on{background:#1faa6b;border-color:#1faa6b}
+.region-btn.punjab.on{background:#f2a93b;border-color:#f2a93b}
+.region-btn.bengal.on{background:#e63320;border-color:#e63320}
+.region-btn.gujarat.on{background:#f2a93b;border-color:#f2a93b;color:#fdf8f2}
 
 /* ═══════════════════════════════════════════════════════
    WEEK PLAN VIEW
@@ -1032,7 +1030,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
         <div class="bev-accent" style="background:#8C7040"></div>
         <div class="bev-body">
           <div>
-            <div class="bev-label"><div class="ct-dot" style="background:#F4C430"></div><span class="bev-title">☕ Beverages</span></div>
+            <div class="bev-label"><div class="ct-dot" style="background:#f2a93b"></div><span class="bev-title">☕ Beverages</span></div>
             <div class="bev-name" id="bevName">Masala Chai</div>
           </div>
           <div class="bev-right">
@@ -1102,13 +1100,13 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
     <div class="ob-hero-logo">
       <div class="ob-hero-mark">
         <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
-          <circle cx="8"  cy="10" r="5" fill="#0F161C"/><circle cx="8"  cy="10" r="3.5" fill="#F0F6FF"/>
-          <circle cx="18" cy="10" r="5" fill="#0F161C"/><circle cx="18" cy="10" r="3.5" fill="#F0F6FF"/>
-          <circle cx="13" cy="18" r="5" fill="#0F161C"/><circle cx="13" cy="18" r="3.5" fill="#F0F6FF"/>
-          <circle cx="8"  cy="10" r="2.4" fill="#2EC4B2"/>
-          <circle cx="18" cy="10" r="2.4" fill="#D4885A"/>
-          <circle cx="13" cy="18" r="2.4" fill="#9480DC"/>
-          <circle cx="13" cy="13" r="2.8" fill="#0F161C"/><circle cx="13" cy="13" r="1.6" fill="#40C8F8"/>
+          <circle cx="8"  cy="10" r="5" fill="#fdf8f2"/><circle cx="8"  cy="10" r="3.5" fill="#1f1a17"/>
+          <circle cx="18" cy="10" r="5" fill="#fdf8f2"/><circle cx="18" cy="10" r="3.5" fill="#1f1a17"/>
+          <circle cx="13" cy="18" r="5" fill="#fdf8f2"/><circle cx="13" cy="18" r="3.5" fill="#1f1a17"/>
+          <circle cx="8"  cy="10" r="2.4" fill="#1faa6b"/>
+          <circle cx="18" cy="10" r="2.4" fill="#f2a93b"/>
+          <circle cx="13" cy="18" r="2.4" fill="#e63320"/>
+          <circle cx="13" cy="13" r="2.8" fill="#fdf8f2"/><circle cx="13" cy="13" r="1.6" fill="#e63320"/>
         </svg>
       </div>
       <span class="ob-hero-name">EatRight</span>
@@ -1831,13 +1829,13 @@ function render(){
   document.getElementById('sPro').textContent=totP+'g';
   const carbEl=document.getElementById('sCarb');
   carbEl.textContent=totC+'g';
-  carbEl.style.color=totC>CARB_CAP?'#C05040':'';
+  carbEl.style.color=totC>CARB_CAP?'#e63320':'';
   document.getElementById('sFat').textContent=totF+'g';
   const calTarget=CAL_TARGET[mode];
   const pct=Math.min(100,Math.round(tot/calTarget*100));
   const b=document.getElementById('calBar');
   b.style.width=pct+'%';
-  const barCol=tot>calTarget*1.05?'#C05040':tot>calTarget*0.9?'#8A9A40':'#0E8FCC';
+  const barCol=tot>calTarget*1.05?'#e63320':tot>calTarget*0.9?'#1faa6b':'#ff4d3d';
   b.style.background=barCol;
   b.style.boxShadow=`0 0 6px ${barCol}50`;
   document.getElementById('modeNote').textContent=MODE_NOTE[mode];
@@ -1922,7 +1920,7 @@ function logDay(){
   if(!meals.length){
     const btn=document.querySelector('.log-btn.save');
     const orig=btn.innerHTML;
-    btn.innerHTML='⚠ Tick meals first!';btn.style.background='#C07A4A';
+    btn.innerHTML='⚠ Tick meals first!';btn.style.background='#f2a93b';
     setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},2000);
     return;
   }
@@ -1952,7 +1950,7 @@ function logDay(){
   const btn=document.querySelector('.log-btn.save');
   const orig=btn.innerHTML;
   btn.innerHTML=`✅ ${meals.length} meal${meals.length>1?'s':''} logged!`;
-  btn.style.background='#2EC4B2';
+  btn.style.background='#1faa6b';
   setTimeout(()=>{btn.innerHTML=orig;btn.style.background='';},2000);
 }
 
@@ -3321,7 +3319,7 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
       '<div style="font-size:15px;font-weight:900;color:var(--ink);margin-bottom:6px">Could not load results</div>' +
       '<div style="font-size:11px;color:var(--ink3);margin-bottom:16px">' + escHtml(err.message) + '</div>' +
       '<a href="https://www.google.com/maps/search/' + q + '/@' + lat + ',' + lng + ',15z" ' +
-      'target="_blank" rel="noopener" style="display:block;padding:13px;background:var(--orange);' +
+      'target="_blank" rel="noopener" style="display:block;padding:13px;background:#f2a93b;' +
       'border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none;margin-bottom:10px">' +
       '&#128269; Search on Google Maps</a>' +
       '<button onclick="openNearby(window._nearbyMealType)" ' +
@@ -3342,7 +3340,7 @@ var RING_LABELS  = ['within 2 miles', '2–5 miles', '5–10 miles'];
 window._nearbyRing   = 0;    // which ring we've searched up to
 
 function restoRowHTML(p, globalIdx) {
-  const oc  = p.isOpen===true?'#2EC4B2':p.isOpen===false?'#E05C5C':'var(--ink3)';
+  const oc  = p.isOpen===true?'#1faa6b':p.isOpen===false?'#E05C5C':'var(--ink3)';
   const ol  = p.isOpen===true?(p.closes||'Open now'):p.isOpen===false?'Closed':'Hours unknown';
   const dist = p.dist!==null ? p.dist.toFixed(1)+' mi' : '';
   const stars = p.rating ? '&#11088; '+p.rating.toFixed(1) : '';
@@ -3356,7 +3354,7 @@ function restoRowHTML(p, globalIdx) {
     '<div style="width:6px;height:6px;border-radius:50%;background:' + oc + ';flex-shrink:0"></div>' +
     '<span style="font-size:9.5px;font-weight:900;color:' + oc + '">' + ol + '</span>' +
     (dist ? '<span style="font-size:9.5px;font-weight:700;color:var(--ink3)"> &middot; ' + dist + '</span>' : '') +
-    (stars ? '<span style="font-size:9.5px;font-weight:900;color:#F4C430"> &middot; ' + stars + '</span>' : '') +
+    (stars ? '<span style="font-size:9.5px;font-weight:900;color:#f2a93b"> &middot; ' + stars + '</span>' : '') +
     '</div></div>' +
     '<span style="color:var(--ink3);font-size:20px;line-height:1">&rsaquo;</span></div>';
 }
@@ -3512,7 +3510,7 @@ function showRestoDetail(idx) {
   const old = document.getElementById('restoDetailWrap');
   if (old) old.remove();
 
-  const oc = p.isOpen===true?'#2EC4B2':p.isOpen===false?'#E05C5C':'var(--ink3)';
+  const oc = p.isOpen===true?'#1faa6b':p.isOpen===false?'#E05C5C':'var(--ink3)';
   const ol = p.isOpen===true?('&#9679; Open'+(p.closes?' &middot; '+p.closes:'')):p.isOpen===false?'&#9679; Closed':'&#9679; Hours unknown';
   const rc = p.ratingCount ? (p.ratingCount>999?(p.ratingCount/1000).toFixed(1)+'k':String(p.ratingCount)) : '';
   const navUrl = (p.lat&&p.lng)
@@ -3541,13 +3539,13 @@ function showRestoDetail(idx) {
     '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">' +
     '<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;' +
     'font-size:11px;font-weight:900;color:'+oc+';border:1px solid '+oc+'44;background:'+oc+'18">'+ol+'</span>' +
-    (p.rating ? '<span style="padding:4px 10px;border-radius:20px;background:var(--deep);border:1px solid var(--ink4);font-size:11px;font-weight:900;color:#F4C430">&#11088; '+p.rating.toFixed(1)+(rc?' ('+rc+')':'')+'</span>' : '') +
+    (p.rating ? '<span style="padding:4px 10px;border-radius:20px;background:var(--deep);border:1px solid var(--ink4);font-size:11px;font-weight:900;color:#f2a93b">&#11088; '+p.rating.toFixed(1)+(rc?' ('+rc+')':'')+'</span>' : '') +
     (p.dist!==null ? '<span style="padding:4px 8px;border-radius:20px;background:var(--ink4);font-size:10px;font-weight:800;color:var(--ink3)">'+p.dist.toFixed(1)+' mi</span>' : '') +
     '</div>' +
     // ── ALL BUTTONS FIRST ── so always visible
     '<div style="display:flex;gap:8px;margin-bottom:8px">' +
-    (p.phone ? '<a href="tel:'+phoneClean+'" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(46,196,178,.4);background:rgba(46,196,178,.1);color:#2EC4B2;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px">&#128222; Call</a>' : '') +
-    '<a href="'+navUrl+'" target="_blank" rel="noopener" style="flex:2;padding:12px;border-radius:12px;background:var(--accent);color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 12px rgba(14,143,204,.35)">&#128506; Directions</a>' +
+    (p.phone ? '<a href="tel:'+phoneClean+'" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(31,170,107,.4);background:rgba(31,170,107,.1);color:#1faa6b;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px">&#128222; Call</a>' : '') +
+    '<a href="'+navUrl+'" target="_blank" rel="noopener" style="flex:2;padding:12px;border-radius:12px;background:var(--accent);color:#fff;font-family:Nunito,sans-serif;font-size:13px;font-weight:900;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 12px rgba(255,77,61,.28)">&#128506; Directions</a>' +
     '</div>' +
     (p.website ? '<a href="'+p.website+'" target="_blank" rel="noopener" ' +
     'style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:11px;border-radius:12px;' +
@@ -3593,7 +3591,7 @@ function renderNearbyFallback(lat, lng, cuisine) {
     '<div class="nearby-error-title">No Results Found</div>' +
     '<div class="nearby-error-sub">Try searching on Google Maps directly.</div>' +
     '<a href="https://www.google.com/maps/search/'+q+'/@'+lat+','+lng+',15z" target="_blank" rel="noopener" ' +
-    'style="display:inline-block;padding:12px 28px;background:var(--orange);border-radius:12px;' +
+    'style="display:inline-block;padding:12px 28px;background:#f2a93b;border-radius:12px;' +
     'font-size:13px;font-weight:900;color:#fff;text-decoration:none;margin-top:4px">&#128506; Open Google Maps</a>' +
     '<div style="margin-top:14px"><button class="nearby-retry-btn" style="background:var(--deep);border:1.5px solid var(--border2);color:var(--ink2)" ' +
     'onclick="openNearby(window._nearbyMealType)">&#8634; Try Again</button></div></div>';
@@ -3687,7 +3685,7 @@ function showNotFoundWithAlt(lat, lng, mealShort) {
   sub.innerHTML = 'No restaurants serving <strong style="color:var(--ink)">' + escHtml(mealShort) + '</strong> found within 2 miles.';
   var b1 = document.createElement('button');
   b1.textContent = '🥗 Find Healthy Restaurants Nearby';
-  b1.style.cssText = 'width:100%;padding:14px;background:#2EC4B2;border:none;border-radius:13px;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;display:block';
+  b1.style.cssText = 'width:100%;padding:14px;background:#1faa6b;border:none;border-radius:13px;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;display:block';
   b1.onclick = function() { searchHealthyAlt(lat, lng); };
   var b2 = document.createElement('button');
   b2.textContent = '↺ Try Again';
@@ -3744,7 +3742,7 @@ async function searchHealthyAlt(lat, lng) {
       '<div style="font-size:12px;color:var(--ink3);margin-bottom:16px">Try expanding your search on Google Maps.</div>' +
       '<a href="https://www.google.com/maps/search/healthy+restaurant+near+me/@' + lat + ',' + lng + ',15z" ' +
       'target="_blank" rel="noopener" ' +
-      'style="display:block;padding:13px;background:var(--orange);border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none">' +
+      'style="display:block;padding:13px;background:#f2a93b;border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none">' +
       '🗺️ Open Google Maps</a></div>';
   }
 }
@@ -3812,7 +3810,7 @@ async function findHealthyNearby(lat, lng) {
         '<div style="font-size:16px;font-weight:900;color:var(--ink);margin-bottom:8px">Nothing Open Right Now</div>' +
         '<div style="font-size:12px;color:var(--ink3);margin-bottom:16px">No healthy restaurants found open near you at this time.</div>' +
         '<a href="https://www.google.com/maps/search/healthy+restaurant/@' + lat + ',' + lng + ',14z" ' +
-        'target="_blank" rel="noopener" style="display:block;padding:13px;background:var(--orange);' +
+        'target="_blank" rel="noopener" style="display:block;padding:13px;background:#f2a93b;' +
         'border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none">🗺️ Search on Google Maps</a></div>';
       return;
     }
@@ -3828,7 +3826,7 @@ async function findHealthyNearby(lat, lng) {
       '<div style="font-size:15px;font-weight:900;color:var(--ink);margin-bottom:8px">Search Failed</div>' +
       '<div style="font-size:11px;color:var(--ink3);margin-bottom:16px">' + escHtml(e.message) + '</div>' +
       '<a href="https://www.google.com/maps/search/healthy+restaurant/@' + lat + ',' + lng + ',14z" ' +
-      'target="_blank" rel="noopener" style="display:block;padding:13px;background:var(--orange);' +
+      'target="_blank" rel="noopener" style="display:block;padding:13px;background:#f2a93b;' +
       'border-radius:12px;font-size:13px;font-weight:900;color:#fff;text-decoration:none">🗺️ Search on Google Maps</a></div>';
   }
 }
