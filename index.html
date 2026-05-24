@@ -3179,6 +3179,8 @@ function haversineMi(lat1, lon1, lat2, lon2) {
 // API key stored in localStorage — user enters via Settings
 function getApiKey() { return localStorage.getItem('eatright_google_key') || ''; }
 function saveApiKey(k) { localStorage.setItem('eatright_google_key', k.trim()); }
+function getAnthropicKey() { return localStorage.getItem('eatright_anthropic_key') || localStorage.getItem('ff_apikey') || ''; }
+function saveAnthropicKey(k) { localStorage.setItem('eatright_anthropic_key', k.trim()); }
 
 function mealToQueries(mealName) {
   // Returns [specificQuery, fallbackQuery]
@@ -3283,6 +3285,7 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
       const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
       return {
         name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        cuisine: (p.types||[]).filter(t=>!['restaurant','food','point_of_interest','establishment','bar'].includes(t)).map(t=>t.replace(/_/g,' ')).slice(0,1).join('') || '',
         address: p.formattedAddress || '',
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
@@ -3440,6 +3443,7 @@ async function loadMoreNearby() {
       const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
       return {
         name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        cuisine: (p.types||[]).filter(t=>!['restaurant','food','point_of_interest','establishment','bar'].includes(t)).map(t=>t.replace(/_/g,' ')).slice(0,1).join('') || '',
         address: p.formattedAddress || '',
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
@@ -3609,44 +3613,50 @@ async function loadTopDishes() {
   const list = document.getElementById('topDishesList');
   if (!list || !t.name) return;
 
+  const apiKey = getAnthropicKey();
+  if (!apiKey) {
+    list.innerHTML = '<div style="font-size:12px;color:var(--ink3);padding:6px 0">Add your Anthropic key in ⚙ Settings to see popular dishes.</div>';
+    return;
+  }
+
   try {
-    const resp = await fetch('https://top5dishes.tapanr.workers.dev', {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 600,
-        messages: [{
-          role: 'user',
-          content: `You are a food expert. List the 5 most popular menu items at "${t.name}"${t.cuisine?' ('+t.cuisine+')':''}${t.address?' located at '+t.address:''}.
-For each: name, one short description, and price if known (~$X) or omit.
-Return ONLY raw JSON, no markdown: {"dishes":[{"name":"","desc":"","price":""}]}`
+        messages: [{ role: 'user', content:
+          'List the 5 most popular menu items at "' + t.name + '"' + (t.cuisine ? ' (' + t.cuisine + ')' : '') + (t.address ? ' in ' + t.address : '') + '. For each: name, one short description (max 10 words), price if known (~$X) else omit. Return ONLY raw JSON, no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'
         }]
       })
     });
 
-    if (!resp.ok) throw new Error('HTTP '+resp.status);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
     const raw = (data.content||[]).map(c=>c.text||'').join('').replace(/```json|```/g,'').trim();
     const dishes = JSON.parse(raw).dishes || [];
     if (!dishes.length) throw new Error('empty');
 
-    list.innerHTML = dishes.slice(0,5).map((d,i) =>
-      '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:14px;background:var(--deep);border:1px solid var(--ink4)">'+
+    list.innerHTML = dishes.slice(0,5).map(function(d,i) {
+      return '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:14px;background:var(--deep);border:1px solid var(--ink4)">'+
         '<div style="min-width:22px;height:22px;border-radius:8px;background:var(--accent);color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
         '<div style="flex:1;min-width:0">'+
           '<div style="font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.2px;margin-bottom:2px">'+escHtml(d.name||'')+'</div>'+
           '<div style="font-size:11.5px;font-weight:600;color:var(--ink3);line-height:1.4">'+escHtml(d.desc||'')+'</div>'+
         '</div>'+
         (d.price ? '<div style="font-size:12px;font-weight:900;color:#f2a93b;flex-shrink:0;padding-top:2px">'+escHtml(d.price)+'</div>' : '')+
-      '</div>'
-    ).join('');
+      '</div>';
+    }).join('');
 
   } catch(e) {
-    if (document.getElementById('topDishesList')) {
-      document.getElementById('topDishesList').innerHTML =
-        '<div style="font-size:12px;color:var(--ink3);font-style:italic;padding:6px 0">Couldn\'t load dishes — see Menu / Website above</div>';
-    }
+    var el = document.getElementById('topDishesList');
+    if (el) el.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-style:italic;padding:6px 0">Couldn't load dishes — see Menu / Website above.</div>';
   }
 }
 window.loadTopDishes = loadTopDishes;
@@ -3682,58 +3692,72 @@ function escHtml(s) {
 
 
 function showApiKeySetup() {
-  // Show as a separate modal on top of the nearby sheet
   var old = document.getElementById('apiKeyModal');
   if (old) old.remove();
 
   var modal = document.createElement('div');
   modal.id = 'apiKeyModal';
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);z-index:700;display:flex;align-items:flex-end;justify-content:center';
+  modal.onclick = function(e){ if(e.target===modal) modal.remove(); };
+
+  var gk = getApiKey(), ak = getAnthropicKey();
+  var gStatus = gk ? '✓ Saved' : 'Not set';
+  var aStatus = ak ? '✓ Saved' : 'Not set';
 
   var sheet = document.createElement('div');
-  sheet.style.cssText = 'background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;width:100%;max-width:420px;padding:24px 18px 44px';
-
+  sheet.style.cssText = 'background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;width:100%;max-width:420px;padding:20px 18px 44px';
   sheet.innerHTML =
-    '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:0 auto 18px"></div>' +
-    '<div style="font-size:18px;font-weight:900;color:var(--ink);margin-bottom:6px">Google Places API Key</div>' +
-    '<div style="font-size:11.5px;color:var(--ink3);line-height:1.7;margin-bottom:16px">' +
-    'Required to search restaurants inside the app.<br>' +
-    '1. Go to <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2);font-weight:800">console.cloud.google.com</a><br>' +
-    '2. Enable <strong style="color:var(--ink)">Places API (New)</strong><br>' +
-    '3. Create a key &amp; paste below</div>' +
-    '<input id="apiKeyInput" type="text" placeholder="AIzaSy..." autocomplete="off" ' +
-    'style="width:100%;padding:13px 14px;background:var(--deep);border:1.5px solid var(--border2);' +
-    'border-radius:12px;color:var(--ink);font-size:14px;font-weight:700;font-family:Nunito,sans-serif;' +
-    'outline:none;margin-bottom:12px;letter-spacing:.03em;box-sizing:border-box" ' +
-    'value="' + escHtml(getApiKey()||'') + '">' +
-    '<button id="saveKeyBtn" onclick="saveKeyAndSearch()" ' +
-    'style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;' +
-    'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;letter-spacing:.03em">' +
-    '✓ Save &amp; Search</button>' +
-    '<button onclick="closeApiKeyModal()" ' +
-    'style="width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;' +
-    'font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer">Cancel</button>';
+    '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:0 auto 18px"></div>'+
+    '<div style="font-size:17px;font-weight:900;color:var(--ink);margin-bottom:16px">⚙ API Keys</div>'+
+
+    // Anthropic
+    '<div style="font-size:10px;font-weight:900;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Anthropic Key <span style="color:'+(ak?'#1faa6b':'#f2a93b')+'">'+aStatus+'</span></div>'+
+    '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Powers meal suggestions & popular dish lookups. Get one at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2);font-weight:800">console.anthropic.com</a></div>'+
+    '<input id="inputAnthropic" type="password" placeholder="sk-ant-..." autocomplete="off" '+
+    'style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:700;font-family:Nunito,sans-serif;outline:none;margin-bottom:14px;box-sizing:border-box" '+
+    'value="'+escHtml(ak)+'">'+
+
+    // Google
+    '<div style="font-size:10px;font-weight:900;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Google Places Key <span style="color:'+(gk?'#1faa6b':'#f2a93b')+'">'+gStatus+'</span></div>'+
+    '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Finds real restaurants near you. Enable <strong style="color:var(--ink)">Places API (New)</strong> at <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2);font-weight:800">console.cloud.google.com</a></div>'+
+    '<input id="inputGoogle" type="password" placeholder="AIzaSy..." autocomplete="off" '+
+    'style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:700;font-family:Nunito,sans-serif;outline:none;margin-bottom:16px;box-sizing:border-box" '+
+    'value="'+escHtml(gk)+'">'+
+
+    '<button onclick="saveAllKeys()" '+
+    'style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;box-shadow:0 3px 14px rgba(255,77,61,.28)">✓ Save Keys</button>'+
+    '<button onclick="document.getElementById(\'apiKeyModal\').remove()" '+
+    'style="width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer">Cancel</button>';
 
   modal.appendChild(sheet);
-  modal.onclick = function(e) { if(e.target === modal) modal.remove(); };
   document.body.appendChild(modal);
-
-  var inp = document.getElementById('apiKeyInput');
-  if (inp) { setTimeout(function(){ inp.focus(); inp.select(); }, 150); }
-  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') saveKeyAndSearch(); });
+  setTimeout(function(){ var i=document.getElementById('inputAnthropic'); if(i) i.focus(); }, 150);
 }
 
+function saveAllKeys() {
+  var ak = (document.getElementById('inputAnthropic')||{}).value||'';
+  var gk = (document.getElementById('inputGoogle')||{}).value||'';
+  if (ak.trim()) saveAnthropicKey(ak);
+  if (gk.trim()) saveApiKey(gk);
+  var modal = document.getElementById('apiKeyModal');
+  if (modal) modal.remove();
+  // If nearby sheet is open, retry search
+  var nb = document.getElementById('nearbyPanel');
+  if (nb && nb.style.display !== 'none') openNearby(window._nearbyMealType);
+}
+window.saveAllKeys = saveAllKeys;
+
 function saveKeyAndSearch() {
-  const inp = document.getElementById('apiKeyInput');
-  const key = inp ? inp.value.trim() : '';
+  var inp = document.getElementById('apiKeyInput');
+  var key = inp ? inp.value.trim() : '';
   if (!key) { if(inp) inp.style.borderColor='#E05C5C'; return; }
   saveApiKey(key);
-  const modal = document.getElementById('apiKeyModal');
+  var modal = document.getElementById('apiKeyModal');
   if (modal) modal.remove();
   openNearby();
 }
-function closeApiKeyModal(){var m=document.getElementById("apiKeyModal");if(m)m.remove();}
-window.closeApiKeyModal=closeApiKeyModal;
+function closeApiKeyModal(){ var m=document.getElementById('apiKeyModal'); if(m) m.remove(); }
+window.closeApiKeyModal = closeApiKeyModal;
 window.showApiKeySetup = showApiKeySetup;
 window.saveKeyAndSearch = saveKeyAndSearch;
 
@@ -3787,6 +3811,7 @@ async function searchHealthyAlt(lat, lng) {
       const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
       return {
         name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        cuisine: (p.types||[]).filter(t=>!['restaurant','food','point_of_interest','establishment','bar'].includes(t)).map(t=>t.replace(/_/g,' ')).slice(0,1).join('') || '',
         address: p.formattedAddress || '',
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
@@ -3860,6 +3885,7 @@ async function findHealthyNearby(lat, lng) {
       const closes = fmtClose(curH ? curH.periods : (regH ? regH.periods : null), day);
       return {
         name: (p.displayName ? p.displayName.text : '') || 'Restaurant',
+        cuisine: (p.types||[]).filter(t=>!['restaurant','food','point_of_interest','establishment','bar'].includes(t)).map(t=>t.replace(/_/g,' ')).slice(0,1).join('') || '',
         address: p.formattedAddress || '',
         phone: p.internationalPhoneNumber || null,
         rating: p.rating || null,
@@ -3938,7 +3964,7 @@ if('serviceWorker' in navigator){
         <button onclick="showApiKeySetup()" title="API Key Settings"
           style="background:var(--deep);border:1px solid var(--border2);border-radius:8px;
           padding:5px 10px;color:var(--ink3);font-size:10px;font-weight:900;cursor:pointer;
-          font-family:Nunito,sans-serif;letter-spacing:.04em;text-transform:uppercase">⚙ Key</button>
+          font-family:Nunito,sans-serif;letter-spacing:.04em;text-transform:uppercase">⚙ Settings</button>
         <button class="nearby-close" onclick="closeNearby()">✕</button>
       </div>
     </div>
