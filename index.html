@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="EatRight">
 <meta name="theme-color" content="#ff4d3d">
 <meta name="description" content="Daily meal plans — high protein, low carb. Regular, Low-GI & Treat Day modes.">
-<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiRWF0UmlnaHQiLCJzaG9ydF9uYW1lIjoiRWF0UmlnaHQiLCJkZXNjcmlwdGlvbiI6IkRhaWx5IG1lYWwgcGxhbm5lciIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZmRmOGYyIiwidGhlbWVfY29sb3IiOiIjZmY0ZDNkIn0=">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff4d3d'/%3E%3Cstop offset='1' stop-color='%23e63320'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='url(%23g)'/%3E%3Cpath d='M7 15 Q7 24 16 24 Q25 24 25 15 Z' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' fill='none'/%3E%3Cline x1='11' y1='26' x2='21' y2='26' stroke='%23fff' stroke-width='1.8' stroke-linecap='round'/%3E%3Cpath d='M10 15 L14 19.5 L22 10' stroke='%23CCFF00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M12.5 11.5 Q11.5 9.5 12.5 7.5' stroke='%23fff' stroke-width='1.2' stroke-linecap='round' opacity='.7' fill='none'/%3E%3Cpath d='M16 10.5 Q15 8.5 16 6.5' stroke='%23fff' stroke-width='1.2' stroke-linecap='round' opacity='.7' fill='none'/%3E%3Cpath d='M19.5 11.5 Q18.5 9.5 19.5 7.5' stroke='%23fff' stroke-width='1.2' stroke-linecap='round' opacity='.7' fill='none'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff4d3d'/%3E%3Cstop offset='1' stop-color='%23e63320'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23g)'/%3E%3Cpath d='M40 85 Q40 135 90 135 Q140 135 140 85 Z' stroke='%23fff' stroke-width='10' stroke-linecap='round' fill='none'/%3E%3Cline x1='62' y1='148' x2='118' y2='148' stroke='%23fff' stroke-width='10' stroke-linecap='round'/%3E%3Cpath d='M57 85 L79 107 L124 58' stroke='%23CCFF00' stroke-width='11' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M70 65 Q64 53 70 42' stroke='%23fff' stroke-width='6' stroke-linecap='round' opacity='.7' fill='none'/%3E%3Cpath d='M90 60 Q84 48 90 37' stroke='%23fff' stroke-width='6' stroke-linecap='round' opacity='.7' fill='none'/%3E%3Cpath d='M110 65 Q104 53 110 42' stroke='%23fff' stroke-width='6' stroke-linecap='round' opacity='.7' fill='none'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.svg">
+<link rel="icon" type="image/svg+xml" href="favicon-32.svg">
 <title>EatRight — Daily Meal Planner</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -3842,12 +3842,19 @@ window.nearbyOverlayClick = nearbyOverlayClick;
 if('serviceWorker' in navigator){
   window.addEventListener('load', async () => {
     try {
+      // Unregister ALL existing service workers — clears any stale/broken cached SW
       const regs = await navigator.serviceWorker.getRegistrations();
       await Promise.all(regs.map(r => r.unregister()));
+      // Clear all caches
       const keys = await caches.keys();
       await Promise.all(keys.map(k => caches.delete(k)));
+      // Re-register fresh
+      await navigator.serviceWorker.register(
+        '/NourishDay/sw.js',
+        { scope: '/NourishDay/', updateViaCache: 'none' }
+      );
     } catch(e) {
-      console.warn('SW cleanup error:', e);
+      console.warn('SW setup error:', e);
     }
   });
 }
