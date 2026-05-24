@@ -3771,8 +3771,8 @@ async function searchHealthyAlt(lat, lng) {
   try {
     const area = await reverseGeocode(lat, lng);
     const areaStr = area ? ' near ' + area : '';
-    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, ringM);
-    if (places.length < 2) places = await placesSearch('restaurant' + areaStr, lat, lng, ringM);
+    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, RADIUS_RINGS[window._nearbyRing||0]);
+    if (places.length < 2) places = await placesSearch('restaurant' + areaStr, lat, lng, RADIUS_RINGS[window._nearbyRing||0]);
     if (!places.length) throw new Error('No restaurants found');
 
     const list = places.slice(0, 8).map(function(p) {
@@ -3841,8 +3841,8 @@ async function findHealthyNearby(lat, lng) {
     const areaStr = area ? ' near ' + area : '';
 
     // Search healthy restaurants — try multiple queries and merge
-    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, ringM);
-    const p2 = await placesSearch('healthy cafe' + areaStr, lat, lng, ringM);
+    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, RADIUS_RINGS[window._nearbyRing||0]);
+    const p2 = await placesSearch('healthy cafe' + areaStr, lat, lng, RADIUS_RINGS[window._nearbyRing||0]);
     const seen = new Set(places.map(function(p) { return p.id; }));
     p2.forEach(function(p) { if (!seen.has(p.id)) places.push(p); });
 
