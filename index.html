@@ -3231,7 +3231,7 @@ async function placesSearch(query, lat, lng, radiusMeters) {
     body: JSON.stringify({
       textQuery: query,
       maxResultCount: 20,
-      locationRestriction: { circle: { center: { latitude: lat, longitude: lng }, radius: radiusMeters } }
+      locationBias: { circle: { center: { latitude: lat, longitude: lng }, radius: radiusMeters } }
     })
   });
   const d = await resp.json();
