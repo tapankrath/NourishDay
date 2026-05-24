@@ -745,7 +745,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   animation:spin .75s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-.nearby-loading-text{font-size:13px;font-weight:600;color:var(--ink3);text-align:center;line-height:1.5;font-family:"Inter",sans-serif;letter-spacing:-.1px}
+.nearby-loading-text{font-size:13px;font-weight:500;color:var(--ink3);text-align:center;line-height:1.5;font-family:"Inter",sans-serif;letter-spacing:-.1px}
 
 /* Restaurant card */
 .resto-card{
@@ -761,7 +761,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   background:var(--deep);border-radius:8px;padding:4px 8px;
 }
 .resto-rating-val{font-size:13px;font-weight:700;color:#f2a93b;letter-spacing:-.3px;font-family:"Inter",sans-serif}
-.resto-rating-count{font-size:9px;font-weight:600;color:var(--ink3);letter-spacing:.01em;font-family:"Inter",sans-serif}
+.resto-rating-count{font-size:9px;font-weight:500;color:var(--ink3);letter-spacing:.01em;font-family:"Inter",sans-serif}
 .resto-status{
   display:inline-flex;align-items:center;gap:5px;
   margin-bottom:8px;
@@ -769,36 +769,36 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .resto-open-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .resto-open-dot.open{background:#1faa6b}
 .resto-open-dot.closed{background:#E05C5C}
-.resto-open-text{font-size:11px;font-weight:700;letter-spacing:.02em;font-family:"Inter",sans-serif}
+.resto-open-text{font-size:11px;font-weight:600;letter-spacing:.02em;font-family:"Inter",sans-serif}
 .resto-open-text.open{color:#1faa6b}
 .resto-open-text.closed{color:#E05C5C}
-.resto-hours{font-size:11px;font-weight:500;color:var(--ink3);margin-left:4px;letter-spacing:-.1px;font-family:"Inter",sans-serif}
+.resto-hours{font-size:11px;font-weight:400;color:var(--ink3);margin-left:4px;letter-spacing:-.1px;font-family:"Inter",sans-serif}
 .resto-meta{display:flex;flex-direction:column;gap:6px}
 .resto-row{display:flex;align-items:flex-start;gap:8px}
 .resto-row-icon{font-size:13px;flex-shrink:0;margin-top:1px;width:16px;text-align:center}
-.resto-row-text{font-size:12px;font-weight:500;color:var(--ink2);line-height:1.4;flex:1;letter-spacing:-.15px;font-family:"Inter",sans-serif}
+.resto-row-text{font-size:12px;font-weight:500;color:var(--ink2);line-height:1.4;flex:1;letter-spacing:-.2px;font-family:"Inter",sans-serif}
 .resto-addr-link{
-  font-size:12px;font-weight:500;color:var(--accent2);
-  text-decoration:none;line-height:1.4;letter-spacing:-.15px;
-  border-bottom:1px dashed rgba(255,77,61,.25);font-family:"Inter",sans-serif;
+  font-size:12px;font-weight:800;color:var(--accent2);
+  text-decoration:none;line-height:1.4;letter-spacing:-.1px;
+  border-bottom:1px dashed rgba(255,77,61,.25);
 }
 .resto-addr-link:active{opacity:.7}
 .resto-actions{display:flex;gap:8px;margin-top:12px}
 .resto-call-btn{
   flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(31,170,107,.30);
   background:rgba(31,170,107,.08);color:#1faa6b;
-  font-family:"Inter",sans-serif;font-size:10.5px;font-weight:700;
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
-  text-decoration:none;letter-spacing:.06em;text-transform:uppercase;
+  text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
   transition:all .14s;
 }
 .resto-call-btn:active{background:rgba(31,170,107,.15)}
 .resto-map-btn{
   flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(242,169,59,.30);
   background:rgba(242,169,59,.08);color:var(--orange);
-  font-family:"Inter",sans-serif;font-size:10.5px;font-weight:700;
+  font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
-  text-decoration:none;letter-spacing:.06em;text-transform:uppercase;
+  text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
   transition:all .14s;
 }
 .resto-map-btn:active{background:rgba(242,169,59,.14)}
@@ -994,18 +994,6 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   </div>
 </div>
 
-<div class="allergy-zone">
-  <div class="allergy-row">
-    <span class="allergy-lbl">🚫 Allergies</span>
-    <div class="allergy-chips" id="allergyChips"><span class="allergy-none">None set</span></div>
-    <div class="allergy-dropdown-wrap">
-      <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">＋ Add</button>
-      <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
-    </div>
-  </div>
-</div>
-
-
 <div class="body">
   <div style="display:flex;gap:8px;margin-bottom:10px">
     <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0">
@@ -1015,10 +1003,17 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
       📍 Restaurants Nearby
     </button>
   </div>
-  <div class="diet-toggle-row">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
     <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
     <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
     <span class="diet-auto-lbl" id="dietAutoLbl"></span>
+    <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:5px">
+      <div class="allergy-chips" id="allergyChips" style="justify-content:flex-end"><span class="allergy-none">No allergies</span></div>
+      <div class="allergy-dropdown-wrap">
+        <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">🚫 ＋</button>
+        <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
+      </div>
+    </div>
   </div>
   <div class="mode-note" id="modeNote"></div>
   <div class="insight-bar" id="insightBar"><span class="insight-icon">💡</span><span id="insightText"></span></div>
@@ -1100,14 +1095,13 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   <div class="ob-hero">
     <div class="ob-hero-logo">
       <div class="ob-hero-mark">
-        <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="32">
-          <circle cx="8"  cy="10" r="5" fill="#fdf8f2"/><circle cx="8"  cy="10" r="3.5" fill="#1f1a17"/>
-          <circle cx="18" cy="10" r="5" fill="#fdf8f2"/><circle cx="18" cy="10" r="3.5" fill="#1f1a17"/>
-          <circle cx="13" cy="18" r="5" fill="#fdf8f2"/><circle cx="13" cy="18" r="3.5" fill="#1f1a17"/>
-          <circle cx="8"  cy="10" r="2.4" fill="#1faa6b"/>
-          <circle cx="18" cy="10" r="2.4" fill="#f2a93b"/>
-          <circle cx="13" cy="18" r="2.4" fill="#e63320"/>
-          <circle cx="13" cy="13" r="2.8" fill="#fdf8f2"/><circle cx="13" cy="13" r="1.6" fill="#e63320"/>
+        <svg width="32" height="32" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16 33 Q16 53 36 53 Q56 53 56 33 Z" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+          <line x1="26" y1="57" x2="46" y2="57" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+          <path d="M22 33 L31 43 L50 22" stroke="#CCFF00" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M29 26 Q27 22 29 18" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+          <path d="M36 24 Q34 20 36 16" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+          <path d="M43 26 Q41 22 43 18" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".6"/>
         </svg>
       </div>
       <span class="ob-hero-name">EatRight</span>
@@ -3536,7 +3530,7 @@ function showRestoDetail(idx) {
     '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:14px auto 16px"></div>' +
     // Name + close
     '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">' +
-    '<div style="font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.8px;line-height:1.15;flex:1;font-family:Inter,sans-serif">' + escHtml(p.name) + '</div>' +
+    '<div style="font-size:20px;font-weight:800;font-family:Inter,sans-serif;color:var(--ink);letter-spacing:-.8px;line-height:1.15;flex:1">' + escHtml(p.name) + '</div>' +
     '<button onclick="document.getElementById(\'restoDetailWrap\').remove()" ' +
     'style="width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;' +
     'color:var(--ink3);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2715;</button></div>' +
@@ -3549,8 +3543,8 @@ function showRestoDetail(idx) {
     '</div>' +
     // ── ALL BUTTONS FIRST ── so always visible
     '<div style="display:flex;gap:8px;margin-bottom:8px">' +
-    (p.phone ? '<a href="tel:'+phoneClean+'" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(31,170,107,.4);background:rgba(31,170,107,.1);color:#1faa6b;font-family:Inter,sans-serif;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:5px">📞 Call</a>' : '') +
-    '<a href="'+navUrl+'" target="_blank" rel="noopener" style="flex:2;padding:12px;border-radius:12px;background:var(--accent);color:#fff;font-family:Inter,sans-serif;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 12px rgba(255,77,61,.28)">↗ Directions</a>' +
+    (p.phone ? '<a href="tel:'+phoneClean+'" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(31,170,107,.4);background:rgba(31,170,107,.1);color:#1faa6b;font-family:Inter,sans-serif;font-size:12px;font-weight:700;letter-spacing:.01em;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px">📞 Call</a>' : '') +
+    '<a href="'+navUrl+'" target="_blank" rel="noopener" style="flex:2;padding:12px;border-radius:12px;background:var(--accent);color:#fff;font-family:Inter,sans-serif;font-size:12px;font-weight:700;letter-spacing:.01em;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 12px rgba(255,77,61,.28)">↗ Directions</a>' +
     '</div>' +
     (p.website ? '<a href="'+p.website+'" target="_blank" rel="noopener" ' +
     'style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:11px;border-radius:12px;' +
@@ -3558,8 +3552,8 @@ function showRestoDetail(idx) {
     'font-size:12px;font-weight:600;font-family:Inter,sans-serif;letter-spacing:.01em;text-decoration:none;margin-bottom:8px;box-sizing:border-box">🌐 Menu / Website</a>' : '') +
     '<div style="margin-bottom:14px">' +
     '<div style="display:flex;gap:8px;margin-bottom:8px">' +
-    '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'" target="_blank" rel="noopener" style="flex:1;padding:11px 6px;border-radius:12px;background:#0a1a12;border:1.5px solid #06c167;color:#06c167;font-family:Inter,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.2px"><svg width="14" height="14" viewBox="0 0 24 24" fill="#06c167"><circle cx="12" cy="12" r="12" fill="#06c167"/><path d="M7 12h10M12 7v10" stroke="#000" stroke-width="2.5" stroke-linecap="round"/></svg>Uber Eats</a>' +
-    '<a href="https://www.doordash.com/" target="_blank" rel="noopener" style="flex:1;padding:11px 6px;border-radius:12px;background:#1a0505;border:1.5px solid #ff3008;color:#ff3008;font-family:Inter,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.2px"><svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#ff3008"/><path d="M8 12c0-2.2 1.8-4 4-4h4v2h-4c-1.1 0-2 .9-2 2s.9 2 2 2h4v2h-4c-2.2 0-4-1.8-4-4z" fill="#fff"/></svg>DoorDash</a>' +
+    '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#071810;border:2px solid #06c167;color:#06c167;font-family:Inter,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#06c167"/><rect x="5" y="9" width="10" height="2" rx="1" fill="#000"/><rect x="9" y="5" width="2" height="10" rx="1" fill="#000"/></svg>Uber Eats</a>' +
+    '<a href="https://www.doordash.com/" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#1a0404;border:2px solid #ff3008;color:#ff3008;font-family:Inter,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#ff3008"/><path d="M6 10c0-2.2 1.8-4 4-4h4v2h-4c-1.1 0-2 .9-2 2s.9 2 2 2h4v2h-4c-2.2 0-4-1.8-4-4z" fill="#fff"/></svg>DoorDash</a>' +
     '</div>' +
     (!p.delivery && !p.takeout ? '' :
     '<div style="display:flex;gap:8px;">' +
@@ -3575,16 +3569,16 @@ function showRestoDetail(idx) {
       'text-decoration:none;line-height:1.5">'+escHtml(p.address)+'</a></div>' : '') +
     (p.phone ? '<div style="display:flex;gap:10px;align-items:center">' +
       '<span style="font-size:16px;flex-shrink:0">&#128222;</span>' +
-      '<span style="font-size:12px;font-weight:700;color:var(--ink2)">'+escHtml(p.phone)+'</span></div>' : '') +
+      '<span style="font-size:12px;font-weight:500;font-family:Inter,sans-serif;color:var(--ink2)">'+escHtml(p.phone)+'</span></div>' : '') +
     '</div>' +
     '<div style="border-top:1px solid var(--ink4);padding-top:14px;margin-top:4px">' +
-    '<div style="font-size:9.5px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink3);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">🍽 Popular Dishes</div>' +
-    '<div id="topDishesList" style="display:flex;flex-direction:column;gap:8px">' +
-    '<div style="font-size:12px;color:var(--ink3);font-weight:700;padding:4px 0">Loading…</div>' +
+    '<div style="font-size:9px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink3);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px">🍽 Popular Dishes</div>' +
+    '<div id="topDishesList" style="display:flex;flex-direction:column;gap:7px">' +
+    '<div style="font-size:12px;font-weight:500;font-family:Inter,sans-serif;color:var(--ink3);padding:4px 0">Loading…</div>' +
     '</div></div></div>';
 
   document.body.appendChild(wrap);
-  window._dishTarget = {name: p.name, cuisine: p.cuisine||'', address: p.address||''};
+  window._dishTarget = {name:p.name, cuisine:p.cuisine||'', address:p.address||''};
   loadTopDishes();
 }
 window.showRestoDetail = showRestoDetail;
@@ -3595,42 +3589,34 @@ async function loadTopDishes() {
   if (!list || !t.name) return;
   var apiKey = getAnthropicKey();
   if (!apiKey) {
-    list.innerHTML = '<div style="font-size:12px;color:var(--ink3);padding:4px 0">Add your Anthropic key in ⚙ Settings to see popular dishes.</div>';
+    list.innerHTML = '<div style="font-size:12px;font-family:Inter,sans-serif;color:var(--ink3);padding:4px 0">Add your Anthropic key in ⚙ Settings to see popular dishes.</div>';
     return;
   }
   try {
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 500,
-        messages: [{role:'user', content: 'List the 5 most popular menu items at "'+t.name+'"'+(t.cuisine?' ('+t.cuisine+')':'')+(t.address?' in '+t.address:'')+'. For each: name, one short description max 10 words, price if known (~$X) else omit. Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]
-      })
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,
+        messages:[{role:'user',content:'List the 5 most popular menu items at "'+t.name+'"'+(t.cuisine?' ('+t.cuisine+')':'')+(t.address?' in '+t.address:'')+'. For each: name, one short description max 10 words, price if known (~$X) else omit. Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]})
     });
     if (!resp.ok) throw new Error('HTTP '+resp.status);
     var data = await resp.json();
     var raw = (data.content||[]).map(function(c){return c.text||'';}).join('').replace(/```json|```/g,'').trim();
-    var dishes = JSON.parse(raw).dishes || [];
+    var dishes = JSON.parse(raw).dishes||[];
     if (!dishes.length) throw new Error('empty');
-    list.innerHTML = dishes.slice(0,5).map(function(d,i) {
-      return '<div style="display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4)">'+
-        '<div style="min-width:20px;height:20px;border-radius:7px;background:var(--accent);color:#fff;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
+    list.innerHTML = dishes.slice(0,5).map(function(d,i){
+      return '<div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4)">'+
+        '<div style="min-width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
         '<div style="flex:1;min-width:0">'+
-          '<div style="font-size:13px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink);letter-spacing:-.3px;margin-bottom:2px">'+escHtml(d.name||'')+'</div>'+
-          '<div style="font-size:11px;font-weight:400;font-family:Inter,sans-serif;color:var(--ink3);line-height:1.45;letter-spacing:-.05px">'+escHtml(d.desc||'')+'</div>'+
+          '<div style="font-size:13px;font-weight:700;font-family:Inter,sans-serif;letter-spacing:-.3px;color:var(--ink);margin-bottom:2px">'+escHtml(d.name||'')+'</div>'+
+          '<div style="font-size:11px;font-weight:400;font-family:Inter,sans-serif;color:var(--ink3);line-height:1.45">'+escHtml(d.desc||'')+'</div>'+
         '</div>'+
-        (d.price?'<div style="font-size:12px;font-weight:700;font-family:Inter,sans-serif;color:#f2a93b;flex-shrink:0;padding-top:1px;letter-spacing:-.2px">'+escHtml(d.price)+'</div>':'')+
+        (d.price?'<div style="font-size:12px;font-weight:600;font-family:Inter,sans-serif;color:#f2a93b;flex-shrink:0;letter-spacing:-.2px">'+escHtml(d.price)+'</div>':'')+
       '</div>';
     }).join('');
   } catch(e) {
-    var el = document.getElementById('topDishesList');
-    if (el) el.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-style:italic;padding:4px 0">Could not load dishes — see Menu / Website above.</div>';
+    var el=document.getElementById('topDishesList');
+    if(el) el.innerHTML='<div style="font-size:12px;font-family:Inter,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load — see Menu / Website above.</div>';
   }
 }
 window.loadTopDishes = loadTopDishes;
@@ -3666,29 +3652,32 @@ function escHtml(s) {
 
 
 function showApiKeySetup() {
-  var old = document.getElementById('apiKeyModal');
-  if (old) old.remove();
+  var prev = document.getElementById('apiKeyModal');
+  if (prev) prev.remove();
   var modal = document.createElement('div');
   modal.id = 'apiKeyModal';
   modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(5px);z-index:700;display:flex;align-items:flex-end;justify-content:center';
-  modal.onclick = function(e) { if(e.target===modal) modal.remove(); };
+  modal.onclick = function(e){ if(e.target===modal) modal.remove(); };
   var ak = getAnthropicKey(), gk = getApiKey();
   var sheet = document.createElement('div');
   sheet.style.cssText = 'background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;width:100%;max-width:420px;padding:20px 18px 48px';
   sheet.innerHTML =
     '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:0 auto 18px"></div>'+
     '<div style="font-size:17px;font-weight:900;color:var(--ink);margin-bottom:18px">⚙ API Keys</div>'+
-    '<div style="font-size:10px;font-weight:900;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Anthropic Key <span style="color:'+(ak?'#1faa6b':'#f2a93b')+';">'+(ak?'✓ Saved':'Not set')+'</span></div>'+
-    '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Powers meal suggestions &amp; popular dish lookups. Get one at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2);font-weight:800">console.anthropic.com</a></div>'+
-    '<input id="inputAnthropic" type="password" placeholder="sk-ant-..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:700;font-family:Nunito,sans-serif;outline:none;margin-bottom:16px;box-sizing:border-box" value="">'+
-    '<div style="font-size:10px;font-weight:900;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px">Google Places Key <span style="color:'+(gk?'#1faa6b':'#f2a93b')+';">'+(gk?'✓ Saved':'Not set')+'</span></div>'+
-    '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Finds real restaurants near you. Enable <strong style="color:var(--ink)">Places API (New)</strong> at <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2);font-weight:800">console.cloud.google.com</a></div>'+
-    '<input id="inputGoogle" type="password" placeholder="AIzaSy..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:700;font-family:Nunito,sans-serif;outline:none;margin-bottom:18px;box-sizing:border-box" value="">'+
-    '<button onclick="saveAllKeys()" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;box-shadow:0 3px 14px rgba(255,77,61,.28)">✓ Save Keys</button>'+
-    '<button onclick="closeApiKeyModal()" style="width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer">Cancel</button>';
+    '<div style="font-size:10px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">Anthropic Key <span style="color:'+(ak?'#1faa6b':'#f2a93b')+';">'+(ak?'✓ Saved':'Not set')+'</span></div>'+
+    '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Powers meal plans &amp; popular dishes. Get one at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2);font-weight:700">console.anthropic.com</a></div>'+
+    '<input id="inputAnthropic" type="password" placeholder="sk-ant-..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:600;font-family:Inter,sans-serif;outline:none;margin-bottom:16px;box-sizing:border-box">'+
+    '<div style="font-size:10px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">Google Places Key <span style="color:'+(gk?'#1faa6b':'#f2a93b')+';">'+(gk?'✓ Saved':'Not set')+'</span></div>'+
+    '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Finds real restaurants nearby. Enable <strong style="color:var(--ink)">Places API (New)</strong> at <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2);font-weight:700">console.cloud.google.com</a></div>'+
+    '<input id="inputGoogle" type="password" placeholder="AIzaSy..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:600;font-family:Inter,sans-serif;outline:none;margin-bottom:18px;box-sizing:border-box">'+
+    '<button onclick="saveAllKeys()" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;font-family:Inter,sans-serif;font-size:14px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:10px;letter-spacing:-.2px;box-shadow:0 3px 14px rgba(255,77,61,.28)">✓ Save Keys</button>'+
+    '<button onclick="closeApiKeyModal()" style="width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:var(--ink3);cursor:pointer">Cancel</button>';
   modal.appendChild(sheet);
   document.body.appendChild(modal);
-  setTimeout(function(){ var i=document.getElementById('inputAnthropic'); if(i){i.value=ak;} var g=document.getElementById('inputGoogle'); if(g){g.value=gk;} }, 50);
+  setTimeout(function(){
+    var i=document.getElementById('inputAnthropic'); if(i) i.value=ak;
+    var g=document.getElementById('inputGoogle'); if(g) g.value=gk;
+  }, 50);
 }
 
 function saveAllKeys() {
@@ -3911,7 +3900,7 @@ if('serviceWorker' in navigator){
         <button onclick="showApiKeySetup()" title="API Key Settings"
           style="background:var(--deep);border:1px solid var(--border2);border-radius:8px;
           padding:5px 10px;color:var(--ink3);font-size:10px;font-weight:900;cursor:pointer;
-          font-family:Nunito,sans-serif;letter-spacing:.04em;text-transform:uppercase">⚙ Settings</button>
+          font-family:"Inter",sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase">⚙ Settings</button>
         <button class="nearby-close" onclick="closeNearby()">✕</button>
       </div>
     </div>
