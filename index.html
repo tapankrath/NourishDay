@@ -3492,9 +3492,12 @@ async function loadTopDishes() {
   if (!list || !t.name) return;
   var apiKey = getAnthropicKey();
   if (!apiKey) {
-    list.innerHTML = '<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);padding:4px 0">Add your Anthropic key in ⚙ Settings to see popular dishes.</div>';
+    list.innerHTML = '<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:#e63320;padding:4px 0">⚠ No Anthropic key found. Open ⚙ Settings and add your key.</div>';
     return;
   }
+
+  // Debug: show key prefix and target
+  list.innerHTML = '<div style="font-size:10px;color:var(--ink3);padding:2px 0">Loading… (key: '+apiKey.slice(0,8)+'… | restaurant: '+escHtml(t.name)+')</div>';
 
   // Try fetching Beli rating (community-driven restaurant ratings)
   try {
@@ -3552,7 +3555,7 @@ async function loadTopDishes() {
     }
   } catch(e) {
     var el=document.getElementById('topDishesList');
-    if(el) el.innerHTML='<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load dishes ('+escHtml(e.message||String(e))+').</div>';
+    if(el) el.innerHTML='<div style="font-size:11px;font-family:Plus Jakarta Sans,sans-serif;color:#e63320;padding:4px 0;word-break:break-all">Error: '+escHtml(String(e))+'</div>';
   }
 }
 window.loadTopDishes = loadTopDishes;
