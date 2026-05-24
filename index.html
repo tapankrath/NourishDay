@@ -3524,7 +3524,11 @@ async function loadTopDishes() {
           ' For each: name, one short description max 10 words, price if known (~$X) else omit.'+
           ' Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]})
     });
-    if (!resp.ok) throw new Error('HTTP '+resp.status);
+    if (!resp.ok) {
+      var errBody = '';
+      try { var errJson = await resp.json(); errBody = errJson.error?.message || JSON.stringify(errJson); } catch(e2){}
+      throw new Error('HTTP '+resp.status+' '+errBody);
+    }
     var data = await resp.json();
     var raw = (data.content||[]).map(function(c){return c.text||'';}).join('').replace(/```json|```/g,'').trim();
     var dishes = JSON.parse(raw).dishes||[];
@@ -3548,7 +3552,7 @@ async function loadTopDishes() {
     }
   } catch(e) {
     var el=document.getElementById('topDishesList');
-    if(el) el.innerHTML='<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load — see Menu / Website above.</div>';
+    if(el) el.innerHTML='<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load dishes ('+escHtml(e.message||String(e))+').</div>';
   }
 }
 window.loadTopDishes = loadTopDishes;
