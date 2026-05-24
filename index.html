@@ -3561,13 +3561,6 @@ function showRestoDetail(idx) {
     '<div style="flex:1;text-align:center;font-size:10px;font-weight:700;color:#E0F0FF;">' + (p.takeout ? '✓ Takeout' : '') + '</div>' +
     '</div>') +
     '</div>' +
-    // Details below buttons
-    '<div style="border-top:1px solid var(--ink4);padding-top:12px">' +
-    (p.address ? '<div style="display:flex;gap:10px;margin-bottom:10px;align-items:flex-start">' +
-      '<span style="font-size:16px;flex-shrink:0;margin-top:1px">&#128205;</span>' +
-      '<a href="'+mapsQ+'" target="_blank" rel="noopener" style="font-size:12px;font-weight:700;color:var(--accent2);' +
-      'text-decoration:none;line-height:1.5">'+escHtml(p.address)+'</a></div>' : '') +
-    '</div>' +
     '<div style="border-top:1px solid var(--ink4);padding-top:14px;margin-top:4px">' +
     '<div style="font-size:9px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px">🍽 Popular Dishes</div>' +
     '<div id="topDishesList" style="display:flex;flex-direction:column;gap:7px">' +
