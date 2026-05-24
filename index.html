@@ -994,17 +994,6 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   </div>
 </div>
 
-<div class="allergy-zone">
-  <div class="allergy-row">
-    <span class="allergy-lbl">🚫 Allergies</span>
-    <div class="allergy-chips" id="allergyChips"><span class="allergy-none">None set</span></div>
-    <div class="allergy-dropdown-wrap">
-      <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">＋ Add</button>
-      <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
-    </div>
-  </div>
-</div>
-
 
 <div class="body">
   <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -1015,10 +1004,19 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
       📍 Restaurants Nearby
     </button>
   </div>
-  <div class="diet-toggle-row">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
     <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
     <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
     <span class="diet-auto-lbl" id="dietAutoLbl"></span>
+    <div style="flex:1;min-width:0">
+      <div class="allergy-row" style="justify-content:flex-end">
+        <div class="allergy-chips" id="allergyChips" style="justify-content:flex-end"><span class="allergy-none">No allergies</span></div>
+        <div class="allergy-dropdown-wrap">
+          <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">🚫 ＋</button>
+          <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="mode-note" id="modeNote"></div>
   <div class="insight-bar" id="insightBar"><span class="insight-icon">💡</span><span id="insightText"></span></div>
