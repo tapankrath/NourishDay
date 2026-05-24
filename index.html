@@ -3575,7 +3575,11 @@ function showRestoDetail(idx) {
     '</div></div></div>';
 
   document.body.appendChild(wrap);
-  window._dishTarget = {name:p.name, cuisine:p.cuisine||'', address:p.address||''};
+  window._dishTarget = {
+    name: p.name, cuisine: p.cuisine||'', address: p.address||'',
+    googleRating: p.rating ? p.rating.toFixed(1) : '',
+    googleReviews: p.ratingCount ? (p.ratingCount > 999 ? (p.ratingCount/1000).toFixed(1)+'k' : p.ratingCount) : ''
+  };
   loadTopDishes();
 }
 window.showRestoDetail = showRestoDetail;
@@ -3589,12 +3593,28 @@ async function loadTopDishes() {
     list.innerHTML = '<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);padding:4px 0">Add your Anthropic key in ⚙ Settings to see popular dishes.</div>';
     return;
   }
+
+  // Try fetching Beli rating (community-driven restaurant ratings)
+  try {
+    var beliResp = await fetch('https://api.beliapp.com/v1/search?query='+encodeURIComponent(t.name+(t.address?' '+t.address.split(',')[0]:'')), {
+      headers: {'Accept':'application/json'}
+    });
+    if (beliResp.ok) {
+      var beliData = await beliResp.json();
+      var beliHit = (beliData.results||beliData.places||[])[0];
+      if (beliHit && beliHit.rating) t.beliRating = beliHit.rating;
+    }
+  } catch(e) { /* Beli unavailable — proceed without */ }
+
   try {
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,
-        messages:[{role:'user',content:'List the 5 most popular menu items at "'+t.name+'"'+(t.cuisine?' ('+t.cuisine+')':'')+(t.address?' in '+t.address:'')+'. For each: name, one short description max 10 words, price if known (~$X) else omit. Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]})
+        messages:[{role:'user',content:'List the 5 most popular menu items at "'+t.name+'"'+(t.cuisine?' ('+t.cuisine+')':'')+(t.address?' in '+t.address:'')+
+          (t.googleRating?' Google rating: '+t.googleRating+'/5 ('+t.googleReviews+' reviews).':'')+
+          (t.beliRating?' Beli community rating: '+t.beliRating+'.':'')+
+          ' Use these ratings as signals of what dishes are most loved. For each dish: name, one short description max 10 words, price if known (~$X) else omit. Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]})
     });
     if (!resp.ok) throw new Error('HTTP '+resp.status);
     var data = await resp.json();
@@ -3605,12 +3625,19 @@ async function loadTopDishes() {
       return '<div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4)">'+
         '<div style="min-width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
         '<div style="flex:1;min-width:0">'+
-          '<div style="font-size:13px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;letter-spacing:-.3px;color:var(--ink);margin-bottom:2px">'+escHtml(d.name||'')+'</div>'+
+          '<div style="font-size:13px;font-weight:700;font-family:Bricolage Grotesque,sans-serif;color:var(--ink);letter-spacing:-.2px;margin-bottom:2px">'+escHtml(d.name||'')+'</div>'+
           '<div style="font-size:11px;font-weight:400;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);line-height:1.45">'+escHtml(d.desc||'')+'</div>'+
         '</div>'+
         (d.price?'<div style="font-size:12px;font-weight:600;font-family:Plus Jakarta Sans,sans-serif;color:#f2a93b;flex-shrink:0;letter-spacing:-.2px">'+escHtml(d.price)+'</div>':'')+
       '</div>';
     }).join('');
+    // Show what ratings signals were used
+    var sigs = [];
+    if (t.googleRating) sigs.push('Google ★'+t.googleRating+(t.googleReviews?' ('+t.googleReviews+')':''));
+    if (t.beliRating) sigs.push('Beli '+t.beliRating);
+    if (sigs.length) {
+      list.innerHTML += '<div style="font-size:10px;font-weight:500;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);margin-top:8px;text-align:right;opacity:.7">Based on: '+sigs.join(' · ')+'</div>';
+    }
   } catch(e) {
     var el=document.getElementById('topDishesList');
     if(el) el.innerHTML='<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load — see Menu / Website above.</div>';
