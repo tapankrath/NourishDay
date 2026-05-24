@@ -12,7 +12,9 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.svg">
 <link rel="icon" type="image/svg+xml" href="favicon-32.svg">
 <title>EatRight — Daily Meal Planner</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800;12..96,900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -27,7 +29,7 @@
   --frame:rgba(255,77,61,.15);
   --green:#1faa6b;--lime:#f2a93b;
 }
-html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:var(--ink);min-height:100%;overscroll-behavior:none}
+html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);min-height:100%;overscroll-behavior:none}
 
 .app{
   max-width:420px;margin:0 auto;padding-bottom:56px;position:relative;
@@ -54,14 +56,14 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 }
 .logo-mark svg{width:20px;height:20px}
 .logo-text{min-width:0}
-.logo-name{font-size:22px;font-weight:900;color:var(--ink);letter-spacing:-.8px;line-height:1}
+.logo-name{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1;font-family:Bricolage Grotesque,sans-serif}
 
 .mode-tabs-row{padding:0 0 8px}
 
 .profile-btn{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:6px 12px;border-radius:8px;border:1.5px solid var(--border2);
-  background:none;color:var(--accent2);font-family:'Nunito',sans-serif;
+  background:none;color:var(--accent2);font-family:Plus Jakarta Sans,sans-serif;
   font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;
   letter-spacing:.03em;transition:all .15s;flex-shrink:0;line-height:1.2;
 }
@@ -73,7 +75,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .mode-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4);width:100%}
 .mode-tab{
   flex:1;padding:7px 4px;border-radius:7px;border:none;cursor:pointer;
-  font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
+  font-size:10px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
   color:var(--ink3);background:none;transition:all .18s;
   white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;text-align:center;
 }
@@ -84,7 +86,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .diet-btn{
   padding:5px 12px;border-radius:30px;border:1.5px solid var(--ink4);
   cursor:pointer;font-size:11px;font-weight:900;
-  font-family:'Nunito',sans-serif;color:var(--ink3);background:none;
+  font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);background:none;
   transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
 }
 .diet-btn.veg-on{background:#1faa6b;color:#fff;border-color:#1faa6b;box-shadow:0 2px 10px rgba(31,170,107,.30)}
@@ -116,7 +118,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .shuffle-btn{
   width:100%;padding:12px;background:var(--accent);border:none;border-radius:12px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
-  font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:13px;font-weight:900;
   color:#fff;letter-spacing:.05em;text-transform:uppercase;
   box-shadow:0 3px 16px rgba(255,77,61,.28);transition:all .16s;margin-bottom:10px;
 }
@@ -180,7 +182,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   color:var(--accent2);
   font-size:10.5px;font-weight:900;
   padding:7px 8px;border-radius:9px;cursor:pointer;
-  font-family:'Nunito',sans-serif;
+  font-family:Plus Jakarta Sans,sans-serif;
   letter-spacing:.03em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:4px;
   transition:all .14s;white-space:nowrap;
@@ -248,7 +250,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .check-btn.done{
   background:var(--teal);border-color:var(--teal);
   box-shadow:0 0 12px rgba(31,170,107,.45);
-  font-size:14px;font-weight:900;color:#fff;font-family:'Nunito',sans-serif;
+  font-size:14px;font-weight:900;color:#fff;font-family:Plus Jakarta Sans,sans-serif;
 }
 .check-btn.done::after{content:'✓'}
 .check-btn:not(.done):hover{border-color:var(--accent);background:rgba(255,77,61,.08)}
@@ -266,7 +268,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .bev-pill{
   padding:4px 10px;border-radius:20px;border:1.5px solid rgba(242,169,59,.25);
   background:none;color:var(--ink3);
-  font-size:10px;font-weight:900;font-family:'Nunito',sans-serif;
+  font-size:10px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
   cursor:pointer;transition:all .15s;letter-spacing:.04em;
 }
 .bev-pill.on{background:#f2a93b;color:#fff;border-color:#f2a93b;box-shadow:0 1px 8px rgba(242,169,59,.30)}
@@ -274,7 +276,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .log-btn-row{padding:10px 12px 0;display:flex;gap:8px}
 .log-btn{
   flex:1;padding:11px;border-radius:12px;border:none;cursor:pointer;
-  font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:900;
   letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
   display:flex;align-items:center;justify-content:center;gap:6px;
 }
@@ -289,7 +291,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .log-sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0}
 .log-sheet-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
 .log-actions{display:flex;gap:8px;align-items:center}
-.log-export-btn{padding:6px 14px;border-radius:8px;background:var(--accent);border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:#fff;letter-spacing:.05em;text-transform:uppercase}
+.log-export-btn{padding:6px 14px;border-radius:8px;background:var(--accent);border:none;cursor:pointer;font-family:Plus Jakarta Sans,sans-serif;font-size:10px;font-weight:900;color:#fff;letter-spacing:.05em;text-transform:uppercase}
 .log-close-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;color:var(--ink3);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .log-list{overflow-y:auto;flex:1;padding:12px}
 .log-empty{text-align:center;padding:40px 20px;color:var(--ink3);font-size:13px;font-weight:700}
@@ -368,7 +370,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .add-meal-btn{
   width:100%;padding:9px;background:none;
   border:1.5px dashed var(--ink4);border-radius:10px;
-  cursor:pointer;font-family:'Nunito',sans-serif;
+  cursor:pointer;font-family:Plus Jakarta Sans,sans-serif;
   font-size:11px;font-weight:800;color:var(--ink3);
   letter-spacing:.04em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:6px;
@@ -390,7 +392,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .share-btn{
   display:flex;align-items:center;justify-content:center;text-align:center;
   width:100%;padding:11px;border-radius:12px;border:none;cursor:pointer;
-  font-family:'Nunito',sans-serif;font-size:12px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:900;
   letter-spacing:.04em;text-transform:uppercase;transition:all .15s;
   gap:6px;
   background:var(--ink4);color:var(--ink2);border:1px solid var(--border2);
@@ -413,7 +415,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .modal-input{
   width:100%;background:var(--deep);border:1px solid var(--border2);
   border-radius:10px;padding:10px 12px;
-  font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:14px;font-weight:700;
   color:var(--ink);outline:none;margin-bottom:10px;
 }
 .modal-input::placeholder{color:var(--ink3)}
@@ -422,9 +424,9 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .modal-row .modal-input{margin-bottom:0}
 .modal-btns{display:flex;gap:8px}
 .modal-save{flex:2;padding:12px;background:var(--accent);border:none;border-radius:10px;
-  font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:#fff;cursor:pointer}
+  font-family:Plus Jakarta Sans,sans-serif;font-size:13px;font-weight:900;color:#fff;cursor:pointer}
 .modal-cancel{flex:1;padding:12px;background:var(--ink4);border:1px solid var(--ink4);border-radius:10px;
-  font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:var(--ink3);cursor:pointer}
+  font-family:Plus Jakarta Sans,sans-serif;font-size:13px;font-weight:900;color:var(--ink3);cursor:pointer}
 
 
 /* ── ALLERGY PANEL ── */
@@ -451,7 +453,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   padding:4px 10px;border-radius:20px;
   border:1.5px solid var(--border2);background:none;
   color:var(--accent2);font-size:10px;font-weight:800;
-  font-family:'Nunito',sans-serif;cursor:pointer;
+  font-family:Plus Jakarta Sans,sans-serif;cursor:pointer;
   white-space:nowrap;transition:all .15s;flex-shrink:0;
 }
 .allergy-add-btn:hover{background:var(--accent-dim)}
@@ -557,7 +559,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .ob-option{
   padding:14px 10px;border-radius:12px;border:2px solid var(--ink4);
   cursor:pointer;text-align:center;transition:all .18s;background:none;
-  font-family:'Nunito',sans-serif;
+  font-family:Plus Jakarta Sans,sans-serif;
 }
 .ob-option:hover{border-color:var(--border2)}
 .ob-option.selected{border-color:var(--accent2);background:var(--accent-dim)}
@@ -569,14 +571,14 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .ob-allergy-item{
   padding:10px 6px;border-radius:10px;border:2px solid var(--ink4);
   cursor:pointer;text-align:center;transition:all .16s;background:none;
-  font-family:'Nunito',sans-serif;
+  font-family:Plus Jakarta Sans,sans-serif;
 }
 .ob-allergy-item.selected{border-color:var(--orange);background:rgba(242,169,59,.10)}
 .ob-allergy-item-icon{font-size:20px;display:block;margin-bottom:4px}
 .ob-allergy-item-label{font-size:9px;font-weight:900;color:var(--ink);letter-spacing:.03em}
 .ob-none-btn{
   width:100%;padding:9px;border-radius:10px;border:1.5px dashed var(--ink4);
-  background:none;color:var(--ink3);font-family:'Nunito',sans-serif;
+  background:none;color:var(--ink3);font-family:Plus Jakarta Sans,sans-serif;
   font-size:11px;font-weight:800;cursor:pointer;margin-bottom:16px;
   text-transform:uppercase;letter-spacing:.05em;transition:all .15s;
 }
@@ -584,7 +586,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 /* Unit toggle buttons in onboarding */
 .ob-unit-btn{
   padding:3px 9px;border-radius:5px;border:none;cursor:pointer;
-  font-family:'Nunito',sans-serif;font-size:9.5px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:9.5px;font-weight:900;
   color:var(--ink3);background:none;transition:all .15s;letter-spacing:.04em;text-transform:uppercase;
 }
 .ob-unit-btn.on{background:var(--accent);color:#fff;}
@@ -594,7 +596,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .ob-input{
   width:100%;background:var(--deep);border:1px solid var(--border2);
   border-radius:10px;padding:10px 12px;
-  font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:15px;font-weight:700;
   color:var(--ink);outline:none;
 }
 .ob-input:focus{border-color:var(--accent2)}
@@ -604,14 +606,14 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .ob-act-btn{
   padding:10px 8px;border-radius:10px;border:2px solid var(--ink4);
   cursor:pointer;text-align:center;transition:all .16s;background:none;
-  font-family:'Nunito',sans-serif;
+  font-family:Plus Jakarta Sans,sans-serif;
 }
 .ob-act-btn.selected{border-color:var(--accent2);background:var(--accent-dim)}
 .ob-act-label{font-size:11px;font-weight:900;color:var(--ink);display:block}
 .ob-act-sub{font-size:8.5px;font-weight:700;color:var(--ink3)}
 .ob-next-btn{
   width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;
-  cursor:pointer;font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;
+  cursor:pointer;font-family:Plus Jakarta Sans,sans-serif;font-size:14px;font-weight:900;
   color:#fff;letter-spacing:.05em;text-transform:uppercase;
   box-shadow:0 4px 18px rgba(255,77,61,.35);transition:all .16s;
 }
@@ -701,7 +703,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   flex:1;min-width:0;background:var(--deep);border:1.5px solid rgba(242,169,59,.30);
   color:var(--orange);font-size:10.5px;font-weight:900;
   padding:7px 8px;border-radius:9px;cursor:pointer;
-  font-family:'Nunito',sans-serif;letter-spacing:.03em;text-transform:uppercase;
+  font-family:Plus Jakarta Sans,sans-serif;letter-spacing:.03em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:4px;
   transition:all .14s;white-space:nowrap;
 }
@@ -726,8 +728,8 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   padding:16px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0;
 }
 .nearby-hdr-left{}
-.nearby-eyebrow{font-size:8.5px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;font-family:"Inter",sans-serif}
-.nearby-title{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.7px;line-height:1.1;font-family:"Inter",sans-serif}
+.nearby-eyebrow{font-size:8.5px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;font-family:Plus Jakarta Sans,sans-serif}
+.nearby-title{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.7px;line-height:1.1;font-family:Plus Jakarta Sans,sans-serif}
 .nearby-close{
   width:32px;height:32px;border-radius:50%;border:1px solid var(--ink4);
   background:none;color:var(--ink3);font-size:18px;cursor:pointer;
@@ -746,7 +748,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   animation:spin .75s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-.nearby-loading-text{font-size:13px;font-weight:500;color:var(--ink3);text-align:center;line-height:1.5;font-family:"Inter",sans-serif;letter-spacing:-.1px}
+.nearby-loading-text{font-size:13px;font-weight:500;color:var(--ink3);text-align:center;line-height:1.5;font-family:Plus Jakarta Sans,sans-serif;letter-spacing:-.1px}
 
 /* Restaurant card */
 .resto-card{
@@ -756,13 +758,13 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .resto-card:last-child{margin-bottom:0}
 .resto-card:active{border-color:var(--orange)}
 .resto-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
-.resto-name{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-.65px;line-height:1.15;font-family:"Inter",sans-serif}
+.resto-name{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-.65px;line-height:1.15;font-family:Plus Jakarta Sans,sans-serif}
 .resto-rating{
   display:flex;align-items:center;gap:4px;flex-shrink:0;
   background:var(--deep);border-radius:8px;padding:4px 8px;
 }
-.resto-rating-val{font-size:13px;font-weight:700;color:#f2a93b;letter-spacing:-.3px;font-family:"Inter",sans-serif}
-.resto-rating-count{font-size:9px;font-weight:500;color:var(--ink3);letter-spacing:.01em;font-family:"Inter",sans-serif}
+.resto-rating-val{font-size:13px;font-weight:700;color:#f2a93b;letter-spacing:-.3px;font-family:Plus Jakarta Sans,sans-serif}
+.resto-rating-count{font-size:9px;font-weight:500;color:var(--ink3);letter-spacing:.01em;font-family:Plus Jakarta Sans,sans-serif}
 .resto-status{
   display:inline-flex;align-items:center;gap:5px;
   margin-bottom:8px;
@@ -770,14 +772,14 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .resto-open-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .resto-open-dot.open{background:#1faa6b}
 .resto-open-dot.closed{background:#E05C5C}
-.resto-open-text{font-size:11px;font-weight:600;letter-spacing:.02em;font-family:"Inter",sans-serif}
+.resto-open-text{font-size:11px;font-weight:600;letter-spacing:.02em;font-family:Plus Jakarta Sans,sans-serif}
 .resto-open-text.open{color:#1faa6b}
 .resto-open-text.closed{color:#E05C5C}
-.resto-hours{font-size:11px;font-weight:400;color:var(--ink3);margin-left:4px;letter-spacing:-.1px;font-family:"Inter",sans-serif}
+.resto-hours{font-size:11px;font-weight:400;color:var(--ink3);margin-left:4px;letter-spacing:-.1px;font-family:Plus Jakarta Sans,sans-serif}
 .resto-meta{display:flex;flex-direction:column;gap:6px}
 .resto-row{display:flex;align-items:flex-start;gap:8px}
 .resto-row-icon{font-size:13px;flex-shrink:0;margin-top:1px;width:16px;text-align:center}
-.resto-row-text{font-size:12px;font-weight:500;color:var(--ink2);line-height:1.4;flex:1;letter-spacing:-.2px;font-family:"Inter",sans-serif}
+.resto-row-text{font-size:12px;font-weight:500;color:var(--ink2);line-height:1.4;flex:1;letter-spacing:-.2px;font-family:Plus Jakarta Sans,sans-serif}
 .resto-addr-link{
   font-size:12px;font-weight:800;color:var(--accent2);
   text-decoration:none;line-height:1.4;letter-spacing:-.1px;
@@ -788,7 +790,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .resto-call-btn{
   flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(31,170,107,.30);
   background:rgba(31,170,107,.08);color:#1faa6b;
-  font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:11px;font-weight:900;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
   text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
   transition:all .14s;
@@ -797,7 +799,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .resto-map-btn{
   flex:1;padding:9px;border-radius:10px;border:1.5px solid rgba(242,169,59,.30);
   background:rgba(242,169,59,.08);color:var(--orange);
-  font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:11px;font-weight:900;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;
   text-decoration:none;letter-spacing:.04em;text-transform:uppercase;
   transition:all .14s;
@@ -813,7 +815,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .nearby-error-sub{font-size:12px;font-weight:700;color:var(--ink3);line-height:1.6;margin-bottom:20px}
 .nearby-retry-btn{
   padding:11px 24px;background:#f2a93b;border:none;border-radius:12px;
-  font-family:'Nunito',sans-serif;font-size:13px;font-weight:900;color:#fff;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:13px;font-weight:900;color:#fff;
   cursor:pointer;letter-spacing:.04em;
 }
 
@@ -822,7 +824,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
   flex:1;min-width:0;background:var(--deep);border:1.5px solid var(--border2);
   color:var(--ink3);font-size:10.5px;font-weight:900;
   padding:7px 8px;border-radius:9px;cursor:pointer;
-  font-family:'Nunito',sans-serif;letter-spacing:.03em;text-transform:uppercase;
+  font-family:Plus Jakarta Sans,sans-serif;letter-spacing:.03em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:4px;
   transition:all .14s;white-space:nowrap;
 }
@@ -842,7 +844,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .region-lbl{font-size:9px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;margin-right:4px}
 .region-btn{
   padding:5px 11px;border-radius:20px;border:1.5px solid var(--ink4);
-  background:none;color:var(--ink3);font-family:'Nunito',sans-serif;
+  background:none;color:var(--ink3);font-family:Plus Jakarta Sans,sans-serif;
   font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap;
   transition:all .15s;letter-spacing:.03em;flex-shrink:0;
 }
@@ -857,7 +859,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 ═══════════════════════════════════════════════════════ */
 .week-btn{
   flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border2);
-  background:none;color:var(--ink2);font-family:'Nunito',sans-serif;
+  background:none;color:var(--ink2);font-family:Plus Jakarta Sans,sans-serif;
   font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
   transition:all .15s;
@@ -871,9 +873,9 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .week-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
 .week-close{width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;color:var(--ink3);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .week-actions{display:flex;gap:7px}
-.week-action-btn{flex:1;padding:8px 10px;border-radius:9px;background:var(--accent);border:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:11px;font-weight:900;color:#fff;letter-spacing:.04em;text-transform:uppercase;text-align:center}
+.week-action-btn{flex:1;padding:8px 10px;border-radius:9px;background:var(--accent);border:none;cursor:pointer;font-family:Plus Jakarta Sans,sans-serif;font-size:11px;font-weight:900;color:#fff;letter-spacing:.04em;text-transform:uppercase;text-align:center}
 .week-tabs{display:flex;border-bottom:1px solid var(--ink4);flex-shrink:0}
-.week-tab{flex:1;padding:10px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:10px;font-weight:900;color:var(--ink3);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .14s;border-bottom:2px solid transparent}
+.week-tab{flex:1;padding:10px;border:none;background:none;font-family:Plus Jakarta Sans,sans-serif;font-size:10px;font-weight:900;color:var(--ink3);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:all .14s;border-bottom:2px solid transparent}
 .week-tab.on{color:var(--accent2);border-bottom-color:var(--accent2)}
 .week-body{overflow-y:auto;flex:1;padding:12px}
 /* Week grid */
@@ -883,7 +885,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
 .week-day-kcal{font-size:11px;font-weight:800;color:var(--accent2)}
 .week-day-regen{
   padding:3px 9px;border-radius:7px;border:1.5px solid var(--border2);
-  background:none;color:var(--accent2);font-family:'Nunito',sans-serif;
+  background:none;color:var(--accent2);font-family:Plus Jakarta Sans,sans-serif;
   font-size:9px;font-weight:900;cursor:pointer;letter-spacing:.04em;
 }
 .week-meal-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-bottom:1px solid rgba(255,255,255,.03)}
@@ -1047,7 +1049,7 @@ html,body{background:var(--bg);font-family:'Nunito',system-ui,sans-serif;color:v
     <button class="log-btn history" onclick="openLog()">📅 History</button>
   </div>
 
-    <button class="share-btn" onclick="shareDay()" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border2);background:none;color:var(--ink2);font-family:Nunito,sans-serif;font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;gap:7px;width:100%">📤 Share Today's Plan</button>
+    <button class="share-btn" onclick="shareDay()" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border2);background:none;color:var(--ink2);font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;gap:7px;width:100%">📤 Share Today's Plan</button>
   </div>
   <button class="add-meal-btn" onclick="openCustomModal()">＋ Add My Own Meal</button>
 </div>
@@ -3010,7 +3012,7 @@ function renderGroceryList() {
     html += '</div>';
   });
 
-  html += '<button onclick="groceryChecked={};renderGroceryList()" style="width:100%;padding:9px;border-radius:10px;border:1.5px dashed var(--ink4);background:none;color:var(--ink3);font-family:Nunito,sans-serif;font-size:11px;font-weight:800;cursor:pointer;margin-top:4px;text-transform:uppercase;letter-spacing:.05em">↺ Uncheck All</button>';
+  html += '<button onclick="groceryChecked={};renderGroceryList()" style="width:100%;padding:9px;border-radius:10px;border:1.5px dashed var(--ink4);background:none;color:var(--ink3);font-family:Plus Jakarta Sans,sans-serif;font-size:11px;font-weight:800;cursor:pointer;margin-top:4px;text-transform:uppercase;letter-spacing:.05em">↺ Uncheck All</button>';
   html += '<div style="height:20px"></div></div>';
   document.getElementById('weekBody').innerHTML = html;
 }
@@ -3249,7 +3251,7 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
       'A free Google Places API key lets us find restaurants near you — right inside the app.</div>' +
       '<button onclick="showApiKeySetup()" ' +
       'style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;' +
-      'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;' +
+      'font-family:Plus Jakarta Sans,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;' +
       'letter-spacing:.03em;margin-bottom:10px">🔑 Enter API Key</button>' +
       '<a href="https://console.cloud.google.com/apis/library/places-backend.googleapis.com" ' +
       'target="_blank" rel="noopener" ' +
@@ -3324,7 +3326,7 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
       '<button onclick="openNearby(window._nearbyMealType)" ' +
       'style="width:100%;padding:11px;background:var(--deep);border:1.5px solid var(--border2);' +
       'border-radius:12px;font-size:12px;font-weight:800;color:var(--ink2);cursor:pointer;' +
-      'font-family:Nunito,sans-serif">&#8634; Try Again</button></div>';
+      'font-family:Plus Jakarta Sans,sans-serif">&#8634; Try Again</button></div>';
   }
 }
 
@@ -3405,7 +3407,7 @@ function renderShowMoreBtn() {
   btn.id = 'showMoreBtn';
   btn.textContent = 'Show More · ' + RING_LABELS[nextRing];
   btn.style.cssText = 'width:100%;margin-top:10px;padding:12px;background:var(--deep);border:1.5px solid var(--border2);' +
-    'border-radius:12px;font-family:Nunito,sans-serif;font-size:12px;font-weight:900;color:var(--accent2);' +
+    'border-radius:12px;font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:900;color:var(--accent2);' +
     'cursor:pointer;letter-spacing:.04em;text-transform:uppercase';
   btn.onclick = loadMoreNearby;
   document.getElementById('nearbyBody').appendChild(btn);
@@ -3531,30 +3533,27 @@ function showRestoDetail(idx) {
     '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:14px auto 16px"></div>' +
     // Name + close
     '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px">' +
-    '<div style="font-size:20px;font-weight:800;font-family:Inter,sans-serif;color:var(--ink);letter-spacing:-.8px;line-height:1.15;flex:1">' + escHtml(p.name) + '</div>' +
+    '<div style="font-size:20px;font-weight:800;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink);letter-spacing:-.8px;line-height:1.15;flex:1">' + escHtml(p.name) + '</div>' +
     '<button onclick="document.getElementById(\'restoDetailWrap\').remove()" ' +
     'style="width:30px;height:30px;border-radius:50%;border:1px solid var(--ink4);background:none;' +
     'color:var(--ink3);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&#x2715;</button></div>' +
     // Badges
     '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">' +
     '<span style="display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;' +
-    'font-size:11px;font-weight:600;font-family:Inter,sans-serif;color:'+oc+';border:1px solid '+oc+'44;background:'+oc+'18">'+ol+'</span>' +
-    (p.rating ? '<span style="padding:4px 10px;border-radius:20px;background:var(--deep);border:1px solid var(--ink4);font-size:11px;font-weight:700;font-family:Inter,sans-serif;color:#f2a93b">★ '+p.rating.toFixed(1)+(rc?' ('+rc+')':'')+'</span>' : '') +
-    (p.dist!==null ? '<span style="padding:4px 8px;border-radius:20px;background:var(--ink4);font-size:10px;font-weight:600;font-family:Inter,sans-serif;color:var(--ink3)">'+p.dist.toFixed(1)+' mi</span>' : '') +
+    'font-size:11px;font-weight:600;font-family:Plus Jakarta Sans,sans-serif;color:'+oc+';border:1px solid '+oc+'44;background:'+oc+'18">'+ol+'</span>' +
+    (p.rating ? '<span style="padding:4px 10px;border-radius:20px;background:var(--deep);border:1px solid var(--ink4);font-size:11px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;color:#f2a93b">★ '+p.rating.toFixed(1)+(rc?' ('+rc+')':'')+'</span>' : '') +
+    (p.dist!==null ? '<span style="padding:4px 8px;border-radius:20px;background:var(--ink4);font-size:10px;font-weight:600;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3)">'+p.dist.toFixed(1)+' mi</span>' : '') +
     '</div>' +
     // ── ALL BUTTONS FIRST ── so always visible
-    '<div style="display:flex;gap:8px;margin-bottom:8px">' +
-    (p.phone ? '<a href="tel:'+phoneClean+'" style="flex:1;padding:12px;border-radius:12px;border:1.5px solid rgba(31,170,107,.4);background:rgba(31,170,107,.1);color:#1faa6b;font-family:Inter,sans-serif;font-size:12px;font-weight:700;letter-spacing:.01em;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px">📞 Call</a>' : '') +
-    '<a href="'+navUrl+'" target="_blank" rel="noopener" style="flex:2;padding:12px;border-radius:12px;background:var(--accent);color:#fff;font-family:Inter,sans-serif;font-size:12px;font-weight:700;letter-spacing:.01em;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;box-shadow:0 3px 12px rgba(255,77,61,.28)">↗ Directions</a>' +
+    '<div style="display:grid;grid-template-columns:'+(p.phone&&p.website?'1fr 1.5fr 1fr':p.phone?'1fr 2fr':p.website?'1.5fr 1fr':'1fr')+';gap:8px;margin-bottom:8px">' +
+    (p.phone ? '<a href="tel:'+phoneClean+'" style="padding:11px 4px;border-radius:12px;border:1.5px solid rgba(31,170,107,.4);background:rgba(31,170,107,.08);color:#1faa6b;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:11.5px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px">📞 Call</a>' : '') +
+    '<a href="'+navUrl+'" target="_blank" rel="noopener" style="padding:11px 4px;border-radius:12px;background:var(--accent);color:#fff;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:11.5px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;box-shadow:0 3px 12px rgba(255,77,61,.28)">↗ Directions</a>' +
+    (p.website ? '<a href="'+p.website+'" target="_blank" rel="noopener" style="padding:11px 4px;border-radius:12px;background:var(--deep);border:1.5px solid var(--border2);color:var(--ink2);font-family:\'Plus Jakarta Sans\',sans-serif;font-size:11.5px;font-weight:600;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;box-sizing:border-box">🌐 Menu</a>' : '') +
     '</div>' +
-    (p.website ? '<a href="'+p.website+'" target="_blank" rel="noopener" ' +
-    'style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:11px;border-radius:12px;' +
-    'background:var(--deep);border:1.5px solid var(--border2);color:var(--ink2);font-family:Nunito,sans-serif;' +
-    'font-size:12px;font-weight:600;font-family:Inter,sans-serif;letter-spacing:.01em;text-decoration:none;margin-bottom:8px;box-sizing:border-box">🌐 Menu / Website</a>' : '') +
     '<div style="margin-bottom:14px">' +
     '<div style="display:flex;gap:8px;margin-bottom:8px">' +
-    '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#071810;border:2px solid #06c167;color:#06c167;font-family:Inter,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#06c167"/><rect x="5" y="9" width="10" height="2" rx="1" fill="#000"/><rect x="9" y="5" width="2" height="10" rx="1" fill="#000"/></svg>Uber Eats</a>' +
-    '<a href="https://www.doordash.com/" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#1a0404;border:2px solid #ff3008;color:#ff3008;font-family:Inter,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#ff3008"/><path d="M6 10c0-2.2 1.8-4 4-4h4v2h-4c-1.1 0-2 .9-2 2s.9 2 2 2h4v2h-4c-2.2 0-4-1.8-4-4z" fill="#fff"/></svg>DoorDash</a>' +
+    '<a href="https://www.ubereats.com/search?q='+encodeURIComponent(p.name)+'" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#071810;border:2px solid #06c167;color:#06c167;font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#06c167"/><rect x="5" y="9" width="10" height="2" rx="1" fill="#000"/><rect x="9" y="5" width="2" height="10" rx="1" fill="#000"/></svg>Uber Eats</a>' +
+    '<a href="https://www.doordash.com/" target="_blank" rel="noopener" style="flex:1;padding:11px 8px;border-radius:12px;background:#1a0404;border:2px solid #ff3008;color:#ff3008;font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:800;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:-.1px"><svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#ff3008"/><path d="M6 10c0-2.2 1.8-4 4-4h4v2h-4c-1.1 0-2 .9-2 2s.9 2 2 2h4v2h-4c-2.2 0-4-1.8-4-4z" fill="#fff"/></svg>DoorDash</a>' +
     '</div>' +
     (!p.delivery && !p.takeout ? '' :
     '<div style="display:flex;gap:8px;">' +
@@ -3570,12 +3569,12 @@ function showRestoDetail(idx) {
       'text-decoration:none;line-height:1.5">'+escHtml(p.address)+'</a></div>' : '') +
     (p.phone ? '<div style="display:flex;gap:10px;align-items:center">' +
       '<span style="font-size:16px;flex-shrink:0">&#128222;</span>' +
-      '<span style="font-size:12px;font-weight:500;font-family:Inter,sans-serif;color:var(--ink2)">'+escHtml(p.phone)+'</span></div>' : '') +
+      '<span style="font-size:12px;font-weight:500;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink2)">'+escHtml(p.phone)+'</span></div>' : '') +
     '</div>' +
     '<div style="border-top:1px solid var(--ink4);padding-top:14px;margin-top:4px">' +
-    '<div style="font-size:9px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink3);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px">🍽 Popular Dishes</div>' +
+    '<div style="font-size:9px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px">🍽 Popular Dishes</div>' +
     '<div id="topDishesList" style="display:flex;flex-direction:column;gap:7px">' +
-    '<div style="font-size:12px;font-weight:500;font-family:Inter,sans-serif;color:var(--ink3);padding:4px 0">Loading…</div>' +
+    '<div style="font-size:12px;font-weight:500;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);padding:4px 0">Loading…</div>' +
     '</div></div></div>';
 
   document.body.appendChild(wrap);
@@ -3590,7 +3589,7 @@ async function loadTopDishes() {
   if (!list || !t.name) return;
   var apiKey = getAnthropicKey();
   if (!apiKey) {
-    list.innerHTML = '<div style="font-size:12px;font-family:Inter,sans-serif;color:var(--ink3);padding:4px 0">Add your Anthropic key in ⚙ Settings to see popular dishes.</div>';
+    list.innerHTML = '<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);padding:4px 0">Add your Anthropic key in ⚙ Settings to see popular dishes.</div>';
     return;
   }
   try {
@@ -3607,17 +3606,17 @@ async function loadTopDishes() {
     if (!dishes.length) throw new Error('empty');
     list.innerHTML = dishes.slice(0,5).map(function(d,i){
       return '<div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4)">'+
-        '<div style="min-width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
+        '<div style="min-width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
         '<div style="flex:1;min-width:0">'+
-          '<div style="font-size:13px;font-weight:700;font-family:Inter,sans-serif;letter-spacing:-.3px;color:var(--ink);margin-bottom:2px">'+escHtml(d.name||'')+'</div>'+
-          '<div style="font-size:11px;font-weight:400;font-family:Inter,sans-serif;color:var(--ink3);line-height:1.45">'+escHtml(d.desc||'')+'</div>'+
+          '<div style="font-size:13px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;letter-spacing:-.3px;color:var(--ink);margin-bottom:2px">'+escHtml(d.name||'')+'</div>'+
+          '<div style="font-size:11px;font-weight:400;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);line-height:1.45">'+escHtml(d.desc||'')+'</div>'+
         '</div>'+
-        (d.price?'<div style="font-size:12px;font-weight:600;font-family:Inter,sans-serif;color:#f2a93b;flex-shrink:0;letter-spacing:-.2px">'+escHtml(d.price)+'</div>':'')+
+        (d.price?'<div style="font-size:12px;font-weight:600;font-family:Plus Jakarta Sans,sans-serif;color:#f2a93b;flex-shrink:0;letter-spacing:-.2px">'+escHtml(d.price)+'</div>':'')+
       '</div>';
     }).join('');
   } catch(e) {
     var el=document.getElementById('topDishesList');
-    if(el) el.innerHTML='<div style="font-size:12px;font-family:Inter,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load — see Menu / Website above.</div>';
+    if(el) el.innerHTML='<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load — see Menu / Website above.</div>';
   }
 }
 window.loadTopDishes = loadTopDishes;
@@ -3665,14 +3664,14 @@ function showApiKeySetup() {
   sheet.innerHTML =
     '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:0 auto 18px"></div>'+
     '<div style="font-size:17px;font-weight:900;color:var(--ink);margin-bottom:18px">⚙ API Keys</div>'+
-    '<div style="font-size:10px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">Anthropic Key <span style="color:'+(ak?'#1faa6b':'#f2a93b')+';">'+(ak?'✓ Saved':'Not set')+'</span></div>'+
+    '<div style="font-size:10px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">Anthropic Key <span style="color:'+(ak?'#1faa6b':'#f2a93b')+';">'+(ak?'✓ Saved':'Not set')+'</span></div>'+
     '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Powers meal plans &amp; popular dishes. Get one at <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent2);font-weight:700">console.anthropic.com</a></div>'+
-    '<input id="inputAnthropic" type="password" placeholder="sk-ant-..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:600;font-family:Inter,sans-serif;outline:none;margin-bottom:16px;box-sizing:border-box">'+
-    '<div style="font-size:10px;font-weight:700;font-family:Inter,sans-serif;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">Google Places Key <span style="color:'+(gk?'#1faa6b':'#f2a93b')+';">'+(gk?'✓ Saved':'Not set')+'</span></div>'+
+    '<input id="inputAnthropic" type="password" placeholder="sk-ant-..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:600;font-family:Plus Jakarta Sans,sans-serif;outline:none;margin-bottom:16px;box-sizing:border-box">'+
+    '<div style="font-size:10px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px">Google Places Key <span style="color:'+(gk?'#1faa6b':'#f2a93b')+';">'+(gk?'✓ Saved':'Not set')+'</span></div>'+
     '<div style="font-size:11px;color:var(--ink3);margin-bottom:8px;line-height:1.5">Finds real restaurants nearby. Enable <strong style="color:var(--ink)">Places API (New)</strong> at <a href="https://console.cloud.google.com" target="_blank" style="color:var(--accent2);font-weight:700">console.cloud.google.com</a></div>'+
-    '<input id="inputGoogle" type="password" placeholder="AIzaSy..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:600;font-family:Inter,sans-serif;outline:none;margin-bottom:18px;box-sizing:border-box">'+
-    '<button onclick="saveAllKeys()" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;font-family:Inter,sans-serif;font-size:14px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:10px;letter-spacing:-.2px;box-shadow:0 3px 14px rgba(255,77,61,.28)">✓ Save Keys</button>'+
-    '<button onclick="closeApiKeyModal()" style="width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Inter,sans-serif;font-size:12px;font-weight:600;color:var(--ink3);cursor:pointer">Cancel</button>';
+    '<input id="inputGoogle" type="password" placeholder="AIzaSy..." autocomplete="off" style="width:100%;padding:12px 14px;background:var(--deep);border:1.5px solid var(--border2);border-radius:12px;color:var(--ink);font-size:13px;font-weight:600;font-family:Plus Jakarta Sans,sans-serif;outline:none;margin-bottom:18px;box-sizing:border-box">'+
+    '<button onclick="saveAllKeys()" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;font-family:Plus Jakarta Sans,sans-serif;font-size:14px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:10px;letter-spacing:-.2px;box-shadow:0 3px 14px rgba(255,77,61,.28)">✓ Save Keys</button>'+
+    '<button onclick="closeApiKeyModal()" style="width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:600;color:var(--ink3);cursor:pointer">Cancel</button>';
   modal.appendChild(sheet);
   document.body.appendChild(modal);
   setTimeout(function(){
@@ -3714,11 +3713,11 @@ function showNotFoundWithAlt(lat, lng, mealShort) {
   sub.innerHTML = 'No restaurants serving <strong style="color:var(--ink)">' + escHtml(mealShort) + '</strong> found within 2 miles.';
   var b1 = document.createElement('button');
   b1.textContent = '🥗 Find Healthy Restaurants Nearby';
-  b1.style.cssText = 'width:100%;padding:14px;background:#1faa6b;border:none;border-radius:13px;font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;display:block';
+  b1.style.cssText = 'width:100%;padding:14px;background:#1faa6b;border:none;border-radius:13px;font-family:Plus Jakarta Sans,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px;display:block';
   b1.onclick = function() { searchHealthyAlt(lat, lng); };
   var b2 = document.createElement('button');
   b2.textContent = '↺ Try Again';
-  b2.style.cssText = 'width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Nunito,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer';
+  b2.style.cssText = 'width:100%;padding:11px;background:none;border:1.5px solid var(--ink4);border-radius:12px;font-family:Plus Jakarta Sans,sans-serif;font-size:12px;font-weight:800;color:var(--ink3);cursor:pointer';
   b2.onclick = function() { openNearby(window._nearbyMealType); };
   wrap.appendChild(icon); wrap.appendChild(title); wrap.appendChild(sub);
   wrap.appendChild(b1); wrap.appendChild(b2);
@@ -3787,7 +3786,7 @@ async function findHealthyNearby(lat, lng) {
       '<div style="font-size:12px;color:var(--ink3);line-height:1.7;margin-bottom:22px">' +
       'Add a free Google Places API key to search restaurants inside the app.</div>' +
       '<button onclick="showApiKeySetup()" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:13px;' +
-      'font-family:Nunito,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px">' +
+      'font-family:Plus Jakarta Sans,sans-serif;font-size:14px;font-weight:900;color:#fff;cursor:pointer;margin-bottom:10px">' +
       '🔑 Enter API Key</button>' +
       '<a href="https://console.cloud.google.com/apis/library/places-backend.googleapis.com" target="_blank" rel="noopener" ' +
       'style="display:block;font-size:11px;font-weight:700;color:var(--accent2);text-decoration:none">Get a free key →</a></div>';
@@ -3901,7 +3900,7 @@ if('serviceWorker' in navigator){
         <button onclick="showApiKeySetup()" title="API Key Settings"
           style="background:var(--deep);border:1px solid var(--border2);border-radius:8px;
           padding:5px 10px;color:var(--ink3);font-size:10px;font-weight:900;cursor:pointer;
-          font-family:"Inter",sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase">⚙ Settings</button>
+          font-family:Plus Jakarta Sans,sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase">⚙ Settings</button>
         <button class="nearby-close" onclick="closeNearby()">✕</button>
       </div>
     </div>
