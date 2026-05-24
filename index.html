@@ -3578,28 +3578,19 @@ function showRestoDetail(idx) {
     '</div>' +
     // ── Top Dishes section ──
     '<div id="topDishesSection" style="border-top:1px solid var(--ink4);padding-top:14px">' +
-    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">' +
-    '<div style="font-size:12px;font-weight:900;color:var(--ink);letter-spacing:.04em;text-transform:uppercase">🍽️ Popular Dishes</div>' +
-    '<button id="topDishesBtn" onclick="loadTopDishes(\''+escHtml(p.name)+'\',\''+escHtml(p.cuisine||'')+'\',\''+escHtml(p.address||'')+'\')" ' +
-    'style="padding:5px 12px;border-radius:20px;border:1.5px solid var(--border2);background:none;' +
-    'color:var(--accent);font-family:Nunito,sans-serif;font-size:11px;font-weight:900;cursor:pointer;letter-spacing:.02em">' +
-    'Load top 5</button>' +
-    '</div>' +
-    '<div id="topDishesList" style="display:flex;flex-direction:column;gap:8px"></div>' +
+    '<div style="font-size:12px;font-weight:900;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px">🍽️ Popular Dishes</div>' +
+    '<div id="topDishesList"><div style="font-size:12px;color:var(--ink3);font-style:italic;padding:4px 0">Loading…</div></div>' +
     '</div>' +
     '</div>';
 
   document.body.appendChild(wrap);
+  // Auto-load dishes immediately
+  loadTopDishes(p.name, p.cuisine||'', p.address||'');
 }
-window.showRestoDetail = showRestoDetail;
 
 async function loadTopDishes(name, cuisine, address) {
-  const btn = document.getElementById('topDishesBtn');
   const list = document.getElementById('topDishesList');
-  if (!btn || !list) return;
-  btn.textContent = 'Loading…';
-  btn.disabled = true;
-  btn.style.opacity = '.5';
+  if (!list) return;
 
   try {
     const prompt = `You are a food expert. List the 5 most popular, well-known menu items at "${name}" (${cuisine||'restaurant'}) located at ${address||'this location'}.
@@ -3624,7 +3615,7 @@ Respond ONLY with raw JSON, no markdown:
     if (!dishes.length) throw new Error('No dishes');
 
     list.innerHTML = dishes.map((d,i) =>
-      '<div style="display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4)">' +
+      '<div style="display:flex;align-items:flex-start;gap:10px;padding:9px 10px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4);margin-bottom:8px">' +
       '<div style="width:22px;height:22px;border-radius:8px;background:var(--accent);color:#fff;font-size:11px;font-weight:900;' +
       'display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>' +
       '<div style="flex:1;min-width:0">' +
@@ -3635,12 +3626,8 @@ Respond ONLY with raw JSON, no markdown:
       '</div>'
     ).join('');
 
-    btn.style.display = 'none';
   } catch(e) {
-    list.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-style:italic;text-align:center;padding:8px">Couldn\'t load dishes — try Menu / Website above</div>';
-    btn.textContent = 'Retry';
-    btn.disabled = false;
-    btn.style.opacity = '1';
+    list.innerHTML = '<div style="font-size:12px;color:var(--ink3);font-style:italic;text-align:center;padding:8px">Couldn\'t load dishes — check Menu / Website above</div>';
   }
 }
 window.loadTopDishes = loadTopDishes;
