@@ -3220,7 +3220,7 @@ function fmtClose(periods, day) {
   return 'Closes ' + h12 + ':' + m + (h >= 12 ? 'pm' : 'am');
 }
 
-async function placesSearch(query, lat, lng, radius) {
+async function placesSearch(query, lat, lng, radiusMeters) {
   const resp = await fetch('https://places.googleapis.com/v1/places:searchText', {
     method: 'POST',
     headers: {
@@ -3230,13 +3230,21 @@ async function placesSearch(query, lat, lng, radius) {
     },
     body: JSON.stringify({
       textQuery: query,
-      maxResultCount: 8,
-      locationBias: { circle: { center: { latitude: lat, longitude: lng }, radius: radius } }
+      maxResultCount: 20,
+      locationRestriction: { circle: { center: { latitude: lat, longitude: lng }, radius: radiusMeters } }
     })
   });
   const d = await resp.json();
   if (d.error) throw new Error(d.error.message);
-  return (d.places || []).filter(function(p) { return p.businessStatus !== 'CLOSED_PERMANENTLY'; });
+  const radiusMi = radiusMeters / 1609.34;
+  return (d.places || [])
+    .filter(function(p) { return p.businessStatus !== 'CLOSED_PERMANENTLY'; })
+    .filter(function(p) {
+      // Hard distance filter — drop anything outside the requested radius
+      if (!p.location) return true;
+      const dist = haversineMi(lat, lng, p.location.latitude, p.location.longitude);
+      return dist <= radiusMi;
+    });
 }
 
 async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
@@ -3247,7 +3255,7 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
   document.getElementById('nearbyBody').innerHTML =
     '<div class="nearby-loading"><div class="nearby-spinner"></div>' +
     '<div class="nearby-loading-text">Searching for restaurants near you…' +
-    '<br><span style="font-size:11px;opacity:.5">Open now · within 2 miles</span></div></div>';
+    '<br><span style="font-size:11px;opacity:.5">Open now · ' + RING_LABELS[window._nearbyRing||0] + '</span></div></div>';
 
   if (!getApiKey()) {
     document.getElementById('nearbyBody').innerHTML =
@@ -3270,12 +3278,20 @@ async function fetchNearbyRestaurants(lat, lng, meal, cuisine) {
   try {
     const area = await reverseGeocode(lat, lng);
     const areaStr = area ? ' near ' + area : '';
+    const ringM = RADIUS_RINGS[window._nearbyRing] || RADIUS_RINGS[0]; // metres for current ring
 
-    let places = await placesSearch(mealToQuery(mealN) + areaStr, lat, lng, 2400);
+    let places = await placesSearch(mealToQuery(mealN) + areaStr, lat, lng, ringM);
     if (places.length < 3) {
-      const p2 = await placesSearch('healthy restaurant' + areaStr, lat, lng, 3200);
+      const p2 = await placesSearch('healthy restaurant' + areaStr, lat, lng, ringM);
       const seen = new Set(places.map(function(p) { return p.id; }));
       p2.forEach(function(p) { if (!seen.has(p.id)) places.push(p); });
+    }
+    // If still thin and not already on the widest ring, quietly expand one ring
+    if (places.length < 3 && window._nearbyRing < RADIUS_RINGS.length - 1) {
+      const nextM = RADIUS_RINGS[window._nearbyRing + 1];
+      const p3 = await placesSearch('restaurant' + areaStr, lat, lng, nextM);
+      const seen2 = new Set(places.map(function(p) { return p.id; }));
+      p3.forEach(function(p) { if (!seen2.has(p.id)) places.push(p); });
     }
     if (!places.length) {
       window._nearbyLat = lat; window._nearbyLng = lng;
@@ -3748,8 +3764,8 @@ async function searchHealthyAlt(lat, lng) {
   try {
     const area = await reverseGeocode(lat, lng);
     const areaStr = area ? ' near ' + area : '';
-    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, 3200);
-    if (places.length < 2) places = await placesSearch('restaurant' + areaStr, lat, lng, 3200);
+    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, ringM);
+    if (places.length < 2) places = await placesSearch('restaurant' + areaStr, lat, lng, ringM);
     if (!places.length) throw new Error('No restaurants found');
 
     const list = places.slice(0, 8).map(function(p) {
@@ -3818,8 +3834,8 @@ async function findHealthyNearby(lat, lng) {
     const areaStr = area ? ' near ' + area : '';
 
     // Search healthy restaurants — try multiple queries and merge
-    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, 3200);
-    const p2 = await placesSearch('healthy cafe' + areaStr, lat, lng, 3200);
+    let places = await placesSearch('healthy restaurant' + areaStr, lat, lng, ringM);
+    const p2 = await placesSearch('healthy cafe' + areaStr, lat, lng, ringM);
     const seen = new Set(places.map(function(p) { return p.id; }));
     p2.forEach(function(p) { if (!seen.has(p.id)) places.push(p); });
 
