@@ -3146,17 +3146,24 @@ function openNearby() {
     showManualLocation(null, null);
     return;
   }
-  var watchId = navigator.geolocation.watchPosition(
-    function(pos) {
-      navigator.geolocation.clearWatch(watchId);
-      findHealthyNearby(pos.coords.latitude, pos.coords.longitude);
-    },
-    function() {
-      navigator.geolocation.clearWatch(watchId);
-      showManualLocation(null, null);
-    },
-    { timeout: 10000, maximumAge: 60000, enableHighAccuracy: false }
-  );
+
+  // Try fresh high-accuracy fix first (maximumAge:0 forces new GPS read)
+  // Fall back to a cached position if fresh takes > 6s
+  var settled = false;
+  function onPos(pos) {
+    if (settled) return; settled = true;
+    findHealthyNearby(pos.coords.latitude, pos.coords.longitude);
+  }
+  function onErr() {
+    if (settled) return; settled = true;
+    showManualLocation(null, null);
+  }
+
+  // Fast path: accept up to 5s old cached fix immediately while fresh one loads
+  navigator.geolocation.getCurrentPosition(onPos, function(){}, { maximumAge: 5000, timeout: 500, enableHighAccuracy: false });
+
+  // Fresh path: force new GPS read
+  navigator.geolocation.getCurrentPosition(onPos, onErr, { maximumAge: 0, timeout: 12000, enableHighAccuracy: true });
 }
 
 async function reverseGeocode(lat, lng) {
