@@ -1009,11 +1009,11 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
       📍 Restaurants Nearby
     </button>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
     <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
     <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
-    <span class="diet-auto-lbl" id="dietAutoLbl"></span>
-    <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:5px">
+    <span class="diet-auto-lbl" id="dietAutoLbl" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:110px"></span>
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:5px">
       <div class="allergy-chips" id="allergyChips" style="justify-content:flex-end"><span class="allergy-none">No allergies</span></div>
       <div class="allergy-dropdown-wrap">
         <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">🚫 ＋</button>
