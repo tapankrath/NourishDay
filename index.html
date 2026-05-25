@@ -92,8 +92,8 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 
 .mode-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4);width:100%}
 .mode-tab{
-  flex:1;padding:7px 4px;border-radius:7px;border:none;cursor:pointer;
-  font-size:10px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
+  flex:1;padding:6px 2px;border-radius:7px;border:none;cursor:pointer;
+  font-size:9.5px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
   color:var(--ink3);background:none;transition:all .18s;
   white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;text-align:center;
 }
@@ -962,21 +962,18 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
     </div>
     <button class="profile-btn" id="profileBtn" onclick="openProfile()">👤 Profile</button>
   </div>
-  <!-- Row 2: Mode tabs full width -->
-  <div class="mode-tabs-row">
-    <div class="mode-tabs" style="width:100%">
-      <button class="mode-tab on" id="tabR" onclick="setMode('R')">Regular</button>
-      <button class="mode-tab"    id="tabD" onclick="setMode('D')">Low-GI</button>
-      <button class="mode-tab"    id="tabC" onclick="setMode('C')">Treat Day</button>
-    </div>
-  </div>
-  <!-- Row 3: Day nav -->
-  <div class="subnav">
-    <div class="day-nav">
+  <!-- Row 2: Day nav + Mode tabs on same line -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+    <div class="day-nav" style="flex-shrink:0">
       <button class="day-arrow" onclick="chgDay(-1)">‹</button>
       <div class="day-lbl" id="dayLbl"></div>
       <div class="veg-dot" id="vegDot"></div>
       <button class="day-arrow" onclick="chgDay(1)">›</button>
+    </div>
+    <div class="mode-tabs" style="flex:1;margin:0">
+      <button class="mode-tab on" id="tabR" onclick="setMode('R')">Regular</button>
+      <button class="mode-tab"    id="tabD" onclick="setMode('D')">Low-GI</button>
+      <button class="mode-tab"    id="tabC" onclick="setMode('C')">Treat</button>
     </div>
   </div>
 </div>
