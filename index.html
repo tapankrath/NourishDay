@@ -43,6 +43,24 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
   opacity:.5;z-index:10;pointer-events:none;
 }
 
+@media(min-width:680px){
+  .app{max-width:600px;font-size:105%}
+  .app::before{width:600px}
+  .stat-val{font-size:2.2rem}
+  .card{border-radius:18px}
+  .nearby-sheet,.log-sheet,.week-sheet,.ob-sheet{max-width:600px}
+  .hdr{padding:12px 20px 0}
+  .body{padding:0 4px}
+  .logo-name{font-size:26px}
+  .mode-tabs{margin:0 4px 10px}
+  .meals{gap:10px}
+}
+@media(min-width:900px){
+  .app{max-width:680px}
+  .app::before{width:680px}
+  .nearby-sheet,.log-sheet,.week-sheet,.ob-sheet{max-width:680px}
+}
+
 .status-bar-spacer{background:var(--night);height:max(env(safe-area-inset-top),44px)}
 .hdr{background:var(--night);padding:10px 14px 0;position:relative}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.15;}
@@ -287,7 +305,7 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 
 .log-panel{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);z-index:100;display:none;align-items:flex-end;justify-content:center}
 .log-panel.open{display:flex}
-.log-sheet{background:var(--night);border:1px solid var(--frame);border-radius:20px 20px 0 0;width:100%;max-width:420px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.log-sheet{background:var(--night);border:1px solid var(--frame);border-radius:20px 20px 0 0;width:100%;max-width:min(680px,100vw);max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
 .log-sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--ink4);flex-shrink:0}
 .log-sheet-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
 .log-actions{display:flex;gap:8px;align-items:center}
@@ -867,7 +885,7 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 .week-btn:active{transform:scale(.97)}
 .week-panel{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:150;display:none;align-items:flex-end;justify-content:center}
 .week-panel.open{display:flex}
-.week-sheet{background:var(--night);border:1px solid var(--frame);border-radius:20px 20px 0 0;width:100%;max-width:420px;max-height:94vh;display:flex;flex-direction:column;overflow:hidden}
+.week-sheet{background:var(--night);border:1px solid var(--frame);border-radius:20px 20px 0 0;width:100%;max-width:min(680px,100vw);max-height:94vh;display:flex;flex-direction:column;overflow:hidden}
 .week-hdr{padding:14px 14px 10px;border-bottom:1px solid var(--ink4);flex-shrink:0}
 .week-hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .week-title{font-size:17px;font-weight:900;color:var(--ink);letter-spacing:-.4px}
@@ -3447,7 +3465,7 @@ function showRestoDetail(idx) {
 
   wrap.innerHTML =
     '<div style="background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;' +
-    'width:100%;max-width:420px;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 18px 40px">' +
+    'width:100%;max-width:min(680px,100vw);max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 18px 40px">' +
     // Handle
     '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:14px auto 16px"></div>' +
     // Name + close
@@ -3612,7 +3630,7 @@ function showApiKeySetup() {
   modal.onclick = function(e){ if(e.target===modal) modal.remove(); };
   var ak = getAnthropicKey(), gk = getApiKey();
   var sheet = document.createElement('div');
-  sheet.style.cssText = 'background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;width:100%;max-width:420px;padding:20px 18px 48px';
+  sheet.style.cssText = 'background:var(--night);border:1px solid var(--frame);border-radius:22px 22px 0 0;width:100%;max-width:min(680px,100vw);padding:20px 18px 48px';
   sheet.innerHTML =
     '<div style="width:36px;height:4px;background:var(--ink4);border-radius:2px;margin:0 auto 18px"></div>'+
     '<div style="font-size:17px;font-weight:900;color:var(--ink);margin-bottom:18px">⚙ API Keys</div>'+
