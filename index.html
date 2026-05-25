@@ -979,24 +979,6 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 </div>
 
 
-<div class="water-zone">
-  <div class="water-row">
-    <span class="water-lbl">💧 Water</span>
-    <div class="water-glasses" id="waterGlasses"></div>
-    <span class="water-count" id="waterCount">0 / 8</span>
-  </div>
-</div>
-<div class="streak-zone">
-  <div class="streak-row">
-    <span class="streak-lbl">🔥 Days Logged</span>
-    <div class="streak-dots" id="streakDots"></div>
-    <span class="streak-count" id="streakCount"></span>
-  </div>
-  <div style="font-size:9px;font-weight:700;color:var(--ink3);margin-top:5px;letter-spacing:.03em">
-    ✓ = day you logged your meals &nbsp;·&nbsp; Blue = streak
-  </div>
-</div>
-
 <div class="body">
   <div style="display:flex;gap:8px;margin-bottom:10px">
     <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0">
@@ -1038,6 +1020,25 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Water + streak -->
+  <div class="water-zone">
+    <div class="water-row">
+      <span class="water-lbl">💧 Water</span>
+      <div class="water-glasses" id="waterGlasses"></div>
+      <span class="water-count" id="waterCount">0 / 8</span>
+    </div>
+  </div>
+  <div class="streak-zone">
+    <div class="streak-row">
+      <span class="streak-lbl">🔥 Days Logged</span>
+      <div class="streak-dots" id="streakDots"></div>
+      <span class="streak-count" id="streakCount"></span>
+    </div>
+    <div style="font-size:9px;font-weight:700;color:var(--ink3);margin-top:5px;letter-spacing:.03em">
+      ✓ = day you logged your meals &nbsp;·&nbsp; Blue = streak
     </div>
   </div>
 
