@@ -3530,15 +3530,24 @@ async function loadTopDishes() {
     }
     var data = await resp.json();
     var raw = (data.content||[]).map(function(c){return c.text||'';}).join('').trim();
-    // Strip any markdown fences or leading text before the JSON
-    raw = raw.replace(/^[\s\S]*?(\{)/,'$1').replace(/\}[\s\S]*$/,'}');
+    // Remove markdown fences if present
+    raw = raw.replace(/^```json\s*/,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
     var dishes = [];
-    try { dishes = JSON.parse(raw).dishes||[]; } catch(je) {
-      // Try extracting just the dishes array
-      var arrMatch = raw.match(/"dishes"\s*:\s*(\[[\s\S]*?\])/);
-      if (arrMatch) dishes = JSON.parse(arrMatch[1]);
+    try {
+      var parsed = JSON.parse(raw);
+      dishes = parsed.dishes || parsed.items || parsed.menu || [];
+      if (!Array.isArray(dishes)) dishes = Object.values(parsed)[0] || [];
+    } catch(je) {
+      // Try to find a JSON object anywhere in the response
+      var objMatch = raw.match(/\{[\s\S]+\}/);
+      if (objMatch) {
+        try {
+          var parsed2 = JSON.parse(objMatch[0]);
+          dishes = parsed2.dishes || parsed2.items || parsed2.menu || Object.values(parsed2)[0] || [];
+        } catch(je2) {}
+      }
     }
-    if (!dishes.length) throw new Error('empty response');
+    if (!dishes.length) throw new Error('empty response — raw: '+raw.slice(0,120));
     list.innerHTML = dishes.slice(0,5).map(function(d,i){
       return '<div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4)">'+
         '<div style="min-width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
