@@ -140,9 +140,9 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 .body{padding:10px 12px 0}
 .shuffle-btn{
   width:100%;padding:12px;background:var(--accent);border:none;border-radius:12px;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;
-  font-family:Plus Jakarta Sans,sans-serif;font-size:13px;font-weight:900;
-  color:#fff;letter-spacing:.05em;text-transform:uppercase;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:11.5px;font-weight:900;
+  color:#fff;letter-spacing:.04em;text-transform:uppercase;
   box-shadow:0 3px 16px rgba(255,77,61,.28);transition:all .16s;margin-bottom:10px;
 }
 .shuffle-btn:active{transform:scale(.97) translateY(1px)}
@@ -1003,13 +1003,13 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 <div class="body">
   <div style="display:flex;gap:8px;margin-bottom:10px">
     <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0">
-      <span class="s-ico">⟳</span> Shuffle
+      <span class="s-ico">⟳</span> Shuffle Meals
     </button>
     <button class="shuffle-btn" onclick="openNearby()" style="flex:1;margin-bottom:0">
-      📍 Restaurants Nearby
+      📍 Want to Eat Out ? Open Nearby
     </button>
   </div>
-  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+  <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:6px">
     <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
     <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
     <span class="diet-auto-lbl" id="dietAutoLbl" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:110px"></span>
@@ -1821,14 +1821,7 @@ function syncDietButtons(){
   if(!vBtn||!nBtn) return;
   vBtn.className='diet-btn'+(diet==='veg'?' veg-on':'');
   nBtn.className='diet-btn'+(diet==='nv'?' nv-on':'');
-  if(lbl){
-    lbl.textContent=isVegDay(dayIdx)
-      ?'(Mon/Thu auto-veg)'
-      :'(override for today)';
-    lbl.style.display=
-      (isVegDay(dayIdx)&&diet==='veg')||(! isVegDay(dayIdx)&&diet==='nv')
-      ?'none':'inline';
-  }
+  if(lbl) lbl.style.display='none';
 }
 
 // ── RENDER ──
