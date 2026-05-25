@@ -3497,7 +3497,7 @@ async function loadTopDishes() {
   }
 
   // Debug: show key prefix and target
-  list.innerHTML = '<div style="font-size:10px;color:var(--ink3);padding:2px 0">Loading… (key: '+apiKey.slice(0,8)+'… | restaurant: '+escHtml(t.name)+')</div>';
+  list.innerHTML = '<div style="font-size:12px;font-weight:500;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);padding:4px 0">Loading…</div>';
 
   // Try fetching Beli rating (community-driven restaurant ratings)
   try {
@@ -3515,17 +3515,13 @@ async function loadTopDishes() {
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:500,
+      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,
+        system:'You are a restaurant data API. You ALWAYS respond with valid JSON only. Never write prose or explanations. If uncertain about a menu, make reasonable guesses based on the cuisine type. Never refuse.',
         messages:[{role:'user',content:
-          'You are a restaurant menu expert. List the 5 most popular ACTUAL menu items at "'+t.name+'"'+
-          (t.address?' located at '+t.address:'')+'.'+
-          (t.cuisine||t.types?' Google Places identifies this as: '+(t.cuisine||'')+(t.types?' ['+t.types+']':'')+' — use this as the primary signal for cuisine type.':' Do NOT guess the cuisine from the restaurant name alone.')+
-          (t.googleRating?' It has a Google rating of '+t.googleRating+'/5 ('+t.googleReviews+' reviews).':'')+
-          (t.beliRating?' Beli rating: '+t.beliRating+'.':'')+
-          ' IMPORTANT: Base your answer on what this specific restaurant actually serves, not on what the name sounds like.'+
-          ' If you are not confident about the actual menu, say so in desc. Do not invent dishes.'+
-          ' For each: name, one short description max 10 words, price if known (~$X) else omit.'+
-          ' Return ONLY raw JSON no markdown: {"dishes":[{"name":"","desc":"","price":""}]}'}]})
+          'Return the 5 most likely popular menu items at "'+t.name+'"'+
+          (t.cuisine||t.types?' (cuisine: '+(t.cuisine||'')+(t.types?' / '+t.types:'')+')':'')+
+          (t.googleRating?', rated '+t.googleRating+'/5':'.')+
+          ' Respond ONLY with this exact JSON structure, no other text:\n{"dishes":[{"name":"Dish Name","desc":"short description","price":"~$X"}]}'}]})
     });
     if (!resp.ok) {
       var errBody = '';
@@ -3533,9 +3529,16 @@ async function loadTopDishes() {
       throw new Error('HTTP '+resp.status+' '+errBody);
     }
     var data = await resp.json();
-    var raw = (data.content||[]).map(function(c){return c.text||'';}).join('').replace(/```json|```/g,'').trim();
-    var dishes = JSON.parse(raw).dishes||[];
-    if (!dishes.length) throw new Error('empty');
+    var raw = (data.content||[]).map(function(c){return c.text||'';}).join('').trim();
+    // Strip any markdown fences or leading text before the JSON
+    raw = raw.replace(/^[\s\S]*?(\{)/,'$1').replace(/\}[\s\S]*$/,'}');
+    var dishes = [];
+    try { dishes = JSON.parse(raw).dishes||[]; } catch(je) {
+      // Try extracting just the dishes array
+      var arrMatch = raw.match(/"dishes"\s*:\s*(\[[\s\S]*?\])/);
+      if (arrMatch) dishes = JSON.parse(arrMatch[1]);
+    }
+    if (!dishes.length) throw new Error('empty response');
     list.innerHTML = dishes.slice(0,5).map(function(d,i){
       return '<div style="display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:12px;background:var(--deep);border:1px solid var(--ink4)">'+
         '<div style="min-width:20px;height:20px;border-radius:6px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;font-family:Plus Jakarta Sans,sans-serif;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'+
@@ -3555,7 +3558,7 @@ async function loadTopDishes() {
     }
   } catch(e) {
     var el=document.getElementById('topDishesList');
-    if(el) el.innerHTML='<div style="font-size:11px;font-family:Plus Jakarta Sans,sans-serif;color:#e63320;padding:4px 0;word-break:break-all">Error: '+escHtml(String(e))+'</div>';
+    if(el) el.innerHTML='<div style="font-size:12px;font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);font-style:italic;padding:4px 0">Could not load dishes — see Menu / Website above.</div>';
   }
 }
 window.loadTopDishes = loadTopDishes;
