@@ -152,6 +152,16 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
   display:flex;align-items:center;gap:8px;
   margin-bottom:10px;
 }
+.cuisine-chip{
+  padding:4px 10px;border-radius:20px;border:1.5px solid var(--border2);
+  background:none;color:var(--ink3);font-family:Plus Jakarta Sans,sans-serif;
+  font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;
+  white-space:nowrap;letter-spacing:.02em;
+}
+.cuisine-chip.on{
+  background:var(--accent);color:#fff;border-color:var(--accent);
+  box-shadow:0 2px 8px rgba(255,77,61,.25);
+}
 .diet-auto-lbl{
   font-size:10px;font-weight:700;
   color:var(--ink3);letter-spacing:.02em;
@@ -964,6 +974,7 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
       </div>
       <div class="logo-text">
         <div class="logo-name">EatRight</div>
+        <div style="font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:.12em;text-transform:uppercase;font-family:Plus Jakarta Sans,sans-serif;margin-top:1px">Plan less. Eat better.</div>
       </div>
     </div>
     <button class="profile-btn" id="profileBtn" onclick="openProfile()">👤 Profile</button>
@@ -1021,6 +1032,8 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
       </div>
     </div>
   </div>
+  <!-- Cuisine filter chips -->
+  <div id="cuisineChips" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;justify-content:center"></div>
   <div class="mode-note" id="modeNote"></div>
   <div class="insight-bar" id="insightBar"><span class="insight-icon">💡</span><span id="insightText"></span></div>
   <div class="meals" id="meals"></div>
@@ -1320,9 +1333,9 @@ const T_LBL={breakfast:'Breakfast',lunch:'Lunch',snacks:'Snack',dinner:'Dinner'}
 const CARB_CAP=130; // daily soft target — shown in stats, turns orange if exceeded
 const CAL_TARGET={R:1800, D:1550, C:2400}; // per-mode calorie targets
 const MODE_NOTE={
-  R:'Regular · ~1800 kcal · high protein · balanced carbs · healthy fats',
-  D:'Low-GI · ~1550 kcal · controlled carbs · high fibre · blood-sugar friendly',
-  C:'Treat Day · ~2400 kcal · enjoy it — back on track tomorrow 💪'
+  R:'Today\'s plan is ready — swap anything you like · ~1800 kcal',
+  D:'Today\'s plan is ready — swap anything you like · ~1550 kcal · Low-GI',
+  C:'Today\'s plan is ready — swap anything you like · ~2400 kcal · Treat Day 💪'
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -1339,66 +1352,66 @@ const DB={
 // All entries include a paired tea or coffee
 breakfast:{
  veg:[
-  {n:'Veggie Omelette + Toast + Masala Chai',        d:'Whisk 3 eggs, pour into a hot oiled pan, top with wilted spinach, mushroom & capsicum and fold. Serve with toasted wholegrain bread and a cup of masala chai brewed with ginger and cardamom, no sugar.',                  cal:355,p:20,c:24,f:16,m:'RDC'},
-  {n:'Scrambled Tofu + Toast + Green Tea',           d:'Crumble silken tofu into a pan with turmeric, garlic and wilted spinach, stir until set like scrambled eggs. Serve on toasted wholegrain bread with berries and a cup of green tea.',                       cal:322,p:18,c:26,f:10,m:'RDC'},
-  {n:'Shakshuka (Veg) + Fruit + Black Coffee',       d:'Simmer diced tomatoes, peppers and onion with cumin and paprika, crack in 2 eggs and poach until just set. Serve with a slice of wholegrain bread, fresh fruit, and black coffee.',                       cal:365,p:18,c:30,f:14,m:'RDC'},
-  {n:'Avocado Toast + Poached Eggs + Filter Coffee', d:'Mash half an avocado with lemon and salt onto toasted wholegrain bread, top with 2 poached eggs and chilli flakes. Pair with filter coffee, low sugar.',            cal:440,p:20,c:34,f:20,m:'RC'},
-  {n:'Lentil Pancakes + Yogurt + Ginger Tea',        d:'Blend soaked moong dal with ginger and green chilli, pour into a hot non-stick pan and cook like small pancakes. Serve with plain yogurt, berries and ginger lemon tea.',                            cal:345,p:18,c:36,f:6,m:'RDC'},
-  {n:'Savoury Oat Porridge + Nuts + Chai',           d:'Cook rolled oats in vegetable stock with cumin and a pinch of turmeric until thick, top with mixed nuts and sliced banana. Pair with elaichi chai, no sugar.',                       cal:345,p:12,c:40,f:12,m:'RDC'},
-  {n:'Egg Cups + Fruit Salad + Tulsi Tea',           d:'Crack 3 eggs into greased muffin tins, add spinach and herbs, bake at 180°C for 12 minutes until set. Serve with fresh fruit salad and tulsi tea.',                                    cal:282,p:18,c:16,f:16,m:'RDC'},
-  {n:'Avocado + Boiled Eggs + Nuts + Black Coffee',  d:'Hard boil 2 eggs, slice with half an avocado, cherry tomatoes and walnuts. Season with lemon and black pepper, pair with black coffee.',                                              cal:335,p:16,c:10,f:24,m:'RDC'},
-  {n:'Paneer Cubes + Fruit + Flaxseeds + Chai',      d:'Lightly toss 150g paneer cubes with chaat masala and pan-sear for 2 minutes each side until golden. Serve with pineapple and papaya, flaxseeds, and masala chai, no sugar.',                   cal:325,p:22,c:22,f:14,m:'RDC'},
-  {n:'Greek Yogurt + Berries + Almond Butter + Tea', d:'Spoon 200g plain Greek yogurt into a bowl, swirl in almond butter, top with mixed berries and chia seeds. Pair with green tea.',                       cal:322,p:20,c:26,f:10,m:'RDC'},
-  {n:'Yogurt Parfait + Granola + Kiwi + Coffee',     d:'Layer Greek yogurt, low-sugar granola and kiwi in a glass, finish with cashews and chia seeds. Pair with an americano.',                                  cal:365,p:16,c:40,f:10,m:'RC'},
-  {n:'Smoothie Bowl + Green Tea',                    d:'Blend frozen banana, mango and spinach thick, pour into a bowl and top with granola, berries and almonds. Pair with green tea.',                         cal:362,p:10,c:54,f:8,m:'RC'},
-  {n:'Berry Protein Smoothie + Black Coffee',        d:'Blend almond milk, Greek yogurt, mixed berries, peanut butter and flaxseeds until smooth. Serve with black coffee.',                       cal:325,p:20,c:28,f:10,m:'RDC'},
-  {n:'Chia Pudding + Mango + Almonds + Chai',        d:'Mix chia seeds into almond milk the night before, refrigerate until thick and pudding-like. Top with fresh mango and sliced almonds, pair with masala chai, no sugar.',                    cal:345,p:10,c:34,f:16,m:'RDC'},
-  {n:'Overnight Oats + Banana + Walnuts + Coffee',   d:'Soak oats in almond milk overnight with a drizzle of honey, top with sliced banana and crushed walnuts. Pair with filter coffee, low sugar.',                                 cal:400,p:12,c:50,f:14,m:'RC'},
-  {n:'Whole Wheat Pancakes + Berries + Chai',        d:'Mix whole wheat flour, egg and milk into a batter, cook small pancakes on a non-stick pan until golden. Top with warm berry compote, pair with masala chai.',                        cal:395,p:12,c:56,f:8,m:'RC'},
-  {n:'Peanut Butter Toast + Banana + Coffee',        d:'Toast 2 slices of wholegrain bread, spread generously with natural peanut butter, top with sliced banana. Serve with plain yogurt and black coffee.',                              cal:445,p:18,c:50,f:16,m:'RC'},
-  {n:'Muesli + Milk + Fruit + Nuts + Tea',           d:'Pour 60g no-sugar muesli over cold low-fat milk, add seasonal fruit and mixed nuts. Let sit 5 minutes to soften, pair with green tea.',                              cal:362,p:12,c:48,f:10,m:'RC'},
+  {n:'Veggie Omelette + Toast + Masala Chai',        d:'Whisk 3 eggs, pour into a hot oiled pan, top with wilted spinach, mushroom & capsicum and fold. Serve with toasted wholegrain bread and a cup of masala chai brewed with ginger and cardamom, no sugar.',                  cal:355,p:20,c:24,f:16,m:'RDC',cu:'Indian'},
+  {n:'Scrambled Tofu + Toast + Green Tea',           d:'Crumble silken tofu into a pan with turmeric, garlic and wilted spinach, stir until set like scrambled eggs. Serve on toasted wholegrain bread with berries and a cup of green tea.',                       cal:322,p:18,c:26,f:10,m:'RDC',cu:'Indian'},
+  {n:'Shakshuka (Veg) + Fruit + Black Coffee',       d:'Simmer diced tomatoes, peppers and onion with cumin and paprika, crack in 2 eggs and poach until just set. Serve with a slice of wholegrain bread, fresh fruit, and black coffee.',                       cal:365,p:18,c:30,f:14,m:'RDC',cu:'Indian'},
+  {n:'Avocado Toast + Poached Eggs + Filter Coffee', d:'Mash half an avocado with lemon and salt onto toasted wholegrain bread, top with 2 poached eggs and chilli flakes. Pair with filter coffee, low sugar.',            cal:440,p:20,c:34,f:20,m:'RC',cu:'Indian'},
+  {n:'Lentil Pancakes + Yogurt + Ginger Tea',        d:'Blend soaked moong dal with ginger and green chilli, pour into a hot non-stick pan and cook like small pancakes. Serve with plain yogurt, berries and ginger lemon tea.',                            cal:345,p:18,c:36,f:6,m:'RDC',cu:'Indian'},
+  {n:'Savoury Oat Porridge + Nuts + Chai',           d:'Cook rolled oats in vegetable stock with cumin and a pinch of turmeric until thick, top with mixed nuts and sliced banana. Pair with elaichi chai, no sugar.',                       cal:345,p:12,c:40,f:12,m:'RDC',cu:'Indian'},
+  {n:'Egg Cups + Fruit Salad + Tulsi Tea',           d:'Crack 3 eggs into greased muffin tins, add spinach and herbs, bake at 180°C for 12 minutes until set. Serve with fresh fruit salad and tulsi tea.',                                    cal:282,p:18,c:16,f:16,m:'RDC',cu:'Indian'},
+  {n:'Avocado + Boiled Eggs + Nuts + Black Coffee',  d:'Hard boil 2 eggs, slice with half an avocado, cherry tomatoes and walnuts. Season with lemon and black pepper, pair with black coffee.',                                              cal:335,p:16,c:10,f:24,m:'RDC',cu:'Indian'},
+  {n:'Paneer Cubes + Fruit + Flaxseeds + Chai',      d:'Lightly toss 150g paneer cubes with chaat masala and pan-sear for 2 minutes each side until golden. Serve with pineapple and papaya, flaxseeds, and masala chai, no sugar.',                   cal:325,p:22,c:22,f:14,m:'RDC',cu:'Indian'},
+  {n:'Greek Yogurt + Berries + Almond Butter + Tea', d:'Spoon 200g plain Greek yogurt into a bowl, swirl in almond butter, top with mixed berries and chia seeds. Pair with green tea.',                       cal:322,p:20,c:26,f:10,m:'RDC',cu:'Indian'},
+  {n:'Yogurt Parfait + Granola + Kiwi + Coffee',     d:'Layer Greek yogurt, low-sugar granola and kiwi in a glass, finish with cashews and chia seeds. Pair with an americano.',                                  cal:365,p:16,c:40,f:10,m:'RC',cu:'Indian'},
+  {n:'Smoothie Bowl + Green Tea',                    d:'Blend frozen banana, mango and spinach thick, pour into a bowl and top with granola, berries and almonds. Pair with green tea.',                         cal:362,p:10,c:54,f:8,m:'RC',cu:'Indian'},
+  {n:'Berry Protein Smoothie + Black Coffee',        d:'Blend almond milk, Greek yogurt, mixed berries, peanut butter and flaxseeds until smooth. Serve with black coffee.',                       cal:325,p:20,c:28,f:10,m:'RDC',cu:'Indian'},
+  {n:'Chia Pudding + Mango + Almonds + Chai',        d:'Mix chia seeds into almond milk the night before, refrigerate until thick and pudding-like. Top with fresh mango and sliced almonds, pair with masala chai, no sugar.',                    cal:345,p:10,c:34,f:16,m:'RDC',cu:'Indian'},
+  {n:'Overnight Oats + Banana + Walnuts + Coffee',   d:'Soak oats in almond milk overnight with a drizzle of honey, top with sliced banana and crushed walnuts. Pair with filter coffee, low sugar.',                                 cal:400,p:12,c:50,f:14,m:'RC',cu:'Indian'},
+  {n:'Whole Wheat Pancakes + Berries + Chai',        d:'Mix whole wheat flour, egg and milk into a batter, cook small pancakes on a non-stick pan until golden. Top with warm berry compote, pair with masala chai.',                        cal:395,p:12,c:56,f:8,m:'RC',cu:'Indian'},
+  {n:'Peanut Butter Toast + Banana + Coffee',        d:'Toast 2 slices of wholegrain bread, spread generously with natural peanut butter, top with sliced banana. Serve with plain yogurt and black coffee.',                              cal:445,p:18,c:50,f:16,m:'RC',cu:'Indian'},
+  {n:'Muesli + Milk + Fruit + Nuts + Tea',           d:'Pour 60g no-sugar muesli over cold low-fat milk, add seasonal fruit and mixed nuts. Let sit 5 minutes to soften, pair with green tea.',                              cal:362,p:12,c:48,f:10,m:'RC',cu:'Indian'},
   // Extra dishes for Cheat / Regular higher cal
-  {n:'Aloo Paratha (2) + Curd + Chai',              d:'Knead mashed spiced potato into whole wheat dough, roll into flatbreads and cook on a tawa with minimal ghee until golden on both sides. Serve with plain curd and masala chai.',                          cal:560,p:16,c:76,f:18,m:'RC'},
-  {n:'Masala Dosa + Sambar + Coffee',               d:'Spread fermented rice-lentil batter thin on a hot griddle, fill with spiced potato masala and fold. Serve with hot sambar and coconut chutney, paired with filter coffee.',                                  cal:420,p:10,c:62,f:12,m:'RC'},
-  {n:'Idli (3) + Sambar + Coconut Chutney + Tea',   d:'Steam fermented rice-lentil batter in idli moulds for 10–12 minutes until fluffy. Serve with hot lentil-vegetable sambar and coconut chutney, pair with ginger tea.',                                   cal:360,p:12,c:58,f:4,m:'RDC'},
-  {n:'Upma + Fruit Bowl + Chai',                    d:'Dry-roast semolina, then cook with sautéed mustard seeds, curry leaves, onion and mixed vegetables until fluffy. Serve with fresh fruit and masala chai, no sugar.',                         cal:380,p:10,c:52,f:10,m:'RC'},
+  {n:'Aloo Paratha (2) + Curd + Chai',              d:'Knead mashed spiced potato into whole wheat dough, roll into flatbreads and cook on a tawa with minimal ghee until golden on both sides. Serve with plain curd and masala chai.',                          cal:560,p:16,c:76,f:18,m:'RC',cu:'Indian'},
+  {n:'Masala Dosa + Sambar + Coffee',               d:'Spread fermented rice-lentil batter thin on a hot griddle, fill with spiced potato masala and fold. Serve with hot sambar and coconut chutney, paired with filter coffee.',                                  cal:420,p:10,c:62,f:12,m:'RC',cu:'Indian'},
+  {n:'Idli (3) + Sambar + Coconut Chutney + Tea',   d:'Steam fermented rice-lentil batter in idli moulds for 10–12 minutes until fluffy. Serve with hot lentil-vegetable sambar and coconut chutney, pair with ginger tea.',                                   cal:360,p:12,c:58,f:4,m:'RDC',cu:'Indian'},
+  {n:'Upma + Fruit Bowl + Chai',                    d:'Dry-roast semolina, then cook with sautéed mustard seeds, curry leaves, onion and mixed vegetables until fluffy. Serve with fresh fruit and masala chai, no sugar.',                         cal:380,p:10,c:52,f:10,m:'RC',cu:'Indian'},
   // More Low-GI veg breakfasts
-  {n:'Flaxseed Chilla (2) + Mint Yogurt + Tea',     d:'Mix flaxseed powder into a besan batter with onion, chilli and coriander, pour into a hot non-stick pan and cook thin pancakes until golden on both sides. Serve with mint yogurt dip and green tea.',                                        cal:310,p:16,c:22,f:14,m:'RDC'},
-  {n:'Barley Porridge + Almonds + Berries + Chai',  d:'Simmer pearl barley in almond milk until thick and creamy, sweeten with a little honey and top with almonds and mixed berries. Pair with masala chai, no sugar.',                       cal:340,p:10,c:46,f:10,m:'RD'},
-  {n:'Tofu Scramble + Rye Toast + Green Tea',       d:'Crumble firm tofu into a hot pan with turmeric, garlic, spinach and diced tomato, stir until the moisture evaporates and it resembles scrambled eggs. Serve on rye toast with berries and green tea.',                        cal:318,p:18,c:24,f:10,m:'RDC'},
-  {n:'Mung Bean Sprout Bowl + Seeds + Chai',        d:'Toss fresh mung bean sprouts with lemon, green chilli, coriander and pomegranate seeds. Finish with pumpkin and sesame seeds, pair with masala chai, no sugar.',               cal:295,p:16,c:26,f:8,m:'RDC'},
+  {n:'Flaxseed Chilla (2) + Mint Yogurt + Tea',     d:'Mix flaxseed powder into a besan batter with onion, chilli and coriander, pour into a hot non-stick pan and cook thin pancakes until golden on both sides. Serve with mint yogurt dip and green tea.',                                        cal:310,p:16,c:22,f:14,m:'RDC',cu:'Indian'},
+  {n:'Barley Porridge + Almonds + Berries + Chai',  d:'Simmer pearl barley in almond milk until thick and creamy, sweeten with a little honey and top with almonds and mixed berries. Pair with masala chai, no sugar.',                       cal:340,p:10,c:46,f:10,m:'RD',cu:'Indian'},
+  {n:'Tofu Scramble + Rye Toast + Green Tea',       d:'Crumble firm tofu into a hot pan with turmeric, garlic, spinach and diced tomato, stir until the moisture evaporates and it resembles scrambled eggs. Serve on rye toast with berries and green tea.',                        cal:318,p:18,c:24,f:10,m:'RDC',cu:'Indian'},
+  {n:'Mung Bean Sprout Bowl + Seeds + Chai',        d:'Toss fresh mung bean sprouts with lemon, green chilli, coriander and pomegranate seeds. Finish with pumpkin and sesame seeds, pair with masala chai, no sugar.',               cal:295,p:16,c:26,f:8,m:'RDC',cu:'Indian'},
   // Cheat-Day veg breakfasts
-  {n:'Chole Bhature + Chai',                        d:'Simmer spiced chickpea masala until thick and fragrant, serve with 2 deep-fried fluffy bhature and raw onion rings with lemon — a treat day breakfast. Pair with masala chai.',                                        cal:620,p:16,c:82,f:22,m:'C'},
-  {n:'Bread Omelette (3 eggs) + Chai',              d:'Dip 2 slices of bread into a spiced beaten egg mix and pan-fry in a little butter until puffed and golden on both sides. Serve hot with masala chai, no sugar.',                  cal:540,p:22,c:46,f:26,m:'C'},
-  {n:'Paneer Paratha (2) + Butter + Chai',          d:'Mix grated paneer with green chilli, coriander and ajwain, stuff into whole wheat dough and roll into flatbreads. Cook on a tawa with a little butter until golden, pair with masala chai.',                           cal:600,p:24,c:70,f:22,m:'C'},
+  {n:'Chole Bhature + Chai',                        d:'Simmer spiced chickpea masala until thick and fragrant, serve with 2 deep-fried fluffy bhature and raw onion rings with lemon — a treat day breakfast. Pair with masala chai.',                                        cal:620,p:16,c:82,f:22,m:'C',cu:'Indian'},
+  {n:'Bread Omelette (3 eggs) + Chai',              d:'Dip 2 slices of bread into a spiced beaten egg mix and pan-fry in a little butter until puffed and golden on both sides. Serve hot with masala chai, no sugar.',                  cal:540,p:22,c:46,f:26,m:'C',cu:'Indian'},
+  {n:'Paneer Paratha (2) + Butter + Chai',          d:'Mix grated paneer with green chilli, coriander and ajwain, stuff into whole wheat dough and roll into flatbreads. Cook on a tawa with a little butter until golden, pair with masala chai.',                           cal:600,p:24,c:70,f:22,m:'C',cu:'Indian'},
  ],
  nonveg:[
-  {n:'Spiced Scrambled Eggs + Roti + Chai',          d:'Beat 3 eggs with chopped onion, green chilli and coriander, scramble in butter until just set. Serve with a wholegrain roti, mixed fruit and masala chai, no sugar.',                   cal:405,p:24,c:30,f:18,m:'RDC'},
-  {n:'Classic Omelette + Toast + Filter Coffee',     d:'Whisk 3 eggs with onion, tomato and herbs, cook folded in a hot pan until lightly golden. Serve with wholegrain toast and filter coffee, low sugar.',                          cal:375,p:22,c:26,f:16,m:'RDC'},
-  {n:'Boiled Eggs + Avocado + Fruit + Black Coffee', d:'Hard boil 3 eggs, slice alongside half an avocado, mixed fruit and almonds. Season with lemon and sea salt, pair with black coffee.',                                    cal:385,p:22,c:18,f:24,m:'RDC'},
-  {n:'Smoked Salmon + Avocado Toast + Green Tea',    d:'Toast 2 slices wholegrain bread, spread with mashed avocado, layer smoked salmon and capers on top. Serve with berries and green tea.',                            cal:422,p:26,c:30,f:18,m:'RDC'},
-  {n:'Greek Yogurt + Boiled Eggs + Nuts + Chai',     d:'Spoon Greek yogurt into a bowl, add halved boiled eggs, blueberries and mixed nuts. Pair with masala chai, no sugar.',                     cal:405,p:28,c:22,f:18,m:'RDC'},
-  {n:'Egg White Omelette + Spinach + Fruit + Tea',   d:'Whisk 4 egg whites until slightly frothy, pour into a non-stick pan, fill with wilted spinach and capsicum, fold and cook through. Serve with fruit salad and tulsi tea.',                                          cal:272,p:22,c:20,f:4,m:'RDC'},
-  {n:'Tuna + Avocado + Crackers + Apple + Coffee',   d:'Drain and flake canned tuna, mix with lemon and pepper, pile onto wholegrain crackers with sliced avocado. Serve with apple slices and an americano.',                                              cal:390,p:28,c:28,f:14,m:'RDC'},
-  {n:'Shakshuka + Bread + Fruit + Masala Chai',      d:'Simmer onion, tomato and pepper with harissa-style spices, crack in 2 eggs and poach in the sauce. Serve with wholegrain bread, seasonal fruit and masala chai, no sugar.',                cal:375,p:18,c:30,f:14,m:'RDC'},
-  {n:'Grilled Chicken + Eggs + Cucumber + Coffee',   d:'Slice leftover cold grilled chicken, serve alongside 2 boiled eggs, cucumber sticks, cherry tomatoes and walnuts. Pair with black coffee.',                     cal:385,p:38,c:8,f:16,m:'RDC'},
-  {n:'Prawn & Egg Scramble + Fruit + Chai',          d:'Sauté prawns in garlic butter, add 2 beaten eggs and scramble together with spring onion until just set. Serve with pineapple chunks, cashews and ginger tea.',                   cal:395,p:30,c:22,f:16,m:'RDC'},
-  {n:'Smoked Fish Scramble + Toast + Green Tea',     d:'Flake smoked fish into 2 lightly scrambled eggs, stir together with black pepper and chives. Serve on wholegrain toast with berries and green tea.',                               cal:372,p:28,c:24,f:14,m:'RDC'},
-  {n:'High-Protein Yogurt Bowl + Nuts + Coffee',     d:'Spoon Greek yogurt into a bowl, stir in hemp seeds, top with berries, a halved boiled egg and almonds. Pair with an americano.',                                cal:395,p:30,c:22,f:16,m:'RDC'},
-  {n:'Egg Muffins + Fruit Salad + Chai',             d:'Whisk 3 eggs with spinach and sun-dried tomato, pour into greased muffin tins and bake at 180°C for 15 minutes. Serve with mixed fruit and masala chai.',                 cal:355,p:22,c:24,f:16,m:'RDC'},
-  {n:'Sardines + Wholegrain Toast + Tea',            d:'Drain canned sardines, season with lemon and pepper, serve on toasted wholegrain bread with sliced tomato and rocket. Pair with green tea.',                cal:382,p:30,c:28,f:12,m:'RDC'},
-  {n:'Shrimp & Egg Omelette + Toast + Coffee',       d:'Sauté 60g shrimp with ginger in a hot pan, pour over 2 beaten eggs and cook folded. Serve with wholegrain toast, berries and black coffee.',             cal:365,p:30,c:24,f:14,m:'RDC'},
+  {n:'Spiced Scrambled Eggs + Roti + Chai',          d:'Beat 3 eggs with chopped onion, green chilli and coriander, scramble in butter until just set. Serve with a wholegrain roti, mixed fruit and masala chai, no sugar.',                   cal:405,p:24,c:30,f:18,m:'RDC',cu:'Indian'},
+  {n:'Classic Omelette + Toast + Filter Coffee',     d:'Whisk 3 eggs with onion, tomato and herbs, cook folded in a hot pan until lightly golden. Serve with wholegrain toast and filter coffee, low sugar.',                          cal:375,p:22,c:26,f:16,m:'RDC',cu:'Indian'},
+  {n:'Boiled Eggs + Avocado + Fruit + Black Coffee', d:'Hard boil 3 eggs, slice alongside half an avocado, mixed fruit and almonds. Season with lemon and sea salt, pair with black coffee.',                                    cal:385,p:22,c:18,f:24,m:'RDC',cu:'Indian'},
+  {n:'Smoked Salmon + Avocado Toast + Green Tea',    d:'Toast 2 slices wholegrain bread, spread with mashed avocado, layer smoked salmon and capers on top. Serve with berries and green tea.',                            cal:422,p:26,c:30,f:18,m:'RDC',cu:'Indian'},
+  {n:'Greek Yogurt + Boiled Eggs + Nuts + Chai',     d:'Spoon Greek yogurt into a bowl, add halved boiled eggs, blueberries and mixed nuts. Pair with masala chai, no sugar.',                     cal:405,p:28,c:22,f:18,m:'RDC',cu:'Indian'},
+  {n:'Egg White Omelette + Spinach + Fruit + Tea',   d:'Whisk 4 egg whites until slightly frothy, pour into a non-stick pan, fill with wilted spinach and capsicum, fold and cook through. Serve with fruit salad and tulsi tea.',                                          cal:272,p:22,c:20,f:4,m:'RDC',cu:'Indian'},
+  {n:'Tuna + Avocado + Crackers + Apple + Coffee',   d:'Drain and flake canned tuna, mix with lemon and pepper, pile onto wholegrain crackers with sliced avocado. Serve with apple slices and an americano.',                                              cal:390,p:28,c:28,f:14,m:'RDC',cu:'Indian'},
+  {n:'Shakshuka + Bread + Fruit + Masala Chai',      d:'Simmer onion, tomato and pepper with harissa-style spices, crack in 2 eggs and poach in the sauce. Serve with wholegrain bread, seasonal fruit and masala chai, no sugar.',                cal:375,p:18,c:30,f:14,m:'RDC',cu:'Indian'},
+  {n:'Grilled Chicken + Eggs + Cucumber + Coffee',   d:'Slice leftover cold grilled chicken, serve alongside 2 boiled eggs, cucumber sticks, cherry tomatoes and walnuts. Pair with black coffee.',                     cal:385,p:38,c:8,f:16,m:'RDC',cu:'Indian'},
+  {n:'Prawn & Egg Scramble + Fruit + Chai',          d:'Sauté prawns in garlic butter, add 2 beaten eggs and scramble together with spring onion until just set. Serve with pineapple chunks, cashews and ginger tea.',                   cal:395,p:30,c:22,f:16,m:'RDC',cu:'Indian'},
+  {n:'Smoked Fish Scramble + Toast + Green Tea',     d:'Flake smoked fish into 2 lightly scrambled eggs, stir together with black pepper and chives. Serve on wholegrain toast with berries and green tea.',                               cal:372,p:28,c:24,f:14,m:'RDC',cu:'Indian'},
+  {n:'High-Protein Yogurt Bowl + Nuts + Coffee',     d:'Spoon Greek yogurt into a bowl, stir in hemp seeds, top with berries, a halved boiled egg and almonds. Pair with an americano.',                                cal:395,p:30,c:22,f:16,m:'RDC',cu:'Indian'},
+  {n:'Egg Muffins + Fruit Salad + Chai',             d:'Whisk 3 eggs with spinach and sun-dried tomato, pour into greased muffin tins and bake at 180°C for 15 minutes. Serve with mixed fruit and masala chai.',                 cal:355,p:22,c:24,f:16,m:'RDC',cu:'Indian'},
+  {n:'Sardines + Wholegrain Toast + Tea',            d:'Drain canned sardines, season with lemon and pepper, serve on toasted wholegrain bread with sliced tomato and rocket. Pair with green tea.',                cal:382,p:30,c:28,f:12,m:'RDC',cu:'Indian'},
+  {n:'Shrimp & Egg Omelette + Toast + Coffee',       d:'Sauté 60g shrimp with ginger in a hot pan, pour over 2 beaten eggs and cook folded. Serve with wholegrain toast, berries and black coffee.',             cal:365,p:30,c:24,f:14,m:'RDC',cu:'Indian'},
   // Extra dishes
-  {n:'Egg Bhurji + 2 Rotis + Chai',                 d:'Sauté finely chopped onion, tomato and green chilli in oil with turmeric and cumin, add 3 beaten eggs and scramble masala-style over medium heat until just cooked. Serve with 2 wholegrain rotis and masala chai, no sugar.',        cal:460,p:26,c:36,f:20,m:'RDC'},
-  {n:'Chicken Keema Paratha + Curd + Coffee',        d:'Cook spiced minced chicken with onion, ginger-garlic and peas until dry, stuff into whole wheat dough rounds and cook on a tawa until golden and crisp. Serve with plain curd and filter coffee.',                                     cal:520,p:32,c:42,f:20,m:'RC'},
-  {n:'Full English Breakfast + Tea',             d:'Fry or poach 2 eggs to your liking, grill tomatoes and button mushrooms, warm a serving of baked beans. Serve with wholegrain toast and a cup of black tea.',           cal:480,p:26,c:38,f:18,m:'RC'},
+  {n:'Egg Bhurji + 2 Rotis + Chai',                 d:'Sauté finely chopped onion, tomato and green chilli in oil with turmeric and cumin, add 3 beaten eggs and scramble masala-style over medium heat until just cooked. Serve with 2 wholegrain rotis and masala chai, no sugar.',        cal:460,p:26,c:36,f:20,m:'RDC',cu:'Indian'},
+  {n:'Chicken Keema Paratha + Curd + Coffee',        d:'Cook spiced minced chicken with onion, ginger-garlic and peas until dry, stuff into whole wheat dough rounds and cook on a tawa until golden and crisp. Serve with plain curd and filter coffee.',                                     cal:520,p:32,c:42,f:20,m:'RC',cu:'Indian'},
+  {n:'Full English Breakfast + Tea',             d:'Fry or poach 2 eggs to your liking, grill tomatoes and button mushrooms, warm a serving of baked beans. Serve with wholegrain toast and a cup of black tea.',           cal:480,p:26,c:38,f:18,m:'RC',cu:'Indian'},
   // Cheat-Day nonveg breakfasts
-  {n:'Egg & Chicken Frankie Roll + Chai',            d:'3-egg omelette + 100g spiced chicken wrapped in 2 rumali-style rotis with chutney & onion · paired with 1 cup masala chai',                   cal:580,p:38,c:48,f:22,m:'C'},
-  {n:'Prawn Omelette + Buttered Toast + Coffee',     d:'Sauté prawns with garlic and herbs until pink, pour over 3 beaten eggs in the same pan and cook folded until golden. Serve with buttered wholegrain toast and black coffee.',             cal:540,p:36,c:30,f:28,m:'C'},
-  {n:'Fish Fry (2 pcs) + Egg + Paratha + Chai',     d:'2 pieces crispy spiced fish fry + 1 fried egg + 1 whole wheat paratha + sliced onion & chilli · paired with 1 cup masala chai',               cal:600,p:40,c:38,f:28,m:'C'},
+  {n:'Egg & Chicken Frankie Roll + Chai',            d:'3-egg omelette + 100g spiced chicken wrapped in 2 rumali-style rotis with chutney & onion · paired with 1 cup masala chai',                   cal:580,p:38,c:48,f:22,m:'C',cu:'Indian'},
+  {n:'Prawn Omelette + Buttered Toast + Coffee',     d:'Sauté prawns with garlic and herbs until pink, pour over 3 beaten eggs in the same pan and cook folded until golden. Serve with buttered wholegrain toast and black coffee.',             cal:540,p:36,c:30,f:28,m:'C',cu:'Indian'},
+  {n:'Fish Fry (2 pcs) + Egg + Paratha + Chai',     d:'2 pieces crispy spiced fish fry + 1 fried egg + 1 whole wheat paratha + sliced onion & chilli · paired with 1 cup masala chai',               cal:600,p:40,c:38,f:28,m:'C',cu:'Indian'},
   // More Low-GI nonveg
-  {n:'Egg Drop Soup + 2 Boiled Eggs + Green Tea',   d:'1.5 cups clear egg drop soup with ginger & spring onion + 2 additional boiled eggs + ½ cup berries · paired with 1 cup green tea',             cal:280,p:24,c:8,f:14,m:'D'},
-  {n:'Smoked Salmon + Cucumber + Seeds + Tea',       d:'80g smoked salmon + sliced cucumber + ½ avocado + 1 tbsp mixed seeds + lemon · paired with 1 cup ginger lemon tea',                           cal:310,p:22,c:6,f:20,m:'RDC'},
+  {n:'Egg Drop Soup + 2 Boiled Eggs + Green Tea',   d:'1.5 cups clear egg drop soup with ginger & spring onion + 2 additional boiled eggs + ½ cup berries · paired with 1 cup green tea',             cal:280,p:24,c:8,f:14,m:'D',cu:'Indian'},
+  {n:'Smoked Salmon + Cucumber + Seeds + Tea',       d:'80g smoked salmon + sliced cucumber + ½ avocado + 1 tbsp mixed seeds + lemon · paired with 1 cup ginger lemon tea',                           cal:310,p:22,c:6,f:20,m:'RDC',cu:'Indian'},
  ]
 },
 
@@ -1406,192 +1419,192 @@ breakfast:{
 lunch:{
  veg:[
   // Indian (front of array — prioritized in seed & swap)
-  {n:'Chickpea Curry + 1 Roti + Salad + Raita', d:'1 cup chickpea curry + 1 wholegrain roti + 1 cup cucumber-tomato salad + 3 tbsp yogurt raita',          cal:440,p:20,c:44,f:10,m:'RDC'},
-  {n:'Paneer + Big Salad + Roti',               d:'120g grilled paneer (marinated in spices) + large leafy salad with lemon-olive oil + 1 wholegrain roti', cal:480,p:28,c:28,f:22,m:'RDC'},
-  {n:'Lentil Soup + Quinoa + Roasted Veg',      d:'1.5 cups lentil soup + ½ cup quinoa + 150g oven-roasted mixed veg + 2 tbsp plain yogurt',               cal:430,p:22,c:42,f:9,m:'RDC'},
-  {n:'Spinach Dal + Brown Rice + Raita',        d:'1 cup spinach dal + ½ cup brown rice + ½ cup yogurt-cucumber raita + sliced onion salad',               cal:450,p:20,c:44,f:8,m:'RDC'},
-  {n:'Rajma + ½ Cup Rice + Salad + Curd',       d:'Pressure-cook kidney beans in a rich onion-tomato-garam masala gravy until thick and saucy. Serve with brown rice, cucumber-tomato salad and a spoonful of curd.',                      cal:460,p:18,c:44,f:8,m:'RDC'},
-  {n:'Palak Paneer + 1 Roti + Salad',           d:'Blanch and blend spinach into a smooth sauce, simmer with paneer cubes, onion, garlic and garam masala. Serve with a wholegrain roti and fresh salad.',                  cal:460,p:24,c:28,f:22,m:'RDC'},
-  {n:'Chole + 1 Roti + Onion Salad + Yogurt',   d:'1 cup spiced chickpea masala + 1 wholegrain roti + raw onion-tomato-cucumber salad + 3 tbsp curd',       cal:440,p:18,c:44,f:10,m:'RDC'},
-  {n:'Moong Dal + Jeera Rice + Papad + Salad',  d:'1 cup yellow moong dal tadka + ½ cup jeera rice + 1 roasted papad + raw salad + sliced mango',          cal:430,p:18,c:46,f:6,m:'RDC'},
+  {n:'Chickpea Curry + 1 Roti + Salad + Raita', d:'1 cup chickpea curry + 1 wholegrain roti + 1 cup cucumber-tomato salad + 3 tbsp yogurt raita',          cal:440,p:20,c:44,f:10,m:'RDC',cu:'Indian'},
+  {n:'Paneer + Big Salad + Roti',               d:'120g grilled paneer (marinated in spices) + large leafy salad with lemon-olive oil + 1 wholegrain roti', cal:480,p:28,c:28,f:22,m:'RDC',cu:'Indian'},
+  {n:'Lentil Soup + Quinoa + Roasted Veg',      d:'1.5 cups lentil soup + ½ cup quinoa + 150g oven-roasted mixed veg + 2 tbsp plain yogurt',               cal:430,p:22,c:42,f:9,m:'RDC',cu:'Indian'},
+  {n:'Spinach Dal + Brown Rice + Raita',        d:'1 cup spinach dal + ½ cup brown rice + ½ cup yogurt-cucumber raita + sliced onion salad',               cal:450,p:20,c:44,f:8,m:'RDC',cu:'Indian'},
+  {n:'Rajma + ½ Cup Rice + Salad + Curd',       d:'Pressure-cook kidney beans in a rich onion-tomato-garam masala gravy until thick and saucy. Serve with brown rice, cucumber-tomato salad and a spoonful of curd.',                      cal:460,p:18,c:44,f:8,m:'RDC',cu:'Indian'},
+  {n:'Palak Paneer + 1 Roti + Salad',           d:'Blanch and blend spinach into a smooth sauce, simmer with paneer cubes, onion, garlic and garam masala. Serve with a wholegrain roti and fresh salad.',                  cal:460,p:24,c:28,f:22,m:'RDC',cu:'Indian'},
+  {n:'Chole + 1 Roti + Onion Salad + Yogurt',   d:'1 cup spiced chickpea masala + 1 wholegrain roti + raw onion-tomato-cucumber salad + 3 tbsp curd',       cal:440,p:18,c:44,f:10,m:'RDC',cu:'Indian'},
+  {n:'Moong Dal + Jeera Rice + Papad + Salad',  d:'1 cup yellow moong dal tadka + ½ cup jeera rice + 1 roasted papad + raw salad + sliced mango',          cal:430,p:18,c:46,f:6,m:'RDC',cu:'Indian'},
   // Chinese
-  {n:'Tofu Stir-Fry + Brown Rice + Miso Soup',  d:'150g firm tofu + broccoli & snap peas + ½ cup brown rice + 1 cup miso soup + sliced orange',            cal:420,p:22,c:42,f:12,m:'RDC'},
-  {n:'Mapo Tofu + ½ Cup Rice + Bok Choy',       d:'150g silken tofu in chilli-bean sauce + ½ cup steamed rice + 1 cup stir-fried bok choy',                cal:420,p:20,c:42,f:14,m:'RC'},
-  {n:'Veggie Fried Rice + Clear Broth',          d:'1 cup brown fried rice with egg & mixed veg + 1 bowl clear broth + fruit slices',                        cal:410,p:14,c:46,f:10,m:'RC'},
+  {n:'Tofu Stir-Fry + Brown Rice + Miso Soup',  d:'150g firm tofu + broccoli & snap peas + ½ cup brown rice + 1 cup miso soup + sliced orange',            cal:420,p:22,c:42,f:12,m:'RDC',cu:'Chinese'},
+  {n:'Mapo Tofu + ½ Cup Rice + Bok Choy',       d:'150g silken tofu in chilli-bean sauce + ½ cup steamed rice + 1 cup stir-fried bok choy',                cal:420,p:20,c:42,f:14,m:'RC',cu:'Chinese'},
+  {n:'Veggie Fried Rice + Clear Broth',          d:'1 cup brown fried rice with egg & mixed veg + 1 bowl clear broth + fruit slices',                        cal:410,p:14,c:46,f:10,m:'RC',cu:'Chinese'},
   // Thai
-  {n:'Som Tam + Grilled Tofu + Sticky Rice',    d:'1.5 cups green papaya salad + 100g grilled tofu + ½ cup sticky rice + fresh lime wedge',                 cal:410,p:16,c:46,f:12,m:'RC'},
-  {n:'Thai Green Curry Tofu + ½ Cup Rice',      d:'Simmer tofu and vegetables in a fragrant coconut green curry paste sauce until the tofu absorbs the flavour. Serve over jasmine rice with fresh herbs.',                 cal:440,p:14,c:44,f:18,m:'RC'},
+  {n:'Som Tam + Grilled Tofu + Sticky Rice',    d:'1.5 cups green papaya salad + 100g grilled tofu + ½ cup sticky rice + fresh lime wedge',                 cal:410,p:16,c:46,f:12,m:'RC',cu:'Thai'},
+  {n:'Thai Green Curry Tofu + ½ Cup Rice',      d:'Simmer tofu and vegetables in a fragrant coconut green curry paste sauce until the tofu absorbs the flavour. Serve over jasmine rice with fresh herbs.',                 cal:440,p:14,c:44,f:18,m:'RC',cu:'Thai'},
   // Mexican
-  {n:'Veggie Burrito Bowl + Yogurt Dressing',   d:'¼ cup brown rice + ½ cup black beans + corn + salsa + ¼ avocado + 3 tbsp yogurt-lime dressing',         cal:430,p:16,c:46,f:12,m:'RDC'},
-  {n:'Lentil Taco Bowl + Yogurt Lime Dressing', d:'½ cup spiced lentils + ¼ cup brown rice + salsa + mixed greens + 3 tbsp yogurt-lime dressing',           cal:410,p:20,c:42,f:10,m:'RDC'},
-  {n:'Black Bean Bowl + Guacamole + Fruit',     d:'½ cup black beans + corn + salsa + ¼ avocado + large greens + lime + ½ cup sliced mango on the side',   cal:390,p:16,c:40,f:12,m:'RDC'},
+  {n:'Veggie Burrito Bowl + Yogurt Dressing',   d:'¼ cup brown rice + ½ cup black beans + corn + salsa + ¼ avocado + 3 tbsp yogurt-lime dressing',         cal:430,p:16,c:46,f:12,m:'RDC',cu:'Mexican'},
+  {n:'Lentil Taco Bowl + Yogurt Lime Dressing', d:'½ cup spiced lentils + ¼ cup brown rice + salsa + mixed greens + 3 tbsp yogurt-lime dressing',           cal:410,p:20,c:42,f:10,m:'RDC',cu:'Mexican'},
+  {n:'Black Bean Bowl + Guacamole + Fruit',     d:'½ cup black beans + corn + salsa + ¼ avocado + large greens + lime + ½ cup sliced mango on the side',   cal:390,p:16,c:40,f:12,m:'RDC',cu:'Mexican'},
   // American
-  {n:'Quinoa Power Bowl + Nuts + Berries',      d:'¾ cup quinoa + roasted sweet potato + kale + 15g almonds + cranberries + ½ cup berries + vinaigrette',   cal:450,p:14,c:46,f:14,m:'RDC'},
-  {n:'Big Garden Salad + Hummus + Pita',        d:'2 cups leafy greens + chickpeas + cucumber + cherry tomatoes + 3 tbsp hummus + 1 mini pita + sliced apple',cal:420,p:16,c:44,f:16,m:'RDC'},
-  {n:'Lentil Soup + Wholegrain Bread + Salad',  d:'2 cups thick lentil soup + 1 slice wholegrain bread + green salad with lemon-olive oil dressing',        cal:400,p:18,c:46,f:8,m:'RDC'},
-  {n:'Stuffed Peppers + Quinoa + Yogurt Dip',   d:'2 peppers stuffed with quinoa, black beans & herbs (baked) + ½ cup yogurt-herb dip + side salad',       cal:430,p:16,c:46,f:10,m:'RDC'},
-  {n:'Cauliflower Bowl + Chickpeas + Tahini',   d:'Roast cauliflower and chickpeas with cumin and paprika at 200°C for 25 minutes. Serve over greens with tahini lemon dressing and tomato.',         cal:390,p:14,c:36,f:16,m:'RDC'},
+  {n:'Quinoa Power Bowl + Nuts + Berries',      d:'¾ cup quinoa + roasted sweet potato + kale + 15g almonds + cranberries + ½ cup berries + vinaigrette',   cal:450,p:14,c:46,f:14,m:'RDC',cu:'American'},
+  {n:'Big Garden Salad + Hummus + Pita',        d:'2 cups leafy greens + chickpeas + cucumber + cherry tomatoes + 3 tbsp hummus + 1 mini pita + sliced apple',cal:420,p:16,c:44,f:16,m:'RDC',cu:'American'},
+  {n:'Lentil Soup + Wholegrain Bread + Salad',  d:'2 cups thick lentil soup + 1 slice wholegrain bread + green salad with lemon-olive oil dressing',        cal:400,p:18,c:46,f:8,m:'RDC',cu:'American'},
+  {n:'Stuffed Peppers + Quinoa + Yogurt Dip',   d:'2 peppers stuffed with quinoa, black beans & herbs (baked) + ½ cup yogurt-herb dip + side salad',       cal:430,p:16,c:46,f:10,m:'RDC',cu:'American'},
+  {n:'Cauliflower Bowl + Chickpeas + Tahini',   d:'Roast cauliflower and chickpeas with cumin and paprika at 200°C for 25 minutes. Serve over greens with tahini lemon dressing and tomato.',         cal:390,p:14,c:36,f:16,m:'RDC',cu:'American'},
   // More Low-GI veg lunches
-  {n:'Rajma + Salad (No Rice)',                  d:'1 cup spiced rajma curry + 2 cups mixed salad with lemon-olive oil dressing + 3 tbsp plain yogurt',        cal:380,p:18,c:38,f:8,m:'RD'},
-  {n:'Moong Dal Soup + Rye Bread + Salad',       d:'1.5 cups thick moong dal soup with cumin & ginger + 1 slice rye bread + large green salad',               cal:370,p:18,c:40,f:6,m:'RD'},
-  {n:'Chickpea Salad Bowl + Olive Oil Dressing', d:'¾ cup chickpeas + cucumber, tomato, red onion, parsley + feta alt + 2 tbsp olive oil-lemon dressing',     cal:380,p:14,c:36,f:16,m:'RD'},
-  {n:'Barley Khichdi + Raita + Salad',           d:'1 cup pearl barley cooked with moong dal & turmeric + ½ cup yogurt raita + cucumber salad (low GI swap)', cal:400,p:16,c:52,f:6,m:'D'},
+  {n:'Rajma + Salad (No Rice)',                  d:'1 cup spiced rajma curry + 2 cups mixed salad with lemon-olive oil dressing + 3 tbsp plain yogurt',        cal:380,p:18,c:38,f:8,m:'RD',cu:'Indian'},
+  {n:'Moong Dal Soup + Rye Bread + Salad',       d:'1.5 cups thick moong dal soup with cumin & ginger + 1 slice rye bread + large green salad',               cal:370,p:18,c:40,f:6,m:'RD',cu:'Indian'},
+  {n:'Chickpea Salad Bowl + Olive Oil Dressing', d:'¾ cup chickpeas + cucumber, tomato, red onion, parsley + feta alt + 2 tbsp olive oil-lemon dressing',     cal:380,p:14,c:36,f:16,m:'RD',cu:'Indian'},
+  {n:'Barley Khichdi + Raita + Salad',           d:'1 cup pearl barley cooked with moong dal & turmeric + ½ cup yogurt raita + cucumber salad (low GI swap)', cal:400,p:16,c:52,f:6,m:'D',cu:'Indian'},
   // Cheat-Day veg lunches
-  {n:'Pav Bhaji + Butter + Chai',                d:'2 soft pav rolls with spiced mashed vegetable bhaji + 1 tsp butter + sliced raw onion & lemon',            cal:580,p:14,c:86,f:16,m:'C'},
-  {n:'Paneer Butter Masala + 2 Rotis',           d:'150g paneer in rich buttery tomato gravy + 2 wholegrain rotis + cucumber salad + 3 tbsp raita',            cal:620,p:28,c:52,f:30,m:'C'},
-  {n:'Chole Puri (2) + Pickle',                  d:'½ cup spiced chole masala + 2 puris + raw onion-tomato salad + 1 tbsp mixed pickle',                       cal:650,p:16,c:90,f:22,m:'C'},
-  {n:'Veg Fried Rice + Manchurian Gravy',        d:'Stir-fry day-old rice with mixed vegetables and soy sauce on high heat, serve alongside veg manchurian balls simmered in a spiced cornstarch gravy.',           cal:580,p:14,c:80,f:18,m:'C'},
+  {n:'Pav Bhaji + Butter + Chai',                d:'2 soft pav rolls with spiced mashed vegetable bhaji + 1 tsp butter + sliced raw onion & lemon',            cal:580,p:14,c:86,f:16,m:'C',cu:'Indian'},
+  {n:'Paneer Butter Masala + 2 Rotis',           d:'150g paneer in rich buttery tomato gravy + 2 wholegrain rotis + cucumber salad + 3 tbsp raita',            cal:620,p:28,c:52,f:30,m:'C',cu:'Indian'},
+  {n:'Chole Puri (2) + Pickle',                  d:'½ cup spiced chole masala + 2 puris + raw onion-tomato salad + 1 tbsp mixed pickle',                       cal:650,p:16,c:90,f:22,m:'C',cu:'Indian'},
+  {n:'Veg Fried Rice + Manchurian Gravy',        d:'Stir-fry day-old rice with mixed vegetables and soy sauce on high heat, serve alongside veg manchurian balls simmered in a spiced cornstarch gravy.',           cal:580,p:14,c:80,f:18,m:'C',cu:'Indian'},
   // ── New veg lunches ──
   // Indian
-  {n:'Methi Dal + Brown Rice + Raita',           d:'1 cup fenugreek-infused yellow dal + ½ cup brown rice + ½ cup yogurt raita + sliced onion salad',          cal:420,p:18,c:42,f:7,m:'RDC'},
-  {n:'Mixed Veg Sabzi + 2 Rotis + Curd',         d:'Seasonal vegetables cooked in a light onion-tomato-spice base, served with 2 wholegrain rotis and plain curd.',                                                    cal:445,p:14,c:46,f:12,m:'RDC'},
-  {n:'Baingan Bharta + Roti + Salad',            d:'Char-roast an eggplant, mash with sautéed onion, tomato, garlic and garam masala. Serve with 1 wholegrain roti and green salad.',                                  cal:380,p:12,c:34,f:14,m:'RDC'},
-  {n:'Sambar Rice + Papad + Pickle',             d:'½ cup sambhar rice with toor dal, tamarind and mixed vegetables, served with a roasted papad and a small piece of pickle.',                                         cal:440,p:14,c:58,f:8,m:'RC'},
-  {n:'Aloo Gobi + 1 Roti + Dal Soup',            d:'Dry-cooked cauliflower and potato with turmeric and coriander seeds, served with 1 wholegrain roti and 1 cup clear lentil soup.',                                   cal:410,p:14,c:44,f:12,m:'RDC'},
-  {n:'Kadhi Pakora + ½ Cup Rice + Salad',        d:'Yogurt-besan kadhi with fried pakoras simmered in it, served with ½ cup steamed rice and a fresh cucumber salad.',                                                  cal:460,p:14,c:48,f:16,m:'RC'},
-  {n:'Bhindi Masala + Roti + Curd',              d:'Dry-fry okra with cumin, onion and tomato until crisp, served with 1 wholegrain roti and plain curd.',                                                              cal:370,p:10,c:34,f:16,m:'RDC'},
+  {n:'Methi Dal + Brown Rice + Raita',           d:'1 cup fenugreek-infused yellow dal + ½ cup brown rice + ½ cup yogurt raita + sliced onion salad',          cal:420,p:18,c:42,f:7,m:'RDC',cu:'Indian'},
+  {n:'Mixed Veg Sabzi + 2 Rotis + Curd',         d:'Seasonal vegetables cooked in a light onion-tomato-spice base, served with 2 wholegrain rotis and plain curd.',                                                    cal:445,p:14,c:46,f:12,m:'RDC',cu:'Indian'},
+  {n:'Baingan Bharta + Roti + Salad',            d:'Char-roast an eggplant, mash with sautéed onion, tomato, garlic and garam masala. Serve with 1 wholegrain roti and green salad.',                                  cal:380,p:12,c:34,f:14,m:'RDC',cu:'Indian'},
+  {n:'Sambar Rice + Papad + Pickle',             d:'½ cup sambhar rice with toor dal, tamarind and mixed vegetables, served with a roasted papad and a small piece of pickle.',                                         cal:440,p:14,c:58,f:8,m:'RC',cu:'Indian'},
+  {n:'Aloo Gobi + 1 Roti + Dal Soup',            d:'Dry-cooked cauliflower and potato with turmeric and coriander seeds, served with 1 wholegrain roti and 1 cup clear lentil soup.',                                   cal:410,p:14,c:44,f:12,m:'RDC',cu:'Indian'},
+  {n:'Kadhi Pakora + ½ Cup Rice + Salad',        d:'Yogurt-besan kadhi with fried pakoras simmered in it, served with ½ cup steamed rice and a fresh cucumber salad.',                                                  cal:460,p:14,c:48,f:16,m:'RC',cu:'Indian'},
+  {n:'Bhindi Masala + Roti + Curd',              d:'Dry-fry okra with cumin, onion and tomato until crisp, served with 1 wholegrain roti and plain curd.',                                                              cal:370,p:10,c:34,f:16,m:'RDC',cu:'Indian'},
   // Mediterranean
-  {n:'Falafel Bowl + Hummus + Pita + Salad',     d:'4 baked falafel + 3 tbsp hummus + 1 mini wholegrain pita + large Greek salad with olive oil and lemon.',                                                           cal:450,p:16,c:44,f:18,m:'RDC'},
-  {n:'Greek Salad + Lentil Soup + Pita',         d:'Large tomato-cucumber-olive-feta salad dressed with olive oil + 1 cup thick lentil soup + 1 mini pita.',                                                            cal:410,p:16,c:38,f:18,m:'RDC'},
-  {n:'Shakshuka + Wholegrain Bread + Salad',     d:'3 eggs poached in spiced tomato-pepper sauce with cumin and paprika, served with 1 slice wholegrain bread and side salad.',                                         cal:390,p:20,c:28,f:18,m:'RDC'},
-  {n:'Stuffed Zucchini + Quinoa + Yogurt',       d:'Zucchini hollowed and filled with herbed quinoa-lentil stuffing, baked at 190°C for 20 minutes. Serve with yogurt-dill dip.',                                       cal:400,p:16,c:40,f:12,m:'RDC'},
+  {n:'Falafel Bowl + Hummus + Pita + Salad',     d:'4 baked falafel + 3 tbsp hummus + 1 mini wholegrain pita + large Greek salad with olive oil and lemon.',                                                           cal:450,p:16,c:44,f:18,m:'RDC',cu:'Mediterranean'},
+  {n:'Greek Salad + Lentil Soup + Pita',         d:'Large tomato-cucumber-olive-feta salad dressed with olive oil + 1 cup thick lentil soup + 1 mini pita.',                                                            cal:410,p:16,c:38,f:18,m:'RDC',cu:'Mediterranean'},
+  {n:'Shakshuka + Wholegrain Bread + Salad',     d:'3 eggs poached in spiced tomato-pepper sauce with cumin and paprika, served with 1 slice wholegrain bread and side salad.',                                         cal:390,p:20,c:28,f:18,m:'RDC',cu:'Mediterranean'},
+  {n:'Stuffed Zucchini + Quinoa + Yogurt',       d:'Zucchini hollowed and filled with herbed quinoa-lentil stuffing, baked at 190°C for 20 minutes. Serve with yogurt-dill dip.',                                       cal:400,p:16,c:40,f:12,m:'RDC',cu:'Mediterranean'},
   // Italian
-  {n:'Pasta Primavera + Salad',                  d:'Wholegrain pasta tossed with sautéed zucchini, cherry tomatoes, garlic and olive oil, finished with fresh basil. Served with a green salad.',                        cal:470,p:14,c:62,f:14,m:'RC'},
-  {n:'Minestrone Soup + Sourdough + Salad',      d:'Thick vegetable-bean soup with pasta and fresh herbs, served with 1 slice sourdough and a side green salad.',                                                        cal:400,p:14,c:52,f:10,m:'RDC'},
-  {n:'Caprese + Lentil Salad + Bread',           d:'Sliced tomato and mozzarella with basil and olive oil + 1 cup lentil salad with herbs + 1 slice wholegrain bread.',                                                  cal:430,p:20,c:36,f:18,m:'RDC'},
+  {n:'Pasta Primavera + Salad',                  d:'Wholegrain pasta tossed with sautéed zucchini, cherry tomatoes, garlic and olive oil, finished with fresh basil. Served with a green salad.',                        cal:470,p:14,c:62,f:14,m:'RC',cu:'Italian'},
+  {n:'Minestrone Soup + Sourdough + Salad',      d:'Thick vegetable-bean soup with pasta and fresh herbs, served with 1 slice sourdough and a side green salad.',                                                        cal:400,p:14,c:52,f:10,m:'RDC',cu:'Italian'},
+  {n:'Caprese + Lentil Salad + Bread',           d:'Sliced tomato and mozzarella with basil and olive oil + 1 cup lentil salad with herbs + 1 slice wholegrain bread.',                                                  cal:430,p:20,c:36,f:18,m:'RDC',cu:'Italian'},
   // Korean
-  {n:'Bibimbap (Veg) + Miso Soup',               d:'½ cup steamed rice topped with sautéed spinach, mushroom, carrot, zucchini and fried egg, drizzled with gochujang. Served with miso soup.',                         cal:450,p:16,c:56,f:12,m:'RC'},
-  {n:'Doenjang Soup + Steamed Rice + Kimchi',    d:'Fermented soybean soup with tofu and zucchini + ½ cup steamed rice + ¼ cup kimchi.',                                                                                cal:380,p:14,c:46,f:8,m:'RDC'},
+  {n:'Bibimbap (Veg) + Miso Soup',               d:'½ cup steamed rice topped with sautéed spinach, mushroom, carrot, zucchini and fried egg, drizzled with gochujang. Served with miso soup.',                         cal:450,p:16,c:56,f:12,m:'RC',cu:'Korean'},
+  {n:'Doenjang Soup + Steamed Rice + Kimchi',    d:'Fermented soybean soup with tofu and zucchini + ½ cup steamed rice + ¼ cup kimchi.',                                                                                cal:380,p:14,c:46,f:8,m:'RDC',cu:'Korean'},
   // Japanese
-  {n:'Veggie Sushi Roll (8 pcs) + Miso Soup',   d:'8 pieces vegetable sushi (cucumber, avocado, pickled radish) + 1 cup miso soup + edamame.',                                                                         cal:410,p:12,c:56,f:10,m:'RC'},
-  {n:'Agedashi Tofu + Rice + Miso Soup',         d:'Lightly battered deep-fried tofu in a dashi-soy broth + ½ cup steamed rice + 1 cup miso soup.',                                                                     cal:420,p:16,c:46,f:14,m:'RC'},
+  {n:'Veggie Sushi Roll (8 pcs) + Miso Soup',   d:'8 pieces vegetable sushi (cucumber, avocado, pickled radish) + 1 cup miso soup + edamame.',                                                                         cal:410,p:12,c:56,f:10,m:'RC',cu:'Japanese'},
+  {n:'Agedashi Tofu + Rice + Miso Soup',         d:'Lightly battered deep-fried tofu in a dashi-soy broth + ½ cup steamed rice + 1 cup miso soup.',                                                                     cal:420,p:16,c:46,f:14,m:'RC',cu:'Japanese'},
   // American
-  {n:'Sweet Potato + Black Bean Burger + Salad', d:'Home-made sweet potato and black bean patty on a lettuce wrap with salsa and yogurt dressing. Served with a mixed green salad.',                                     cal:430,p:14,c:48,f:12,m:'RDC'},
-  {n:'Roasted Veg + Halloumi + Quinoa Bowl',     d:'Oven-roasted peppers, zucchini and eggplant with grilled halloumi slices on a bed of quinoa, drizzled with lemon-herb dressing.',                                   cal:470,p:20,c:36,f:22,m:'RDC'},
+  {n:'Sweet Potato + Black Bean Burger + Salad', d:'Home-made sweet potato and black bean patty on a lettuce wrap with salsa and yogurt dressing. Served with a mixed green salad.',                                     cal:430,p:14,c:48,f:12,m:'RDC',cu:'American'},
+  {n:'Roasted Veg + Halloumi + Quinoa Bowl',     d:'Oven-roasted peppers, zucchini and eggplant with grilled halloumi slices on a bed of quinoa, drizzled with lemon-herb dressing.',                                   cal:470,p:20,c:36,f:22,m:'RDC',cu:'American'},
  ],
  nonveg:[
   // Indian (front — prioritized)
-  {n:'Grilled Chicken + Brown Rice + Raita',    d:'150g marinated grilled chicken + ½ cup brown rice + ½ cup yogurt-cucumber raita + green salad',         cal:460,p:38,c:36,f:12,m:'RDC'},
-  {n:'Fish Curry + ½ Cup Rice + Salad',         d:'150g fish curry + ½ cup steamed rice + 1 cup mixed green salad + 2 tbsp curd',                          cal:450,p:34,c:38,f:12,m:'RDC'},
-  {n:'Prawn Masala + Brown Rice + Yogurt',      d:'150g prawns in spiced masala + ½ cup brown rice + 3 tbsp cucumber yogurt + onion salad',               cal:440,p:32,c:36,f:12,m:'RDC'},
-  {n:'Egg Curry + 1 Roti + Salad',              d:'Simmer halved boiled eggs in a thick spiced onion-tomato gravy flavoured with garam masala and coriander. Serve with a wholegrain roti and salad.',          cal:410,p:24,c:30,f:18,m:'RDC'},
-  {n:'Chicken Curry + ½ Cup Rice + Raita',      d:'150g home-style chicken curry + ½ cup basmati rice + ½ cup yogurt raita + raw onion salad',             cal:470,p:36,c:38,f:14,m:'RDC'},
-  {n:'Mutton Keema + 1 Roti + Salad',           d:'½ cup spiced minced mutton with peas + 1 wholegrain roti + cucumber-tomato salad + 3 tbsp curd',        cal:450,p:32,c:26,f:20,m:'RC'},
-  {n:'Tandoori Chicken + Salad + Roti',         d:'2 pieces tandoori chicken (200g) + large green salad + 1 wholegrain roti + mint chutney + lemon',       cal:460,p:40,c:24,f:16,m:'RDC'},
-  {n:'Shrimp Masala + Brown Rice + Raita',      d:'150g shrimp in spiced masala gravy + ½ cup brown rice + ½ cup yogurt-cucumber raita + salad',           cal:440,p:34,c:38,f:10,m:'RDC'},
-  {n:'Tandoori Fish + Salad + Roti',            d:'180g tandoori grilled fish + large cucumber-onion salad + 1 wholegrain roti + mint chutney',             cal:420,p:38,c:24,f:12,m:'RDC'},
+  {n:'Grilled Chicken + Brown Rice + Raita',    d:'150g marinated grilled chicken + ½ cup brown rice + ½ cup yogurt-cucumber raita + green salad',         cal:460,p:38,c:36,f:12,m:'RDC',cu:'Indian'},
+  {n:'Fish Curry + ½ Cup Rice + Salad',         d:'150g fish curry + ½ cup steamed rice + 1 cup mixed green salad + 2 tbsp curd',                          cal:450,p:34,c:38,f:12,m:'RDC',cu:'Indian'},
+  {n:'Prawn Masala + Brown Rice + Yogurt',      d:'150g prawns in spiced masala + ½ cup brown rice + 3 tbsp cucumber yogurt + onion salad',               cal:440,p:32,c:36,f:12,m:'RDC',cu:'Indian'},
+  {n:'Egg Curry + 1 Roti + Salad',              d:'Simmer halved boiled eggs in a thick spiced onion-tomato gravy flavoured with garam masala and coriander. Serve with a wholegrain roti and salad.',          cal:410,p:24,c:30,f:18,m:'RDC',cu:'Indian'},
+  {n:'Chicken Curry + ½ Cup Rice + Raita',      d:'150g home-style chicken curry + ½ cup basmati rice + ½ cup yogurt raita + raw onion salad',             cal:470,p:36,c:38,f:14,m:'RDC',cu:'Indian'},
+  {n:'Mutton Keema + 1 Roti + Salad',           d:'½ cup spiced minced mutton with peas + 1 wholegrain roti + cucumber-tomato salad + 3 tbsp curd',        cal:450,p:32,c:26,f:20,m:'RC',cu:'Indian'},
+  {n:'Tandoori Chicken + Salad + Roti',         d:'2 pieces tandoori chicken (200g) + large green salad + 1 wholegrain roti + mint chutney + lemon',       cal:460,p:40,c:24,f:16,m:'RDC',cu:'Indian'},
+  {n:'Shrimp Masala + Brown Rice + Raita',      d:'150g shrimp in spiced masala gravy + ½ cup brown rice + ½ cup yogurt-cucumber raita + salad',           cal:440,p:34,c:38,f:10,m:'RDC',cu:'Indian'},
+  {n:'Tandoori Fish + Salad + Roti',            d:'180g tandoori grilled fish + large cucumber-onion salad + 1 wholegrain roti + mint chutney',             cal:420,p:38,c:24,f:12,m:'RDC',cu:'Indian'},
   // Chinese
-  {n:'Kung Pao Chicken + ½ Cup Brown Rice',     d:'Toss chicken pieces in soy-vinegar-sesame sauce, stir-fry with peanuts, dried chillies and zucchini on high heat. Serve with brown rice.',               cal:460,p:36,c:36,f:14,m:'RC'},
-  {n:'Steamed Fish + Bok Choy + ½ Cup Rice',    d:'Steam fish fillet with ginger and spring onion for 8–10 minutes, blanch bok choy alongside. Serve with jasmine rice and soy-sesame drizzle.',         cal:410,p:36,c:32,f:10,m:'RDC'},
-  {n:'Shrimp Fried Rice + Miso Soup',           d:'Stir-fry day-old rice with prawns, egg, soy sauce and sesame oil on high heat. Serve with a cup of hot miso soup.',          cal:450,p:30,c:40,f:12,m:'RC'},
-  {n:'Chicken & Broccoli + Brown Rice',         d:'Stir-fry sliced chicken breast with broccoli florets in oyster-soy sauce until the broccoli is bright and the chicken just cooked. Serve over brown rice.',             cal:430,p:36,c:34,f:10,m:'RDC'},
+  {n:'Kung Pao Chicken + ½ Cup Brown Rice',     d:'Toss chicken pieces in soy-vinegar-sesame sauce, stir-fry with peanuts, dried chillies and zucchini on high heat. Serve with brown rice.',               cal:460,p:36,c:36,f:14,m:'RC',cu:'Chinese'},
+  {n:'Steamed Fish + Bok Choy + ½ Cup Rice',    d:'Steam fish fillet with ginger and spring onion for 8–10 minutes, blanch bok choy alongside. Serve with jasmine rice and soy-sesame drizzle.',         cal:410,p:36,c:32,f:10,m:'RDC',cu:'Chinese'},
+  {n:'Shrimp Fried Rice + Miso Soup',           d:'Stir-fry day-old rice with prawns, egg, soy sauce and sesame oil on high heat. Serve with a cup of hot miso soup.',          cal:450,p:30,c:40,f:12,m:'RC',cu:'Chinese'},
+  {n:'Chicken & Broccoli + Brown Rice',         d:'Stir-fry sliced chicken breast with broccoli florets in oyster-soy sauce until the broccoli is bright and the chicken just cooked. Serve over brown rice.',             cal:430,p:36,c:34,f:10,m:'RDC',cu:'Chinese'},
   // Thai
-  {n:'Thai Basil Chicken + ½ Cup Rice + Salad', d:'Cook minced chicken with garlic, chilli and a generous handful of Thai basil in oyster-fish sauce until aromatic. Serve over jasmine rice with a simple salad.',                  cal:470,p:36,c:40,f:14,m:'RC'},
-  {n:'Grilled Fish + Thai Herb Salad + ½ Rice', d:'Grill fish fillet with lemongrass and chilli marinade for 4 minutes each side. Serve over jasmine rice with a fresh herb and papaya salad dressed with lime.',                cal:430,p:34,c:30,f:12,m:'RDC'},
-  {n:'Grilled Shrimp + Papaya Salad + Rice',    d:'Marinate shrimp in chilli-lime, grill until charred at edges. Serve with shredded green papaya salad and jasmine rice.',      cal:420,p:32,c:36,f:8,m:'RDC'},
+  {n:'Thai Basil Chicken + ½ Cup Rice + Salad', d:'Cook minced chicken with garlic, chilli and a generous handful of Thai basil in oyster-fish sauce until aromatic. Serve over jasmine rice with a simple salad.',                  cal:470,p:36,c:40,f:14,m:'RC',cu:'Thai'},
+  {n:'Grilled Fish + Thai Herb Salad + ½ Rice', d:'Grill fish fillet with lemongrass and chilli marinade for 4 minutes each side. Serve over jasmine rice with a fresh herb and papaya salad dressed with lime.',                cal:430,p:34,c:30,f:12,m:'RDC',cu:'Thai'},
+  {n:'Grilled Shrimp + Papaya Salad + Rice',    d:'Marinate shrimp in chilli-lime, grill until charred at edges. Serve with shredded green papaya salad and jasmine rice.',      cal:420,p:32,c:36,f:8,m:'RDC',cu:'Thai'},
   // Mexican
-  {n:'Chicken Burrito Bowl (Half Rice)',         d:'Season and grill chicken, slice and serve over half portion of rice with black beans, corn, salsa, guacamole and shredded lettuce.',           cal:470,p:38,c:36,f:14,m:'RDC'},
-  {n:'Fish Tacos (2) + Mango Salsa',            d:'Grill or bake seasoned fish, flake into corn tortillas with shredded cabbage and fresh mango salsa with lime and coriander.',              cal:450,p:30,c:40,f:14,m:'RDC'},
-  {n:'Shrimp Fajita Bowl',                       d:'150g grilled shrimp + peppers & onion + ½ cup black beans + salsa + ¼ avocado + yogurt dressing — no dairy',cal:420,p:32,c:28,f:14,m:'RDC'},
+  {n:'Chicken Burrito Bowl (Half Rice)',         d:'Season and grill chicken, slice and serve over half portion of rice with black beans, corn, salsa, guacamole and shredded lettuce.',           cal:470,p:38,c:36,f:14,m:'RDC',cu:'Mexican'},
+  {n:'Fish Tacos (2) + Mango Salsa',            d:'Grill or bake seasoned fish, flake into corn tortillas with shredded cabbage and fresh mango salsa with lime and coriander.',              cal:450,p:30,c:40,f:14,m:'RDC',cu:'Mexican'},
+  {n:'Shrimp Fajita Bowl',                       d:'150g grilled shrimp + peppers & onion + ½ cup black beans + salsa + ¼ avocado + yogurt dressing — no dairy',cal:420,p:32,c:28,f:14,m:'RDC',cu:'Mexican'},
   // American
-  {n:'Grilled Chicken Caesar Salad',            d:'Grill chicken breast until golden, slice over romaine lettuce with cherry tomatoes and a light Caesar dressing made with yogurt and lemon instead of mayo.',           cal:400,p:36,c:10,f:18,m:'RDC'},
-  {n:'Tuna Salad Bowl + Crackers + Apple',      d:'Flake drained canned tuna with lemon, celery and a little yogurt, serve over mixed greens with wholegrain crackers and a sliced apple.',             cal:410,p:34,c:28,f:12,m:'RDC'},
-  {n:'Salmon + Greens + Quinoa + Nuts',         d:'Bake salmon fillet at 200°C for 12–15 minutes with lemon and herbs, serve over cooked quinoa with mixed greens and walnuts.',            cal:470,p:40,c:30,f:20,m:'RDC'},
-  {n:'Shrimp & Avocado Salad Bowl',             d:'Toss cooked shrimp with mixed greens, avocado, cherry tomatoes and a lemon vinaigrette. Finish with pumpkin seeds.', cal:390,p:32,c:14,f:20,m:'RDC'},
+  {n:'Grilled Chicken Caesar Salad',            d:'Grill chicken breast until golden, slice over romaine lettuce with cherry tomatoes and a light Caesar dressing made with yogurt and lemon instead of mayo.',           cal:400,p:36,c:10,f:18,m:'RDC',cu:'American'},
+  {n:'Tuna Salad Bowl + Crackers + Apple',      d:'Flake drained canned tuna with lemon, celery and a little yogurt, serve over mixed greens with wholegrain crackers and a sliced apple.',             cal:410,p:34,c:28,f:12,m:'RDC',cu:'American'},
+  {n:'Salmon + Greens + Quinoa + Nuts',         d:'Bake salmon fillet at 200°C for 12–15 minutes with lemon and herbs, serve over cooked quinoa with mixed greens and walnuts.',            cal:470,p:40,c:30,f:20,m:'RDC',cu:'American'},
+  {n:'Shrimp & Avocado Salad Bowl',             d:'Toss cooked shrimp with mixed greens, avocado, cherry tomatoes and a lemon vinaigrette. Finish with pumpkin seeds.', cal:390,p:32,c:14,f:20,m:'RDC',cu:'American'},
   // More Low-GI nonveg lunches
-  {n:'Grilled Fish + Salad (No Rice)',           d:'180g marinated grilled fish fillet + 2 cups mixed greens + cucumber, tomato & lemon vinaigrette + 3 tbsp curd',cal:360,p:36,c:8,f:14,m:'D'},
-  {n:'Chicken Clear Soup + Egg + Salad',         d:'1.5 cups clear chicken soup with veg + 2 boiled eggs + 2 cups mixed salad + lemon-olive oil dressing',    cal:340,p:32,c:10,f:14,m:'D'},
-  {n:'Prawn Salad + Chickpeas + Yogurt',         d:'150g grilled prawns + 2 cups mixed greens + ½ cup chickpeas + 3 tbsp yogurt-herb dressing + lemon',      cal:380,p:34,c:20,f:10,m:'D'},
-  {n:'Steamed Fish + Dal + Salad',               d:'180g steamed ginger-garlic fish + ½ cup moong dal + large cucumber-tomato salad + 2 tbsp curd',           cal:390,p:38,c:22,f:10,m:'RD'},
+  {n:'Grilled Fish + Salad (No Rice)',           d:'180g marinated grilled fish fillet + 2 cups mixed greens + cucumber, tomato & lemon vinaigrette + 3 tbsp curd',cal:360,p:36,c:8,f:14,m:'D',cu:'Indian'},
+  {n:'Chicken Clear Soup + Egg + Salad',         d:'1.5 cups clear chicken soup with veg + 2 boiled eggs + 2 cups mixed salad + lemon-olive oil dressing',    cal:340,p:32,c:10,f:14,m:'D',cu:'Indian'},
+  {n:'Prawn Salad + Chickpeas + Yogurt',         d:'150g grilled prawns + 2 cups mixed greens + ½ cup chickpeas + 3 tbsp yogurt-herb dressing + lemon',      cal:380,p:34,c:20,f:10,m:'D',cu:'Indian'},
+  {n:'Steamed Fish + Dal + Salad',               d:'180g steamed ginger-garlic fish + ½ cup moong dal + large cucumber-tomato salad + 2 tbsp curd',           cal:390,p:38,c:22,f:10,m:'RD',cu:'Indian'},
   // Cheat-Day nonveg lunches
-  {n:'Chicken Biryani + Raita + Salad',         d:'Layer par-cooked saffron rice with slow-cooked chicken masala and dum-cook sealed for 20 minutes. Serve with boondi raita and cucumber-onion salad.',                  cal:620,p:34,c:72,f:18,m:'RC'},
-  {n:'Mutton Biryani + Raita',                  d:'Slow-cook mutton in spiced gravy until tender, layer with par-cooked saffron basmati, seal and dum-cook for 25 minutes. Serve with boondi raita.',                           cal:680,p:34,c:76,f:24,m:'C'},
-  {n:'Prawn Biryani + Raita + Salad',           d:'Cook prawns in a fragrant biryani masala, layer with saffron rice and dum-cook sealed for 15 minutes. Serve with cucumber-mint raita.',                       cal:580,p:32,c:68,f:16,m:'RC'},
-  {n:'BBQ Chicken + Roasted Veg + Quinoa',      d:'Coat chicken thigh in BBQ marinade, bake at 200°C for 30 minutes until caramelised. Serve with roasted peppers and zucchini and quinoa.',                          cal:520,p:40,c:36,f:18,m:'RC'},
-  {n:'Butter Chicken + 2 Rotis + Salad',        d:'Simmer grilled chicken in a creamy tomato-cashew-butter gravy with fenugreek leaves until rich. Serve with wholegrain rotis and cucumber-onion salad.',                 cal:580,p:36,c:46,f:24,m:'RC'},
-  {n:'Fish & Chips (Baked) + Yogurt Dip',       d:'200g baked spiced fish + 150g oven-baked potato wedges + 2 tbsp thick yogurt-mint dip + salad',          cal:560,p:36,c:52,f:16,m:'C'},
-  {n:'Dragon Chicken + Fried Rice',             d:'150g crispy fried chicken in chilli-soy sauce + 1 cup egg fried rice + sliced spring onion & chilli',     cal:640,p:36,c:64,f:22,m:'C'},
+  {n:'Chicken Biryani + Raita + Salad',         d:'Layer par-cooked saffron rice with slow-cooked chicken masala and dum-cook sealed for 20 minutes. Serve with boondi raita and cucumber-onion salad.',                  cal:620,p:34,c:72,f:18,m:'RC',cu:'Indian'},
+  {n:'Mutton Biryani + Raita',                  d:'Slow-cook mutton in spiced gravy until tender, layer with par-cooked saffron basmati, seal and dum-cook for 25 minutes. Serve with boondi raita.',                           cal:680,p:34,c:76,f:24,m:'C',cu:'Indian'},
+  {n:'Prawn Biryani + Raita + Salad',           d:'Cook prawns in a fragrant biryani masala, layer with saffron rice and dum-cook sealed for 15 minutes. Serve with cucumber-mint raita.',                       cal:580,p:32,c:68,f:16,m:'RC',cu:'Indian'},
+  {n:'BBQ Chicken + Roasted Veg + Quinoa',      d:'Coat chicken thigh in BBQ marinade, bake at 200°C for 30 minutes until caramelised. Serve with roasted peppers and zucchini and quinoa.',                          cal:520,p:40,c:36,f:18,m:'RC',cu:'Indian'},
+  {n:'Butter Chicken + 2 Rotis + Salad',        d:'Simmer grilled chicken in a creamy tomato-cashew-butter gravy with fenugreek leaves until rich. Serve with wholegrain rotis and cucumber-onion salad.',                 cal:580,p:36,c:46,f:24,m:'RC',cu:'Indian'},
+  {n:'Fish & Chips (Baked) + Yogurt Dip',       d:'200g baked spiced fish + 150g oven-baked potato wedges + 2 tbsp thick yogurt-mint dip + salad',          cal:560,p:36,c:52,f:16,m:'C',cu:'Indian'},
+  {n:'Dragon Chicken + Fried Rice',             d:'150g crispy fried chicken in chilli-soy sauce + 1 cup egg fried rice + sliced spring onion & chilli',     cal:640,p:36,c:64,f:22,m:'C',cu:'Indian'},
   // ── New nonveg lunches ──
   // Indian
-  {n:'Chicken Keema + 2 Rotis + Salad',          d:'½ cup spiced minced chicken with green peas + 2 wholegrain rotis + cucumber-tomato salad + 3 tbsp curd.',                                                         cal:470,p:36,c:32,f:16,m:'RDC'},
-  {n:'Egg Bhurji + Brown Rice + Salad',           d:'3 eggs scrambled with onion, tomato, chilli and coriander + ½ cup brown rice + fresh salad.',                                                                      cal:430,p:26,c:36,f:16,m:'RDC'},
-  {n:'Fish Tikka + Salad + Roti',                 d:'180g marinated fish tikka grilled in an oven or pan + large leafy salad + 1 wholegrain roti + mint chutney.',                                                       cal:420,p:38,c:22,f:12,m:'RDC'},
-  {n:'Chicken Palak + Brown Rice + Raita',        d:'150g chicken pieces simmered in a smooth spinach gravy with garlic and garam masala + ½ cup brown rice + raita.',                                                   cal:460,p:36,c:36,f:14,m:'RDC'},
-  {n:'Mutton Curry + 1 Roti + Salad',             d:'150g slow-cooked mutton in a spiced onion-tomato gravy + 1 wholegrain roti + cucumber salad + 3 tbsp curd.',                                                       cal:490,p:34,c:28,f:22,m:'RC'},
+  {n:'Chicken Keema + 2 Rotis + Salad',          d:'½ cup spiced minced chicken with green peas + 2 wholegrain rotis + cucumber-tomato salad + 3 tbsp curd.',                                                         cal:470,p:36,c:32,f:16,m:'RDC',cu:'Indian'},
+  {n:'Egg Bhurji + Brown Rice + Salad',           d:'3 eggs scrambled with onion, tomato, chilli and coriander + ½ cup brown rice + fresh salad.',                                                                      cal:430,p:26,c:36,f:16,m:'RDC',cu:'Indian'},
+  {n:'Fish Tikka + Salad + Roti',                 d:'180g marinated fish tikka grilled in an oven or pan + large leafy salad + 1 wholegrain roti + mint chutney.',                                                       cal:420,p:38,c:22,f:12,m:'RDC',cu:'Indian'},
+  {n:'Chicken Palak + Brown Rice + Raita',        d:'150g chicken pieces simmered in a smooth spinach gravy with garlic and garam masala + ½ cup brown rice + raita.',                                                   cal:460,p:36,c:36,f:14,m:'RDC',cu:'Indian'},
+  {n:'Mutton Curry + 1 Roti + Salad',             d:'150g slow-cooked mutton in a spiced onion-tomato gravy + 1 wholegrain roti + cucumber salad + 3 tbsp curd.',                                                       cal:490,p:34,c:28,f:22,m:'RC',cu:'Indian'},
   // Mediterranean
-  {n:'Grilled Chicken + Tabbouleh + Hummus',      d:'150g herb-marinated grilled chicken + 1 cup bulgur-parsley tabbouleh + 3 tbsp hummus + lemon wedge.',                                                              cal:460,p:38,c:32,f:14,m:'RDC'},
-  {n:'Baked Salmon + Greek Salad + Pita',         d:'180g baked salmon with herbs and lemon + large Greek salad with olives and feta + 1 mini pita.',                                                                    cal:490,p:42,c:24,f:22,m:'RDC'},
-  {n:'Chicken Souvlaki + Rice + Salad',           d:'Marinate chicken in lemon-garlic-oregano, skewer and grill. Serve with ½ cup rice, tzatziki and a village salad.',                                                  cal:470,p:38,c:36,f:14,m:'RDC'},
+  {n:'Grilled Chicken + Tabbouleh + Hummus',      d:'150g herb-marinated grilled chicken + 1 cup bulgur-parsley tabbouleh + 3 tbsp hummus + lemon wedge.',                                                              cal:460,p:38,c:32,f:14,m:'RDC',cu:'Mediterranean'},
+  {n:'Baked Salmon + Greek Salad + Pita',         d:'180g baked salmon with herbs and lemon + large Greek salad with olives and feta + 1 mini pita.',                                                                    cal:490,p:42,c:24,f:22,m:'RDC',cu:'Mediterranean'},
+  {n:'Chicken Souvlaki + Rice + Salad',           d:'Marinate chicken in lemon-garlic-oregano, skewer and grill. Serve with ½ cup rice, tzatziki and a village salad.',                                                  cal:470,p:38,c:36,f:14,m:'RDC',cu:'Mediterranean'},
   // Italian
-  {n:'Chicken Pasta + Parmesan + Salad',          d:'Wholegrain pasta tossed with grilled chicken, cherry tomatoes, garlic and olive oil, finished with grated parmesan and basil.',                                     cal:510,p:38,c:52,f:14,m:'RC'},
-  {n:'Tuna Niçoise Salad + Bread',                d:'Canned tuna, boiled egg, green beans, olives and cherry tomatoes over greens with a Dijon dressing. Served with 1 slice sourdough.',                               cal:430,p:34,c:22,f:18,m:'RDC'},
+  {n:'Chicken Pasta + Parmesan + Salad',          d:'Wholegrain pasta tossed with grilled chicken, cherry tomatoes, garlic and olive oil, finished with grated parmesan and basil.',                                     cal:510,p:38,c:52,f:14,m:'RC',cu:'Italian'},
+  {n:'Tuna Niçoise Salad + Bread',                d:'Canned tuna, boiled egg, green beans, olives and cherry tomatoes over greens with a Dijon dressing. Served with 1 slice sourdough.',                               cal:430,p:34,c:22,f:18,m:'RDC',cu:'Italian'},
   // Korean
-  {n:'Bulgogi + Steamed Rice + Kimchi',           d:'Thinly sliced beef marinated in soy-sesame-pear sauce, stir-fried until caramelised. Served with ½ cup steamed rice and kimchi.',                                  cal:490,p:34,c:44,f:16,m:'RC'},
-  {n:'Korean Chicken Bowl + Gochujang + Rice',    d:'Gochujang-glazed grilled chicken thigh over steamed rice with pickled radish and sesame spinach.',                                                                  cal:470,p:36,c:42,f:14,m:'RC'},
+  {n:'Bulgogi + Steamed Rice + Kimchi',           d:'Thinly sliced beef marinated in soy-sesame-pear sauce, stir-fried until caramelised. Served with ½ cup steamed rice and kimchi.',                                  cal:490,p:34,c:44,f:16,m:'RC',cu:'Korean'},
+  {n:'Korean Chicken Bowl + Gochujang + Rice',    d:'Gochujang-glazed grilled chicken thigh over steamed rice with pickled radish and sesame spinach.',                                                                  cal:470,p:36,c:42,f:14,m:'RC',cu:'Korean'},
   // Japanese
-  {n:'Salmon Sashimi Bowl + Rice + Miso',         d:'6 slices fresh salmon sashimi + ½ cup steamed sushi rice + edamame + miso soup + pickled ginger.',                                                                 cal:450,p:36,c:38,f:14,m:'RDC'},
-  {n:'Chicken Teriyaki + Brown Rice + Salad',     d:'150g chicken thigh glazed in homemade teriyaki sauce, grilled until sticky. Served with brown rice and shredded cabbage salad.',                                   cal:460,p:36,c:40,f:12,m:'RDC'},
-  {n:'Prawn Tempura + Rice + Miso Soup',          d:'4 lightly battered fried prawns + ½ cup steamed rice + 1 cup miso soup + shredded daikon salad.',                                                                  cal:470,p:28,c:46,f:14,m:'RC'},
+  {n:'Salmon Sashimi Bowl + Rice + Miso',         d:'6 slices fresh salmon sashimi + ½ cup steamed sushi rice + edamame + miso soup + pickled ginger.',                                                                 cal:450,p:36,c:38,f:14,m:'RDC',cu:'Japanese'},
+  {n:'Chicken Teriyaki + Brown Rice + Salad',     d:'150g chicken thigh glazed in homemade teriyaki sauce, grilled until sticky. Served with brown rice and shredded cabbage salad.',                                   cal:460,p:36,c:40,f:12,m:'RDC',cu:'Japanese'},
+  {n:'Prawn Tempura + Rice + Miso Soup',          d:'4 lightly battered fried prawns + ½ cup steamed rice + 1 cup miso soup + shredded daikon salad.',                                                                  cal:470,p:28,c:46,f:14,m:'RC',cu:'Japanese'},
   // American
-  {n:'Turkey Wrap + Hummus + Salad',              d:'Wholegrain wrap with sliced turkey, avocado, lettuce, tomato and hummus + side mixed greens salad.',                                                                cal:430,p:34,c:36,f:14,m:'RDC'},
-  {n:'Grilled Shrimp + Corn + Quinoa Bowl',       d:'150g grilled shrimp + ½ cup quinoa + roasted corn + cherry tomatoes + avocado + lime dressing.',                                                                    cal:440,p:34,c:36,f:14,m:'RDC'},
-  {n:'Chicken & Avocado Club Salad',              d:'Grilled chicken breast sliced over romaine, avocado, boiled egg, bacon bits and cherry tomatoes with ranch-yogurt dressing.',                                       cal:450,p:38,c:12,f:24,m:'RDC'},
+  {n:'Turkey Wrap + Hummus + Salad',              d:'Wholegrain wrap with sliced turkey, avocado, lettuce, tomato and hummus + side mixed greens salad.',                                                                cal:430,p:34,c:36,f:14,m:'RDC',cu:'American'},
+  {n:'Grilled Shrimp + Corn + Quinoa Bowl',       d:'150g grilled shrimp + ½ cup quinoa + roasted corn + cherry tomatoes + avocado + lime dressing.',                                                                    cal:440,p:34,c:36,f:14,m:'RDC',cu:'American'},
+  {n:'Chicken & Avocado Club Salad',              d:'Grilled chicken breast sliced over romaine, avocado, boiled egg, bacon bits and cherry tomatoes with ranch-yogurt dressing.',                                       cal:450,p:38,c:12,f:24,m:'RDC',cu:'American'},
  ]
 },
 
 // ══════════════════ SNACKS (carbs ≤25g) ══════════════════
 snacks:{
  veg:[
-  {n:'Mixed Nuts + Fresh Fruit',                d:'20g almonds, walnuts & cashews + 1 medium apple or pear',                                               cal:210,p:5,c:20,f:14,m:'RDC'},
-  {n:'Greek Yogurt + Honey + Berries + Almonds', d:'150g plain Greek yogurt + 1 tsp honey + ½ cup mixed berries + 10g sliced almonds',                     cal:210,p:14,c:20,f:6,m:'RDC'},
-  {n:'Apple + Almond Butter + Cinnamon',        d:'1 medium apple sliced + 1 tbsp natural almond butter + a pinch of cinnamon',                            cal:190,p:4,c:22,f:9,m:'RDC'},
-  {n:'Hummus + Veggie Sticks + Walnuts',        d:'4 tbsp hummus + 1 cup carrot, celery & cucumber sticks + 10g walnuts',                                  cal:200,p:7,c:16,f:12,m:'RDC'},
-  {n:'Roasted Chickpeas + Dried Mango',         d:'½ cup oven-roasted chickpeas with smoked paprika + 2 slices dried mango',                               cal:190,p:9,c:24,f:4,m:'RDC'},
-  {n:'Trail Mix + Dark Chocolate',              d:'Mix almonds, pumpkin seeds and raisins in a small container, pair with 2 squares of dark chocolate.',                          cal:220,p:6,c:18,f:14,m:'RDC'},
-  {n:'Edamame + Sea Salt + Sliced Orange',      d:'¾ cup steamed edamame pods with sea salt + 1 medium orange',                                             cal:190,p:12,c:22,f:5,m:'RDC'},
-  {n:'Banana + Peanut Butter',                  d:'1 medium banana + 1 tbsp natural peanut butter',                                                         cal:200,p:5,c:28,f:8,m:'RC'},
-  {n:'Fresh Fruit Bowl + Chia Seeds + Yogurt',  d:'1 cup mixed mango, papaya, kiwi & pomegranate + 1 tsp chia seeds + 3 tbsp plain yogurt on the side',   cal:180,p:5,c:34,f:3,m:'RC'},
-  {n:'Chia Pudding + Berries + Almonds',        d:'2 tbsp chia seeds soaked in 150ml almond milk overnight + ½ cup berries + 10g sliced almonds',           cal:220,p:6,c:22,f:10,m:'RDC'},
-  {n:'Paneer Cubes + Pineapple + Black Salt',   d:'100g paneer cubes (raw or lightly grilled) + ½ cup fresh pineapple chunks + black salt & chilli',       cal:220,p:16,c:14,f:12,m:'RDC'},
-  {n:'Yogurt + Cucumber Dip + Veggie Sticks',   d:'150g thick yogurt with cucumber, mint & garlic + 1 cup carrot & cucumber sticks + 10g pumpkin seeds',   cal:180,p:10,c:14,f:6,m:'RDC'},
-  {n:'Rice Cakes + Avocado + Tomato',           d:'Spread mashed avocado on 2 rice cakes, top with sliced cherry tomatoes and a pinch of sea salt and chilli flakes.',                       cal:185,p:3,c:22,f:8,m:'RDC'},
-  {n:'Walnuts + Dark Chocolate + Dried Fruit',  d:'Combine walnuts, dark chocolate pieces and dried apricots in a small bowl — ready in seconds, balanced macros.',                                         cal:220,p:4,c:18,f:16,m:'RDC'},
-  {n:'Pumpkin Seeds + Cashews + Berries',       d:'15g pumpkin seeds + 10g cashews + ½ cup fresh strawberries & blueberries',                               cal:190,p:6,c:18,f:10,m:'RDC'},
-  {n:'Smoothie: Spinach + Banana + Almond Milk',d:'1 cup almond milk + 1 frozen banana + handful spinach + 1 tsp peanut butter — blended',                  cal:200,p:5,c:28,f:6,m:'RC'},
-  {n:'Mango + Yogurt + Pistachios',             d:'½ cup fresh mango cubes + 100g plain yogurt + 15g shelled pistachios',                                   cal:210,p:8,c:24,f:8,m:'RDC'},
+  {n:'Mixed Nuts + Fresh Fruit',                d:'20g almonds, walnuts & cashews + 1 medium apple or pear',                                               cal:210,p:5,c:20,f:14,m:'RDC',cu:'American'},
+  {n:'Greek Yogurt + Honey + Berries + Almonds', d:'150g plain Greek yogurt + 1 tsp honey + ½ cup mixed berries + 10g sliced almonds',                     cal:210,p:14,c:20,f:6,m:'RDC',cu:'American'},
+  {n:'Apple + Almond Butter + Cinnamon',        d:'1 medium apple sliced + 1 tbsp natural almond butter + a pinch of cinnamon',                            cal:190,p:4,c:22,f:9,m:'RDC',cu:'American'},
+  {n:'Hummus + Veggie Sticks + Walnuts',        d:'4 tbsp hummus + 1 cup carrot, celery & cucumber sticks + 10g walnuts',                                  cal:200,p:7,c:16,f:12,m:'RDC',cu:'American'},
+  {n:'Roasted Chickpeas + Dried Mango',         d:'½ cup oven-roasted chickpeas with smoked paprika + 2 slices dried mango',                               cal:190,p:9,c:24,f:4,m:'RDC',cu:'American'},
+  {n:'Trail Mix + Dark Chocolate',              d:'Mix almonds, pumpkin seeds and raisins in a small container, pair with 2 squares of dark chocolate.',                          cal:220,p:6,c:18,f:14,m:'RDC',cu:'American'},
+  {n:'Edamame + Sea Salt + Sliced Orange',      d:'¾ cup steamed edamame pods with sea salt + 1 medium orange',                                             cal:190,p:12,c:22,f:5,m:'RDC',cu:'American'},
+  {n:'Banana + Peanut Butter',                  d:'1 medium banana + 1 tbsp natural peanut butter',                                                         cal:200,p:5,c:28,f:8,m:'RC',cu:'American'},
+  {n:'Fresh Fruit Bowl + Chia Seeds + Yogurt',  d:'1 cup mixed mango, papaya, kiwi & pomegranate + 1 tsp chia seeds + 3 tbsp plain yogurt on the side',   cal:180,p:5,c:34,f:3,m:'RC',cu:'American'},
+  {n:'Chia Pudding + Berries + Almonds',        d:'2 tbsp chia seeds soaked in 150ml almond milk overnight + ½ cup berries + 10g sliced almonds',           cal:220,p:6,c:22,f:10,m:'RDC',cu:'American'},
+  {n:'Paneer Cubes + Pineapple + Black Salt',   d:'100g paneer cubes (raw or lightly grilled) + ½ cup fresh pineapple chunks + black salt & chilli',       cal:220,p:16,c:14,f:12,m:'RDC',cu:'American'},
+  {n:'Yogurt + Cucumber Dip + Veggie Sticks',   d:'150g thick yogurt with cucumber, mint & garlic + 1 cup carrot & cucumber sticks + 10g pumpkin seeds',   cal:180,p:10,c:14,f:6,m:'RDC',cu:'American'},
+  {n:'Rice Cakes + Avocado + Tomato',           d:'Spread mashed avocado on 2 rice cakes, top with sliced cherry tomatoes and a pinch of sea salt and chilli flakes.',                       cal:185,p:3,c:22,f:8,m:'RDC',cu:'American'},
+  {n:'Walnuts + Dark Chocolate + Dried Fruit',  d:'Combine walnuts, dark chocolate pieces and dried apricots in a small bowl — ready in seconds, balanced macros.',                                         cal:220,p:4,c:18,f:16,m:'RDC',cu:'American'},
+  {n:'Pumpkin Seeds + Cashews + Berries',       d:'15g pumpkin seeds + 10g cashews + ½ cup fresh strawberries & blueberries',                               cal:190,p:6,c:18,f:10,m:'RDC',cu:'American'},
+  {n:'Smoothie: Spinach + Banana + Almond Milk',d:'1 cup almond milk + 1 frozen banana + handful spinach + 1 tsp peanut butter — blended',                  cal:200,p:5,c:28,f:6,m:'RC',cu:'American'},
+  {n:'Mango + Yogurt + Pistachios',             d:'½ cup fresh mango cubes + 100g plain yogurt + 15g shelled pistachios',                                   cal:210,p:8,c:24,f:8,m:'RDC',cu:'American'},
   // More Low-GI veg snacks
-  {n:'Roasted Makhana (Fox Nuts) + Chai',       d:'1 cup makhana dry-roasted with ghee, pepper & himalayan salt + 1 cup green tea',                          cal:195,p:8,c:22,f:6,m:'RDC'},
-  {n:'Celery + Almond Butter + Cinnamon',       d:'4 celery sticks + 2 tbsp natural almond butter + a sprinkle of cinnamon',                                 cal:175,p:6,c:8,f:14,m:'RDC'},
-  {n:'Avocado + Lemon + Seeds',                 d:'½ avocado sliced + squeeze of lemon + 1 tbsp pumpkin seeds + black salt & chilli flakes',                  cal:200,p:4,c:8,f:18,m:'RDC'},
-  {n:'Paneer Cubes + Cucumber + Cumin',          d:'150g lightly seasoned paneer cubes with diced cucumber, cumin powder & lemon squeeze — high protein, very low GI',cal:180,p:18,c:6,f:10,m:'D'},
+  {n:'Roasted Makhana (Fox Nuts) + Chai',       d:'1 cup makhana dry-roasted with ghee, pepper & himalayan salt + 1 cup green tea',                          cal:195,p:8,c:22,f:6,m:'RDC',cu:'Indian'},
+  {n:'Celery + Almond Butter + Cinnamon',       d:'4 celery sticks + 2 tbsp natural almond butter + a sprinkle of cinnamon',                                 cal:175,p:6,c:8,f:14,m:'RDC',cu:'Indian'},
+  {n:'Avocado + Lemon + Seeds',                 d:'½ avocado sliced + squeeze of lemon + 1 tbsp pumpkin seeds + black salt & chilli flakes',                  cal:200,p:4,c:8,f:18,m:'RDC',cu:'Indian'},
+  {n:'Paneer Cubes + Cucumber + Cumin',          d:'150g lightly seasoned paneer cubes with diced cucumber, cumin powder & lemon squeeze — high protein, very low GI',cal:180,p:18,c:6,f:10,m:'D',cu:'Indian'},
   // Cheat-Day veg snacks
-  {n:'Samosa (2) + Green Chutney',              d:'Crispy baked or fried potato samosas, paired with fresh mint-coriander chutney and sliced onion with lemon — treat day snack.',           cal:360,p:6,c:44,f:18,m:'RDC'},
-  {n:'Bhel Puri (Large)',                       d:'2 cups puffed rice with onion, tomato, chaat masala, tamarind & mint chutney + sev & peanuts',              cal:340,p:8,c:50,f:12,m:'RDC'},
-  {n:'Masala Chai + 2 Biscuits + Namkeen',      d:'1 cup masala chai + 2 digestive biscuits + ¼ cup spiced namkeen mix',                                      cal:280,p:5,c:40,f:10,m:'RDC'},
-  {n:'Vada Pav',                                d:'1 fluffy pav bun + spiced potato vada + dry garlic chutney + green chutney — Mumbai classic',               cal:380,p:8,c:52,f:16,m:'RDC'},
+  {n:'Samosa (2) + Green Chutney',              d:'Crispy baked or fried potato samosas, paired with fresh mint-coriander chutney and sliced onion with lemon — treat day snack.',           cal:360,p:6,c:44,f:18,m:'RDC',cu:'Indian'},
+  {n:'Bhel Puri (Large)',                       d:'2 cups puffed rice with onion, tomato, chaat masala, tamarind & mint chutney + sev & peanuts',              cal:340,p:8,c:50,f:12,m:'RDC',cu:'Indian'},
+  {n:'Masala Chai + 2 Biscuits + Namkeen',      d:'1 cup masala chai + 2 digestive biscuits + ¼ cup spiced namkeen mix',                                      cal:280,p:5,c:40,f:10,m:'RDC',cu:'Indian'},
+  {n:'Vada Pav',                                d:'1 fluffy pav bun + spiced potato vada + dry garlic chutney + green chutney — Mumbai classic',               cal:380,p:8,c:52,f:16,m:'RDC',cu:'Indian'},
  ],
  nonveg:[
-  {n:'Boiled Eggs + Almonds + Apple',           d:'2 boiled eggs + 15g almonds + 1 small apple',                                                            cal:230,p:16,c:14,f:14,m:'RDC'},
-  {n:'Greek Yogurt + Berries + Boiled Egg + Nuts',d:'150g plain Greek yogurt + ½ cup mixed berries + 1 boiled egg + 10g walnuts',                           cal:250,p:20,c:18,f:10,m:'RDC'},
-  {n:'Mini Chicken Skewers + Yogurt Dip + Fruit',d:'3 mini grilled chicken skewers (90g) + 2 tbsp Greek yogurt herb dip + ½ cup sliced watermelon',        cal:230,p:24,c:12,f:7,m:'RDC'},
-  {n:'Tuna + Crackers + Apple + Walnuts',       d:'80g canned tuna + 4 wholegrain crackers + 1 small apple + 10g walnuts',                                  cal:250,p:22,c:24,f:8,m:'RDC'},
-  {n:'Egg White Cups + Fruit Salad',            d:'Bake egg whites seasoned with herbs in muffin tins at 180°C for 12 minutes until set. Serve with a mixed fruit salad.',                         cal:185,p:18,c:16,f:3,m:'RDC'},
-  {n:'Grilled Shrimp + Cucumber + Yogurt Dip',  d:'100g grilled shrimp with lime & chilli + sliced cucumber & carrot + 2 tbsp thick yogurt-mint dip',      cal:190,p:22,c:8,f:4,m:'RDC'},
-  {n:'Prawn Rice Paper Rolls + Mango Dip',      d:'2 fresh rice paper rolls with 80g prawns, cucumber, avocado & mint + 2 tbsp mango-chilli dip',          cal:200,p:16,c:18,f:5,m:'RDC'},
-  {n:'Smoked Salmon + Crackers + Cucumber',     d:'60g smoked salmon + 4 wholegrain crackers + sliced cucumber + ¼ avocado + lemon',                        cal:230,p:18,c:14,f:12,m:'RDC'},
-  {n:'Hard-Boiled Eggs + Fruit + Cashews',      d:'2 boiled eggs + 1 cup watermelon, grapes & kiwi + 10g cashews',                                          cal:230,p:14,c:22,f:10,m:'RDC'},
-  {n:'Chicken Lettuce Cups + Nuts',             d:'80g shredded grilled chicken in 3 butter lettuce cups + cucumber, carrot & sesame + 10g peanuts',        cal:210,p:22,c:8,f:10,m:'RDC'},
-  {n:'Sardines + Tomato + Crackers + Fruit',    d:'50g sardines in brine + sliced tomato + 2 Ryvita crispbreads + 1 small orange',                          cal:220,p:18,c:20,f:6,m:'RDC'},
-  {n:'Protein Yogurt Bowl + Nuts + Berries',    d:'150g Greek yogurt + 2 tbsp hemp seeds + 1 boiled egg + 10g almonds + ½ cup berries',                     cal:270,p:26,c:14,f:14,m:'RDC'},
-  {n:'Fish Tikka Bites + Mint Yogurt',          d:'Marinate fish pieces in tandoori spiced yogurt, grill or bake at 220°C for 12 minutes until lightly charred. Serve with mint yogurt dip.',         cal:210,p:24,c:6,f:8,m:'RDC'},
+  {n:'Boiled Eggs + Almonds + Apple',           d:'2 boiled eggs + 15g almonds + 1 small apple',                                                            cal:230,p:16,c:14,f:14,m:'RDC',cu:'Indian'},
+  {n:'Greek Yogurt + Berries + Boiled Egg + Nuts',d:'150g plain Greek yogurt + ½ cup mixed berries + 1 boiled egg + 10g walnuts',                           cal:250,p:20,c:18,f:10,m:'RDC',cu:'Indian'},
+  {n:'Mini Chicken Skewers + Yogurt Dip + Fruit',d:'3 mini grilled chicken skewers (90g) + 2 tbsp Greek yogurt herb dip + ½ cup sliced watermelon',        cal:230,p:24,c:12,f:7,m:'RDC',cu:'Indian'},
+  {n:'Tuna + Crackers + Apple + Walnuts',       d:'80g canned tuna + 4 wholegrain crackers + 1 small apple + 10g walnuts',                                  cal:250,p:22,c:24,f:8,m:'RDC',cu:'Indian'},
+  {n:'Egg White Cups + Fruit Salad',            d:'Bake egg whites seasoned with herbs in muffin tins at 180°C for 12 minutes until set. Serve with a mixed fruit salad.',                         cal:185,p:18,c:16,f:3,m:'RDC',cu:'Indian'},
+  {n:'Grilled Shrimp + Cucumber + Yogurt Dip',  d:'100g grilled shrimp with lime & chilli + sliced cucumber & carrot + 2 tbsp thick yogurt-mint dip',      cal:190,p:22,c:8,f:4,m:'RDC',cu:'Indian'},
+  {n:'Prawn Rice Paper Rolls + Mango Dip',      d:'2 fresh rice paper rolls with 80g prawns, cucumber, avocado & mint + 2 tbsp mango-chilli dip',          cal:200,p:16,c:18,f:5,m:'RDC',cu:'Indian'},
+  {n:'Smoked Salmon + Crackers + Cucumber',     d:'60g smoked salmon + 4 wholegrain crackers + sliced cucumber + ¼ avocado + lemon',                        cal:230,p:18,c:14,f:12,m:'RDC',cu:'Indian'},
+  {n:'Hard-Boiled Eggs + Fruit + Cashews',      d:'2 boiled eggs + 1 cup watermelon, grapes & kiwi + 10g cashews',                                          cal:230,p:14,c:22,f:10,m:'RDC',cu:'Indian'},
+  {n:'Chicken Lettuce Cups + Nuts',             d:'80g shredded grilled chicken in 3 butter lettuce cups + cucumber, carrot & sesame + 10g peanuts',        cal:210,p:22,c:8,f:10,m:'RDC',cu:'Indian'},
+  {n:'Sardines + Tomato + Crackers + Fruit',    d:'50g sardines in brine + sliced tomato + 2 Ryvita crispbreads + 1 small orange',                          cal:220,p:18,c:20,f:6,m:'RDC',cu:'Indian'},
+  {n:'Protein Yogurt Bowl + Nuts + Berries',    d:'150g Greek yogurt + 2 tbsp hemp seeds + 1 boiled egg + 10g almonds + ½ cup berries',                     cal:270,p:26,c:14,f:14,m:'RDC',cu:'Indian'},
+  {n:'Fish Tikka Bites + Mint Yogurt',          d:'Marinate fish pieces in tandoori spiced yogurt, grill or bake at 220°C for 12 minutes until lightly charred. Serve with mint yogurt dip.',         cal:210,p:24,c:6,f:8,m:'RDC',cu:'Indian'},
   // More Low-GI nonveg snacks
-  {n:'Chicken Tikka Bites (3) + Mint Curd',     d:'3 small grilled chicken tikka pieces (90g) + 2 tbsp mint-coriander curd dip — nearly zero carb',          cal:195,p:24,c:4,f:8,m:'RDC'},
-  {n:'Tuna Lettuce Wraps',                       d:'80g canned tuna with lemon & mustard in 3 butter lettuce cups + sliced cucumber & radish',                 cal:180,p:22,c:4,f:8,m:'RDC'},
-  {n:'Devilled Eggs (3)',                        d:'3 hard-boiled egg halves filled with yogurt, mustard & paprika — low carb, high protein',                  cal:190,p:14,c:4,f:12,m:'RDC'},
+  {n:'Chicken Tikka Bites (3) + Mint Curd',     d:'3 small grilled chicken tikka pieces (90g) + 2 tbsp mint-coriander curd dip — nearly zero carb',          cal:195,p:24,c:4,f:8,m:'RDC',cu:'Indian'},
+  {n:'Tuna Lettuce Wraps',                       d:'80g canned tuna with lemon & mustard in 3 butter lettuce cups + sliced cucumber & radish',                 cal:180,p:22,c:4,f:8,m:'RDC',cu:'Indian'},
+  {n:'Devilled Eggs (3)',                        d:'3 hard-boiled egg halves filled with yogurt, mustard & paprika — low carb, high protein',                  cal:190,p:14,c:4,f:12,m:'RDC',cu:'Indian'},
   // Cheat-Day nonveg snacks
-  {n:'Chicken Wings (6) + Dip',                 d:'6 grilled spiced chicken wings + 3 tbsp yogurt-herb dip + sliced celery & carrot',                         cal:400,p:32,c:8,f:26,m:'RDC'},
-  {n:'Egg Roll + Chai',                         d:'2-egg omelette rolled in a thin roti with chutney, onion & chilli sauce + 1 cup masala chai',              cal:380,p:18,c:40,f:16,m:'RDC'},
-  {n:'Prawn Koliwada (6 pcs)',                  d:'6 crispy fried spiced prawns with lemon, raw onion & mint chutney — coastal street snack',                  cal:320,p:24,c:18,f:16,m:'RDC'},
+  {n:'Chicken Wings (6) + Dip',                 d:'6 grilled spiced chicken wings + 3 tbsp yogurt-herb dip + sliced celery & carrot',                         cal:400,p:32,c:8,f:26,m:'RDC',cu:'Indian'},
+  {n:'Egg Roll + Chai',                         d:'2-egg omelette rolled in a thin roti with chutney, onion & chilli sauce + 1 cup masala chai',              cal:380,p:18,c:40,f:16,m:'RDC',cu:'Indian'},
+  {n:'Prawn Koliwada (6 pcs)',                  d:'6 crispy fried spiced prawns with lemon, raw onion & mint chutney — coastal street snack',                  cal:320,p:24,c:18,f:16,m:'RDC',cu:'Indian'},
  ]
 },
 
@@ -1599,118 +1612,118 @@ snacks:{
 dinner:{
  veg:[
   // Indian (front — prioritized)
-  {n:'Dal + 1 Roti + Salad + Yogurt',           d:'1 cup mixed lentil dal + 1 small wholegrain roti + cucumber-tomato salad + 100g plain yogurt',          cal:390,p:18,c:38,f:8,m:'RDC'},
-  {n:'Paneer Tikka + Roasted Veg + Salad',      d:'Marinate paneer cubes in spiced yogurt overnight, grill or bake at 220°C until slightly charred. Serve with roasted peppers and broccoli and a green salad.', cal:420,p:28,c:16,f:24,m:'RDC'},
-  {n:'Soy Mince Curry + 1 Roti + Salad',        d:'½ cup soy mince curry + 1 small wholegrain roti + large cucumber-tomato salad + 3 tbsp curd',           cal:390,p:28,c:28,f:12,m:'RDC'},
-  {n:'Spinach Lentil Soup + 1 Slice Bread',     d:'1.5 cups spinach-lentil soup with garlic & cumin + 1 slice wholegrain bread + green salad + 10g walnuts',cal:380,p:18,c:40,f:10,m:'RDC'},
-  {n:'Palak Paneer + 1 Roti + Salad',           d:'Blanch and blend spinach into a smooth sauce, simmer with paneer cubes, onion, garlic and garam masala. Serve with a wholegrain roti and fresh salad.',             cal:420,p:24,c:26,f:22,m:'RDC'},
-  {n:'Moong Dal Khichdi + Raita + Salad',       d:'1 cup moong dal khichdi + ½ cup yogurt raita + sliced cucumber + seasonal fruit slice',                  cal:390,p:16,c:46,f:6,m:'RDC'},
-  {n:'Paneer Bhurji + 1 Roti + Salad',          d:'120g scrambled paneer with onion, tomato & spices + 1 wholegrain roti + mixed salad + 3 tbsp curd',     cal:420,p:24,c:22,f:22,m:'RDC'},
-  {n:'Lentil & Veggie Stew + Side Salad',       d:'1.5 cups mixed lentil & vegetable stew + large green salad with lemon-olive oil + 10g mixed nuts',       cal:360,p:16,c:36,f:8,m:'RDC'},
+  {n:'Dal + 1 Roti + Salad + Yogurt',           d:'1 cup mixed lentil dal + 1 small wholegrain roti + cucumber-tomato salad + 100g plain yogurt',          cal:390,p:18,c:38,f:8,m:'RDC',cu:'Indian'},
+  {n:'Paneer Tikka + Roasted Veg + Salad',      d:'Marinate paneer cubes in spiced yogurt overnight, grill or bake at 220°C until slightly charred. Serve with roasted peppers and broccoli and a green salad.', cal:420,p:28,c:16,f:24,m:'RDC',cu:'Indian'},
+  {n:'Soy Mince Curry + 1 Roti + Salad',        d:'½ cup soy mince curry + 1 small wholegrain roti + large cucumber-tomato salad + 3 tbsp curd',           cal:390,p:28,c:28,f:12,m:'RDC',cu:'Indian'},
+  {n:'Spinach Lentil Soup + 1 Slice Bread',     d:'1.5 cups spinach-lentil soup with garlic & cumin + 1 slice wholegrain bread + green salad + 10g walnuts',cal:380,p:18,c:40,f:10,m:'RDC',cu:'Indian'},
+  {n:'Palak Paneer + 1 Roti + Salad',           d:'Blanch and blend spinach into a smooth sauce, simmer with paneer cubes, onion, garlic and garam masala. Serve with a wholegrain roti and fresh salad.',             cal:420,p:24,c:26,f:22,m:'RDC',cu:'Indian'},
+  {n:'Moong Dal Khichdi + Raita + Salad',       d:'1 cup moong dal khichdi + ½ cup yogurt raita + sliced cucumber + seasonal fruit slice',                  cal:390,p:16,c:46,f:6,m:'RDC',cu:'Indian'},
+  {n:'Paneer Bhurji + 1 Roti + Salad',          d:'120g scrambled paneer with onion, tomato & spices + 1 wholegrain roti + mixed salad + 3 tbsp curd',     cal:420,p:24,c:22,f:22,m:'RDC',cu:'Indian'},
+  {n:'Lentil & Veggie Stew + Side Salad',       d:'1.5 cups mixed lentil & vegetable stew + large green salad with lemon-olive oil + 10g mixed nuts',       cal:360,p:16,c:36,f:8,m:'RDC',cu:'Indian'},
   // Chinese
-  {n:'Tofu Stir-Fry + Cauliflower Rice',        d:'150g firm tofu + broccoli, snap peas & mushrooms stir-fried in soy-ginger + 1 cup cauliflower rice',    cal:320,p:22,c:18,f:12,m:'RDC'},
-  {n:'Hot & Sour Soup + Steamed Veg',           d:'Simmer vegetable broth with vinegar, soy, chilli and tofu, thicken with cornstarch. Serve with mixed steamed vegetables in sesame drizzle.',                    cal:280,p:14,c:22,f:8,m:'RDC'},
-  {n:'Tofu & Bok Choy in Ginger Broth',         d:'150g tofu + 200g bok choy simmered in 1.5 cups ginger-miso broth + ¼ cup brown rice',                  cal:320,p:18,c:24,f:10,m:'RDC'},
+  {n:'Tofu Stir-Fry + Cauliflower Rice',        d:'150g firm tofu + broccoli, snap peas & mushrooms stir-fried in soy-ginger + 1 cup cauliflower rice',    cal:320,p:22,c:18,f:12,m:'RDC',cu:'Chinese'},
+  {n:'Hot & Sour Soup + Steamed Veg',           d:'Simmer vegetable broth with vinegar, soy, chilli and tofu, thicken with cornstarch. Serve with mixed steamed vegetables in sesame drizzle.',                    cal:280,p:14,c:22,f:8,m:'RDC',cu:'Chinese'},
+  {n:'Tofu & Bok Choy in Ginger Broth',         d:'150g tofu + 200g bok choy simmered in 1.5 cups ginger-miso broth + ¼ cup brown rice',                  cal:320,p:18,c:24,f:10,m:'RDC',cu:'Chinese'},
   // Thai
-  {n:'Thai Veg Curry + Cauliflower Rice',        d:'1.5 cups Thai red/green veg curry (light coconut milk) + 1 cup cauliflower rice',                      cal:340,p:12,c:20,f:18,m:'RDC'},
-  {n:'Tofu Larb Salad + Fruit Slice',           d:'150g crumbled tofu with mint, lemongrass, lime & chilli on lettuce cups + sliced mango on the side',    cal:310,p:20,c:18,f:14,m:'RDC'},
+  {n:'Thai Veg Curry + Cauliflower Rice',        d:'1.5 cups Thai red/green veg curry (light coconut milk) + 1 cup cauliflower rice',                      cal:340,p:12,c:20,f:18,m:'RDC',cu:'Thai'},
+  {n:'Tofu Larb Salad + Fruit Slice',           d:'150g crumbled tofu with mint, lemongrass, lime & chilli on lettuce cups + sliced mango on the side',    cal:310,p:20,c:18,f:14,m:'RDC',cu:'Thai'},
   // Mexican
-  {n:'Black Bean Bowl (No Tortilla) + Yogurt',  d:'½ cup black beans + corn + salsa + ¼ avocado + mixed greens + 3 tbsp yogurt-lime dressing',             cal:350,p:14,c:36,f:12,m:'RDC'},
-  {n:'Veggie Fajita Bowl (No Rice)',             d:'Roasted peppers & onion + ½ cup black beans + salsa + ¼ avocado + mixed greens + 3 tbsp curd dressing', cal:330,p:12,c:28,f:12,m:'RDC'},
+  {n:'Black Bean Bowl (No Tortilla) + Yogurt',  d:'½ cup black beans + corn + salsa + ¼ avocado + mixed greens + 3 tbsp yogurt-lime dressing',             cal:350,p:14,c:36,f:12,m:'RDC',cu:'Mexican'},
+  {n:'Veggie Fajita Bowl (No Rice)',             d:'Roasted peppers & onion + ½ cup black beans + salsa + ¼ avocado + mixed greens + 3 tbsp curd dressing', cal:330,p:12,c:28,f:12,m:'RDC',cu:'Mexican'},
   // American
-  {n:'Lentil Soup + Kale Salad + Walnuts',      d:'1.5 cups lentil soup + 2 cups kale with apple, 15g walnuts & lemon dressing + sliced pear',             cal:390,p:18,c:44,f:12,m:'RDC'},
-  {n:'Stuffed Zucchini + Quinoa + Yogurt Dip',  d:'2 zucchini boats stuffed with quinoa, black beans & herbs (baked) + 3 tbsp yogurt-herb dip + side salad',cal:380,p:16,c:36,f:10,m:'RDC'},
-  {n:'Roasted Veg Platter + Hummus + Nuts',     d:'Toss mixed vegetables with olive oil and herbs, roast at 200°C for 30 minutes until caramelised. Serve with hummus and almonds.',                  cal:360,p:12,c:32,f:16,m:'RDC'},
-  {n:'Cauliflower Steak + Lentils + Greens',    d:'250g roasted cauliflower steak + ½ cup red lentils + 1 cup sautéed spinach + 2 tbsp yogurt on the side', cal:360,p:18,c:30,f:10,m:'RDC'},
-  {n:'Egg Fried Cauliflower Rice + Fruit',      d:'2 eggs scrambled into 200g cauliflower rice with spring onion & sesame + side salad + seasonal fruit',   cal:310,p:18,c:18,f:16,m:'RDC'},
+  {n:'Lentil Soup + Kale Salad + Walnuts',      d:'1.5 cups lentil soup + 2 cups kale with apple, 15g walnuts & lemon dressing + sliced pear',             cal:390,p:18,c:44,f:12,m:'RDC',cu:'American'},
+  {n:'Stuffed Zucchini + Quinoa + Yogurt Dip',  d:'2 zucchini boats stuffed with quinoa, black beans & herbs (baked) + 3 tbsp yogurt-herb dip + side salad',cal:380,p:16,c:36,f:10,m:'RDC',cu:'American'},
+  {n:'Roasted Veg Platter + Hummus + Nuts',     d:'Toss mixed vegetables with olive oil and herbs, roast at 200°C for 30 minutes until caramelised. Serve with hummus and almonds.',                  cal:360,p:12,c:32,f:16,m:'RDC',cu:'American'},
+  {n:'Cauliflower Steak + Lentils + Greens',    d:'250g roasted cauliflower steak + ½ cup red lentils + 1 cup sautéed spinach + 2 tbsp yogurt on the side', cal:360,p:18,c:30,f:10,m:'RDC',cu:'American'},
+  {n:'Egg Fried Cauliflower Rice + Fruit',      d:'2 eggs scrambled into 200g cauliflower rice with spring onion & sesame + side salad + seasonal fruit',   cal:310,p:18,c:18,f:16,m:'RDC',cu:'American'},
   // More Low-GI veg dinners
-  {n:'Soya Chunk Curry + Salad (No Rice)',       d:'½ cup soya chunk curry in spiced tomato gravy + 2 cups large salad + 3 tbsp curd — high protein, low GI',cal:340,p:26,c:18,f:8,m:'D'},
-  {n:'Paneer Soup + Salad',                      d:'1.5 cups paneer & spinach clear soup + 2 cups mixed salad with seeds + lemon dressing — light & filling', cal:300,p:18,c:12,f:16,m:'D'},
-  {n:'Baked Tofu + Roasted Veg (No Grains)',     d:'180g marinated baked tofu + 250g roasted broccoli, capsicum & zucchini + 2 tbsp sesame-soy dressing',    cal:330,p:22,c:16,f:18,m:'D'},
+  {n:'Soya Chunk Curry + Salad (No Rice)',       d:'½ cup soya chunk curry in spiced tomato gravy + 2 cups large salad + 3 tbsp curd — high protein, low GI',cal:340,p:26,c:18,f:8,m:'D',cu:'Indian'},
+  {n:'Paneer Soup + Salad',                      d:'1.5 cups paneer & spinach clear soup + 2 cups mixed salad with seeds + lemon dressing — light & filling', cal:300,p:18,c:12,f:16,m:'D',cu:'Indian'},
+  {n:'Baked Tofu + Roasted Veg (No Grains)',     d:'180g marinated baked tofu + 250g roasted broccoli, capsicum & zucchini + 2 tbsp sesame-soy dressing',    cal:330,p:22,c:16,f:18,m:'D',cu:'Indian'},
   // Cheat-Day veg dinners
-  {n:'Vegetable Biryani + Raita + Salad',        d:'1.5 cups fragrant veg biryani with whole spices + ½ cup boondi raita + cucumber-onion salad',             cal:560,p:14,c:82,f:12,m:'C'},
-  {n:'Paneer Tikka Masala + 2 Rotis + Raita',   d:'180g rich paneer tikka masala + 2 wholegrain rotis + ½ cup yogurt raita + sliced onion & lemon',           cal:640,p:30,c:52,f:30,m:'C'},
-  {n:'Dal Makhani + 2 Rotis + Raita',            d:'Slow-cook black lentils and kidney beans with butter, cream and tomato for at least an hour until deeply rich. Serve with wholegrain rotis and raita.',           cal:580,p:20,c:66,f:20,m:'RC'},
-  {n:'Pindi Chole + 2 Puris + Raita',            d:'1 cup spiced Pindi chole masala + 2 wholegrain puris + ½ cup cucumber raita + sliced raw onion',          cal:620,p:18,c:82,f:20,m:'C'},
+  {n:'Vegetable Biryani + Raita + Salad',        d:'1.5 cups fragrant veg biryani with whole spices + ½ cup boondi raita + cucumber-onion salad',             cal:560,p:14,c:82,f:12,m:'C',cu:'Indian'},
+  {n:'Paneer Tikka Masala + 2 Rotis + Raita',   d:'180g rich paneer tikka masala + 2 wholegrain rotis + ½ cup yogurt raita + sliced onion & lemon',           cal:640,p:30,c:52,f:30,m:'C',cu:'Indian'},
+  {n:'Dal Makhani + 2 Rotis + Raita',            d:'Slow-cook black lentils and kidney beans with butter, cream and tomato for at least an hour until deeply rich. Serve with wholegrain rotis and raita.',           cal:580,p:20,c:66,f:20,m:'RC',cu:'Indian'},
+  {n:'Pindi Chole + 2 Puris + Raita',            d:'1 cup spiced Pindi chole masala + 2 wholegrain puris + ½ cup cucumber raita + sliced raw onion',          cal:620,p:18,c:82,f:20,m:'C',cu:'Indian'},
   // ── New veg dinners ──
   // Indian
-  {n:'Palak Dal + 1 Roti + Salad',               d:'1 cup yellow dal with wilted spinach and cumin tadka + 1 small wholegrain roti + fresh salad.',               cal:360,p:16,c:34,f:8,m:'RDC'},
-  {n:'Lauki Sabzi + Dal + 1 Roti',               d:'Bottle gourd cooked with mild spices + ½ cup moong dal + 1 wholegrain roti + 3 tbsp yogurt.',                 cal:340,p:14,c:36,f:8,m:'RDC'},
-  {n:'Methi Thepla + Curd + Salad',              d:'2 thin fenugreek flatbreads baked with minimal oil + 100g plain curd + large cucumber-tomato salad.',          cal:360,p:12,c:40,f:10,m:'RDC'},
-  {n:'Mushroom Masala + 1 Roti + Raita',         d:'200g mushrooms in a light onion-tomato-spice gravy + 1 wholegrain roti + ½ cup raita.',                       cal:360,p:14,c:30,f:14,m:'RDC'},
-  {n:'Veg Soup + 2 Multigrain Rotis',            d:'2 cups thick mixed vegetable soup + 2 small multigrain rotis + 3 tbsp yogurt.',                                cal:370,p:12,c:44,f:8,m:'RDC'},
+  {n:'Palak Dal + 1 Roti + Salad',               d:'1 cup yellow dal with wilted spinach and cumin tadka + 1 small wholegrain roti + fresh salad.',               cal:360,p:16,c:34,f:8,m:'RDC',cu:'Indian'},
+  {n:'Lauki Sabzi + Dal + 1 Roti',               d:'Bottle gourd cooked with mild spices + ½ cup moong dal + 1 wholegrain roti + 3 tbsp yogurt.',                 cal:340,p:14,c:36,f:8,m:'RDC',cu:'Indian'},
+  {n:'Methi Thepla + Curd + Salad',              d:'2 thin fenugreek flatbreads baked with minimal oil + 100g plain curd + large cucumber-tomato salad.',          cal:360,p:12,c:40,f:10,m:'RDC',cu:'Indian'},
+  {n:'Mushroom Masala + 1 Roti + Raita',         d:'200g mushrooms in a light onion-tomato-spice gravy + 1 wholegrain roti + ½ cup raita.',                       cal:360,p:14,c:30,f:14,m:'RDC',cu:'Indian'},
+  {n:'Veg Soup + 2 Multigrain Rotis',            d:'2 cups thick mixed vegetable soup + 2 small multigrain rotis + 3 tbsp yogurt.',                                cal:370,p:12,c:44,f:8,m:'RDC',cu:'Indian'},
   // Mediterranean
-  {n:'Moussaka (Veg) + Green Salad',             d:'Baked layers of eggplant, potato, spiced lentils and béchamel, served with a large Greek salad.',             cal:420,p:16,c:36,f:20,m:'RC'},
-  {n:'Lemon Herb Tofu + Bulgur + Salad',         d:'180g tofu marinated in lemon-herb olive oil, pan-seared golden. Served with ½ cup bulgur and a tabbouleh-style salad.', cal:390,p:22,c:34,f:16,m:'RDC'},
-  {n:'Roasted Pepper Soup + Feta Toast',         d:'2 cups roasted red pepper and tomato soup + 1 slice toast with crumbled feta and olive oil.',                  cal:360,p:12,c:40,f:14,m:'RDC'},
+  {n:'Moussaka (Veg) + Green Salad',             d:'Baked layers of eggplant, potato, spiced lentils and béchamel, served with a large Greek salad.',             cal:420,p:16,c:36,f:20,m:'RC',cu:'Mediterranean'},
+  {n:'Lemon Herb Tofu + Bulgur + Salad',         d:'180g tofu marinated in lemon-herb olive oil, pan-seared golden. Served with ½ cup bulgur and a tabbouleh-style salad.', cal:390,p:22,c:34,f:16,m:'RDC',cu:'Mediterranean'},
+  {n:'Roasted Pepper Soup + Feta Toast',         d:'2 cups roasted red pepper and tomato soup + 1 slice toast with crumbled feta and olive oil.',                  cal:360,p:12,c:40,f:14,m:'RDC',cu:'Mediterranean'},
   // Italian
-  {n:'Ratatouille + Poached Eggs + Bread',       d:'Slow-cooked Provençal vegetable stew + 2 eggs poached directly in the sauce + 1 slice wholegrain bread.',     cal:380,p:18,c:32,f:16,m:'RDC'},
-  {n:'Pumpkin Risotto + Parmesan + Salad',       d:'Slow-stirred arborio rice with roasted pumpkin purée and parmesan, served with a green salad.',                cal:450,p:14,c:58,f:14,m:'RC'},
+  {n:'Ratatouille + Poached Eggs + Bread',       d:'Slow-cooked Provençal vegetable stew + 2 eggs poached directly in the sauce + 1 slice wholegrain bread.',     cal:380,p:18,c:32,f:16,m:'RDC',cu:'Italian'},
+  {n:'Pumpkin Risotto + Parmesan + Salad',       d:'Slow-stirred arborio rice with roasted pumpkin purée and parmesan, served with a green salad.',                cal:450,p:14,c:58,f:14,m:'RC',cu:'Italian'},
   // Korean
-  {n:'Kimchi Fried Rice + Fried Egg + Tofu',     d:'Stir-fry day-old rice with kimchi and gochujang, top with a fried egg and 100g pan-seared tofu.',             cal:420,p:18,c:50,f:14,m:'RC'},
-  {n:'Soon Tofu Jjigae + Rice',                  d:'Soft tofu simmered in a spiced anchovy broth with egg, mushrooms and zucchini + ¼ cup steamed rice.',         cal:360,p:18,c:28,f:12,m:'RDC'},
+  {n:'Kimchi Fried Rice + Fried Egg + Tofu',     d:'Stir-fry day-old rice with kimchi and gochujang, top with a fried egg and 100g pan-seared tofu.',             cal:420,p:18,c:50,f:14,m:'RC',cu:'Korean'},
+  {n:'Soon Tofu Jjigae + Rice',                  d:'Soft tofu simmered in a spiced anchovy broth with egg, mushrooms and zucchini + ¼ cup steamed rice.',         cal:360,p:18,c:28,f:12,m:'RDC',cu:'Korean'},
   // Japanese
-  {n:'Vegetable Ramen + Soft-Boiled Egg',        d:'Rich vegetable broth ramen noodles with mushrooms, corn, bok choy, nori and a soy-marinated soft egg.',        cal:420,p:16,c:54,f:12,m:'RC'},
-  {n:'Miso Glazed Eggplant + Rice + Salad',      d:'Halved eggplant brushed with miso-mirin glaze, baked at 200°C until caramelised. Served with ¼ cup rice.',   cal:360,p:10,c:44,f:12,m:'RDC'},
+  {n:'Vegetable Ramen + Soft-Boiled Egg',        d:'Rich vegetable broth ramen noodles with mushrooms, corn, bok choy, nori and a soy-marinated soft egg.',        cal:420,p:16,c:54,f:12,m:'RC',cu:'Japanese'},
+  {n:'Miso Glazed Eggplant + Rice + Salad',      d:'Halved eggplant brushed with miso-mirin glaze, baked at 200°C until caramelised. Served with ¼ cup rice.',   cal:360,p:10,c:44,f:12,m:'RDC',cu:'Japanese'},
   // American
-  {n:'Sweet Potato Soup + Kale + Almonds',       d:'2 cups creamy roasted sweet potato soup + 1 cup kale salad with sliced almonds and lemon dressing.',          cal:360,p:10,c:44,f:12,m:'RDC'},
-  {n:'Lentil & Spinach Stew + Sourdough',        d:'Thick red lentil and spinach stew with cumin and paprika + 1 slice sourdough bread + yogurt dollop.',         cal:390,p:18,c:46,f:10,m:'RDC'},
+  {n:'Sweet Potato Soup + Kale + Almonds',       d:'2 cups creamy roasted sweet potato soup + 1 cup kale salad with sliced almonds and lemon dressing.',          cal:360,p:10,c:44,f:12,m:'RDC',cu:'American'},
+  {n:'Lentil & Spinach Stew + Sourdough',        d:'Thick red lentil and spinach stew with cumin and paprika + 1 slice sourdough bread + yogurt dollop.',         cal:390,p:18,c:46,f:10,m:'RDC',cu:'American'},
  ],
  nonveg:[
   // Indian (front — prioritized)
-  {n:'Grilled Chicken + Salad + Yogurt',        d:'150g marinated grilled chicken breast + large cucumber-tomato salad + 100g plain yogurt + sliced lemon', cal:400,p:40,c:10,f:14,m:'RDC'},
-  {n:'Fish Curry + ½ Cup Brown Rice + Salad',   d:'150g light fish curry + ½ cup brown rice + 1 cup green salad + 2 tbsp curd',                            cal:420,p:34,c:36,f:12,m:'RDC'},
-  {n:'Egg Curry + 1 Roti + Salad + Curd',       d:'2 eggs in spiced tomato sauce + 1 small wholegrain roti + cucumber & onion salad + 3 tbsp curd',        cal:390,p:22,c:28,f:16,m:'RDC'},
-  {n:'Baked Fish + Lentils + Sautéed Spinach',  d:'180g oven-baked spiced fish + ½ cup red lentils + 1 cup sautéed spinach + lemon + 2 tbsp yogurt',       cal:420,p:36,c:26,f:12,m:'RDC'},
-  {n:'Chicken Tikka + Salad + Mint Chutney',    d:'200g grilled chicken tikka + large mixed salad + mint-coriander chutney + 2 tbsp yogurt dip',           cal:400,p:40,c:8,f:14,m:'RDC'},
-  {n:'Shrimp Masala + Salad + 1 Roti',          d:'150g shrimp in spiced masala + 1 small wholegrain roti + cucumber-tomato salad + 3 tbsp curd',          cal:400,p:34,c:24,f:12,m:'RDC'},
-  {n:'Tandoori Fish + Stir-Fried Greens',       d:'Marinate fish in tandoori spiced yogurt, bake at 220°C for 15 minutes until lightly charred. Serve with stir-fried spinach and beans and mint yogurt.',               cal:380,p:36,c:10,f:14,m:'RDC'},
-  {n:'Mutton Keema + Salad + 1 Roti',           d:'½ cup dry spiced minced mutton with peas + 1 wholegrain roti + cucumber-onion salad + 3 tbsp curd',     cal:430,p:32,c:24,f:20,m:'RC'},
-  {n:'Grilled Prawns + Salad + Yogurt Dip',     d:'180g grilled whole prawns with lime & chilli + 2 cups mixed green salad + 3 tbsp thick yogurt-herb dip',cal:360,p:34,c:10,f:14,m:'RDC'},
+  {n:'Grilled Chicken + Salad + Yogurt',        d:'150g marinated grilled chicken breast + large cucumber-tomato salad + 100g plain yogurt + sliced lemon', cal:400,p:40,c:10,f:14,m:'RDC',cu:'Indian'},
+  {n:'Fish Curry + ½ Cup Brown Rice + Salad',   d:'150g light fish curry + ½ cup brown rice + 1 cup green salad + 2 tbsp curd',                            cal:420,p:34,c:36,f:12,m:'RDC',cu:'Indian'},
+  {n:'Egg Curry + 1 Roti + Salad + Curd',       d:'2 eggs in spiced tomato sauce + 1 small wholegrain roti + cucumber & onion salad + 3 tbsp curd',        cal:390,p:22,c:28,f:16,m:'RDC',cu:'Indian'},
+  {n:'Baked Fish + Lentils + Sautéed Spinach',  d:'180g oven-baked spiced fish + ½ cup red lentils + 1 cup sautéed spinach + lemon + 2 tbsp yogurt',       cal:420,p:36,c:26,f:12,m:'RDC',cu:'Indian'},
+  {n:'Chicken Tikka + Salad + Mint Chutney',    d:'200g grilled chicken tikka + large mixed salad + mint-coriander chutney + 2 tbsp yogurt dip',           cal:400,p:40,c:8,f:14,m:'RDC',cu:'Indian'},
+  {n:'Shrimp Masala + Salad + 1 Roti',          d:'150g shrimp in spiced masala + 1 small wholegrain roti + cucumber-tomato salad + 3 tbsp curd',          cal:400,p:34,c:24,f:12,m:'RDC',cu:'Indian'},
+  {n:'Tandoori Fish + Stir-Fried Greens',       d:'Marinate fish in tandoori spiced yogurt, bake at 220°C for 15 minutes until lightly charred. Serve with stir-fried spinach and beans and mint yogurt.',               cal:380,p:36,c:10,f:14,m:'RDC',cu:'Indian'},
+  {n:'Mutton Keema + Salad + 1 Roti',           d:'½ cup dry spiced minced mutton with peas + 1 wholegrain roti + cucumber-onion salad + 3 tbsp curd',     cal:430,p:32,c:24,f:20,m:'RC',cu:'Indian'},
+  {n:'Grilled Prawns + Salad + Yogurt Dip',     d:'180g grilled whole prawns with lime & chilli + 2 cups mixed green salad + 3 tbsp thick yogurt-herb dip',cal:360,p:34,c:10,f:14,m:'RDC',cu:'Indian'},
   // ── New nonveg dinners ──
   // Indian
-  {n:'Chicken Shorba + 1 Roti + Salad',         d:'2 cups spiced chicken broth with shredded chicken and vegetables + 1 wholegrain roti + green salad.',    cal:380,p:32,c:24,f:12,m:'RDC'},
-  {n:'Fish Moilee + ½ Cup Rice + Salad',         d:'Kerala-style coconut milk fish curry with turmeric and green chilli + ½ cup rice + cucumber salad.',     cal:450,p:34,c:38,f:16,m:'RC'},
-  {n:'Chicken Chettinad + 1 Roti + Raita',       d:'Boneless chicken in fiery Chettinad spice masala + 1 wholegrain roti + ½ cup cooling yogurt raita.',    cal:440,p:36,c:26,f:18,m:'RC'},
-  {n:'Prawn Ghee Roast + Salad + 1 Roti',        d:'150g prawns in a dry Mangalorean ghee roast masala, served with 1 wholegrain roti and green salad.',     cal:420,p:32,c:22,f:20,m:'RC'},
-  {n:'Egg Akuri + 1 Roti + Salad',               d:'Parsi-style soft scrambled eggs with onion, green chilli, tomato and coriander + 1 wholegrain roti + salad.', cal:380,p:22,c:24,f:18,m:'RDC'},
-  {n:'Chicken Soup + Boiled Egg + Salad',         d:'2 cups homestyle chicken vegetable soup + 1 boiled egg + large mixed salad + lemon dressing.',           cal:340,p:32,c:14,f:12,m:'RDC'},
+  {n:'Chicken Shorba + 1 Roti + Salad',         d:'2 cups spiced chicken broth with shredded chicken and vegetables + 1 wholegrain roti + green salad.',    cal:380,p:32,c:24,f:12,m:'RDC',cu:'Indian'},
+  {n:'Fish Moilee + ½ Cup Rice + Salad',         d:'Kerala-style coconut milk fish curry with turmeric and green chilli + ½ cup rice + cucumber salad.',     cal:450,p:34,c:38,f:16,m:'RC',cu:'Indian'},
+  {n:'Chicken Chettinad + 1 Roti + Raita',       d:'Boneless chicken in fiery Chettinad spice masala + 1 wholegrain roti + ½ cup cooling yogurt raita.',    cal:440,p:36,c:26,f:18,m:'RC',cu:'Indian'},
+  {n:'Prawn Ghee Roast + Salad + 1 Roti',        d:'150g prawns in a dry Mangalorean ghee roast masala, served with 1 wholegrain roti and green salad.',     cal:420,p:32,c:22,f:20,m:'RC',cu:'Indian'},
+  {n:'Egg Akuri + 1 Roti + Salad',               d:'Parsi-style soft scrambled eggs with onion, green chilli, tomato and coriander + 1 wholegrain roti + salad.', cal:380,p:22,c:24,f:18,m:'RDC',cu:'Indian'},
+  {n:'Chicken Soup + Boiled Egg + Salad',         d:'2 cups homestyle chicken vegetable soup + 1 boiled egg + large mixed salad + lemon dressing.',           cal:340,p:32,c:14,f:12,m:'RDC',cu:'Indian'},
   // Chinese
-  {n:'Steamed Chicken + Bok Choy + Cauli Rice', d:'150g ginger-soy steamed chicken + 200g bok choy + 1 cup cauliflower rice + sliced mandarin',            cal:350,p:36,c:16,f:10,m:'RDC'},
-  {n:'Kung Pao Shrimp + Stir-Fried Veg',        d:'150g shrimp with peanuts & chilli + 200g stir-fried mixed veg — no rice + sliced orange',               cal:330,p:28,c:16,f:14,m:'RDC'},
-  {n:'Miso Soup + Steamed Fish + Greens',       d:'2 cups miso soup + 180g steamed fish fillet + 200g steamed bok choy & broccoli',                        cal:320,p:36,c:12,f:10,m:'RDC'},
-  {n:'Mapo Tofu with Pork + Cauli Rice',         d:'Silken tofu with minced pork in spicy bean sauce, served with cauliflower rice instead of white rice.',   cal:380,p:28,c:14,f:22,m:'RDC'},
+  {n:'Steamed Chicken + Bok Choy + Cauli Rice', d:'150g ginger-soy steamed chicken + 200g bok choy + 1 cup cauliflower rice + sliced mandarin',            cal:350,p:36,c:16,f:10,m:'RDC',cu:'Chinese'},
+  {n:'Kung Pao Shrimp + Stir-Fried Veg',        d:'150g shrimp with peanuts & chilli + 200g stir-fried mixed veg — no rice + sliced orange',               cal:330,p:28,c:16,f:14,m:'RDC',cu:'Chinese'},
+  {n:'Miso Soup + Steamed Fish + Greens',       d:'2 cups miso soup + 180g steamed fish fillet + 200g steamed bok choy & broccoli',                        cal:320,p:36,c:12,f:10,m:'RDC',cu:'Chinese'},
+  {n:'Mapo Tofu with Pork + Cauli Rice',         d:'Silken tofu with minced pork in spicy bean sauce, served with cauliflower rice instead of white rice.',   cal:380,p:28,c:14,f:22,m:'RDC',cu:'Chinese'},
   // Thai
-  {n:'Thai Basil Chicken + Cauliflower Rice',   d:'150g chicken with Thai basil & chilli + 1 cup cauliflower rice + side green salad + sliced fruit',       cal:360,p:34,c:14,f:14,m:'RDC'},
-  {n:'Grilled Prawns + Mango Salad',            d:'180g grilled whole prawns + 2 cups green mango & herb salad with lime dressing + 10g peanuts',           cal:340,p:32,c:20,f:10,m:'RDC'},
-  {n:'Tom Yum Soup + Steamed Fish',              d:'Large bowl of spicy-sour prawn/fish broth with lemongrass, galangal and mushrooms + 150g steamed fish.', cal:310,p:32,c:10,f:10,m:'RDC'},
-  {n:'Thai Green Curry Chicken + Cauli Rice',    d:'Coconut-light Thai green curry with chicken + 1 cup cauliflower rice + fresh coriander and lime.',       cal:380,p:34,c:12,f:20,m:'RDC'},
+  {n:'Thai Basil Chicken + Cauliflower Rice',   d:'150g chicken with Thai basil & chilli + 1 cup cauliflower rice + side green salad + sliced fruit',       cal:360,p:34,c:14,f:14,m:'RDC',cu:'Thai'},
+  {n:'Grilled Prawns + Mango Salad',            d:'180g grilled whole prawns + 2 cups green mango & herb salad with lime dressing + 10g peanuts',           cal:340,p:32,c:20,f:10,m:'RDC',cu:'Thai'},
+  {n:'Tom Yum Soup + Steamed Fish',              d:'Large bowl of spicy-sour prawn/fish broth with lemongrass, galangal and mushrooms + 150g steamed fish.', cal:310,p:32,c:10,f:10,m:'RDC',cu:'Thai'},
+  {n:'Thai Green Curry Chicken + Cauli Rice',    d:'Coconut-light Thai green curry with chicken + 1 cup cauliflower rice + fresh coriander and lime.',       cal:380,p:34,c:12,f:20,m:'RDC',cu:'Thai'},
   // Mexican
-  {n:'Chicken Fajita Bowl (No Rice)',            d:'150g grilled chicken strips + peppers & onion + ½ cup black beans + salsa + ¼ avocado — no rice',       cal:400,p:36,c:22,f:16,m:'RDC'},
-  {n:'Fish Taco (1) + Big Salad + Yogurt',       d:'1 corn tortilla + 120g grilled fish + cabbage + ¼ avocado + 2 cups salad + lime + 3 tbsp yogurt dip',  cal:390,p:28,c:28,f:14,m:'RDC'},
-  {n:'Shrimp Ceviche + Salad + Crackers',        d:'150g shrimp marinated in lime juice with tomato, onion, coriander and jalapeño + mixed greens + crackers.', cal:320,p:28,c:18,f:10,m:'RDC'},
+  {n:'Chicken Fajita Bowl (No Rice)',            d:'150g grilled chicken strips + peppers & onion + ½ cup black beans + salsa + ¼ avocado — no rice',       cal:400,p:36,c:22,f:16,m:'RDC',cu:'Mexican'},
+  {n:'Fish Taco (1) + Big Salad + Yogurt',       d:'1 corn tortilla + 120g grilled fish + cabbage + ¼ avocado + 2 cups salad + lime + 3 tbsp yogurt dip',  cal:390,p:28,c:28,f:14,m:'RDC',cu:'Mexican'},
+  {n:'Shrimp Ceviche + Salad + Crackers',        d:'150g shrimp marinated in lime juice with tomato, onion, coriander and jalapeño + mixed greens + crackers.', cal:320,p:28,c:18,f:10,m:'RDC',cu:'Mexican'},
   // American/European
-  {n:'Grilled Salmon + Roasted Veg + Nuts',     d:'Bake salmon with lemon-herb crust at 200°C for 14 minutes, serve with roasted broccoli and asparagus and crushed walnuts.',       cal:430,p:40,c:12,f:24,m:'RDC'},
-  {n:'Herb Chicken + Kale Salad + Walnuts',     d:'Bake herb-crusted chicken breast at 200°C for 22 minutes until golden. Slice over kale massaged with lemon, with walnuts and cranberries.',        cal:410,p:38,c:14,f:18,m:'RDC'},
-  {n:'Garlic Shrimp + Zucchini Noodles',        d:'Sauté shrimp in garlic-chilli butter, toss with spiralized zucchini and cherry tomatoes. Finish with pine nuts and basil.',      cal:350,p:30,c:12,f:18,m:'RDC'},
-  {n:'Beef Stir-Fry + Broccoli + Brown Rice',   d:'Thinly sliced beef in oyster-soy sauce, stir-fried with broccoli and snap peas. Served with ½ cup brown rice.',                  cal:450,p:36,c:36,f:14,m:'RC'},
-  {n:'Lamb Kofta + Greek Salad + Yogurt',       d:'4 spiced lamb koftas grilled until charred + large Greek salad with tomato, cucumber, olive, feta + tzatziki.',                   cal:460,p:36,c:14,f:26,m:'RC'},
-  {n:'Chicken & Mushroom Soup + Sourdough',     d:'2 cups creamy chicken and mushroom soup + 1 slice sourdough bread + side green salad.',                                            cal:400,p:28,c:32,f:14,m:'RC'},
-  {n:'Smoked Salmon + Quinoa + Asparagus',      d:'150g smoked salmon + ½ cup quinoa + 8 roasted asparagus spears + lemon-caper dressing.',                                          cal:420,p:36,c:28,f:16,m:'RDC'},
+  {n:'Grilled Salmon + Roasted Veg + Nuts',     d:'Bake salmon with lemon-herb crust at 200°C for 14 minutes, serve with roasted broccoli and asparagus and crushed walnuts.',       cal:430,p:40,c:12,f:24,m:'RDC',cu:'American'},
+  {n:'Herb Chicken + Kale Salad + Walnuts',     d:'Bake herb-crusted chicken breast at 200°C for 22 minutes until golden. Slice over kale massaged with lemon, with walnuts and cranberries.',        cal:410,p:38,c:14,f:18,m:'RDC',cu:'American'},
+  {n:'Garlic Shrimp + Zucchini Noodles',        d:'Sauté shrimp in garlic-chilli butter, toss with spiralized zucchini and cherry tomatoes. Finish with pine nuts and basil.',      cal:350,p:30,c:12,f:18,m:'RDC',cu:'American'},
+  {n:'Beef Stir-Fry + Broccoli + Brown Rice',   d:'Thinly sliced beef in oyster-soy sauce, stir-fried with broccoli and snap peas. Served with ½ cup brown rice.',                  cal:450,p:36,c:36,f:14,m:'RC',cu:'American'},
+  {n:'Lamb Kofta + Greek Salad + Yogurt',       d:'4 spiced lamb koftas grilled until charred + large Greek salad with tomato, cucumber, olive, feta + tzatziki.',                   cal:460,p:36,c:14,f:26,m:'RC',cu:'American'},
+  {n:'Chicken & Mushroom Soup + Sourdough',     d:'2 cups creamy chicken and mushroom soup + 1 slice sourdough bread + side green salad.',                                            cal:400,p:28,c:32,f:14,m:'RC',cu:'American'},
+  {n:'Smoked Salmon + Quinoa + Asparagus',      d:'150g smoked salmon + ½ cup quinoa + 8 roasted asparagus spears + lemon-caper dressing.',                                          cal:420,p:36,c:28,f:16,m:'RDC',cu:'American'},
   // More Low-GI nonveg dinners
-  {n:'Clear Chicken Soup + 2 Boiled Eggs',      d:'2 cups clear spiced chicken broth with veg + 2 boiled eggs + large salad + lemon dressing',               cal:310,p:32,c:8,f:12,m:'D'},
-  {n:'Steamed Fish + Sautéed Spinach',           d:'Steam fish fillet with ginger and soy for 8 minutes. Serve alongside sautéed garlic spinach with a yogurt dip.',                 cal:340,p:38,c:8,f:12,m:'D'},
-  {n:'Egg White Curry + Salad',                  d:'5 egg whites in light spiced tomato-onion sauce + large cucumber-tomato salad + 2 tbsp curd',              cal:280,p:24,c:12,f:8,m:'D'},
-  {n:'Grilled Shrimp + Cauliflower Rice',        d:'180g spiced grilled shrimp + 200g cauliflower rice stir-fried with garlic + green salad + lime',           cal:320,p:32,c:14,f:10,m:'D'},
+  {n:'Clear Chicken Soup + 2 Boiled Eggs',      d:'2 cups clear spiced chicken broth with veg + 2 boiled eggs + large salad + lemon dressing',               cal:310,p:32,c:8,f:12,m:'D',cu:'Indian'},
+  {n:'Steamed Fish + Sautéed Spinach',           d:'Steam fish fillet with ginger and soy for 8 minutes. Serve alongside sautéed garlic spinach with a yogurt dip.',                 cal:340,p:38,c:8,f:12,m:'D',cu:'Indian'},
+  {n:'Egg White Curry + Salad',                  d:'5 egg whites in light spiced tomato-onion sauce + large cucumber-tomato salad + 2 tbsp curd',              cal:280,p:24,c:12,f:8,m:'D',cu:'Indian'},
+  {n:'Grilled Shrimp + Cauliflower Rice',        d:'180g spiced grilled shrimp + 200g cauliflower rice stir-fried with garlic + green salad + lime',           cal:320,p:32,c:14,f:10,m:'D',cu:'Indian'},
   // Cheat-Day nonveg dinners
-  {n:'Chicken Tikka Masala + 2 Rotis + Salad',  d:'Grill marinated chicken tikka, simmer in rich tomato-cream masala. Serve with wholegrain rotis and salad.', cal:580,p:40,c:44,f:22,m:'RC'},
-  {n:'Butter Chicken + 1 Roti + Raita',         d:'Tandoori chicken simmered in silky butter-tomato-cream gravy with fenugreek. Served with wholegrain roti.',  cal:520,p:36,c:32,f:22,m:'RC'},
-  {n:'Mutton Rogan Josh + Rice + Raita',        d:'Slow-braise mutton in Kashmiri red chilli and whole spice gravy until meat falls apart. Served with rice.',   cal:660,p:36,c:58,f:28,m:'C'},
-  {n:'Prawn Biryani + Raita',                   d:'Prawns in biryani masala, layered with saffron rice and dum-cooked. Served with cucumber-mint raita.',         cal:560,p:30,c:64,f:16,m:'RC'},
-  {n:'Grilled Fish + Brown Rice + Salad',        d:'Turmeric-chilli fish pan-grilled, served with brown rice and a large mixed green salad.',                      cal:480,p:38,c:46,f:12,m:'RC'},
-  {n:'Lamb Chops + Roasted Veg',                d:'Rosemary-garlic lamb chops grilled to medium, served with roasted peppers, zucchini and mint-yogurt dip.',     cal:560,p:42,c:16,f:30,m:'C'},
-  {n:'Chicken Seekh Kebab (4) + Salad + Raita', d:'4 grilled chicken seekh kebabs + large onion-tomato salad + ½ cup mint raita + lemon & chaat masala.',        cal:480,p:44,c:16,f:20,m:'RC'},
-  {n:'Goan Fish Curry + ½ Cup Rice + Salad',    d:'Coconut-based Goan fish curry + ½ cup steamed rice + cucumber salad + fresh lemon wedge.',                     cal:500,p:34,c:44,f:18,m:'RC'},
+  {n:'Chicken Tikka Masala + 2 Rotis + Salad',  d:'Grill marinated chicken tikka, simmer in rich tomato-cream masala. Serve with wholegrain rotis and salad.', cal:580,p:40,c:44,f:22,m:'RC',cu:'Indian'},
+  {n:'Butter Chicken + 1 Roti + Raita',         d:'Tandoori chicken simmered in silky butter-tomato-cream gravy with fenugreek. Served with wholegrain roti.',  cal:520,p:36,c:32,f:22,m:'RC',cu:'Indian'},
+  {n:'Mutton Rogan Josh + Rice + Raita',        d:'Slow-braise mutton in Kashmiri red chilli and whole spice gravy until meat falls apart. Served with rice.',   cal:660,p:36,c:58,f:28,m:'C',cu:'Indian'},
+  {n:'Prawn Biryani + Raita',                   d:'Prawns in biryani masala, layered with saffron rice and dum-cooked. Served with cucumber-mint raita.',         cal:560,p:30,c:64,f:16,m:'RC',cu:'Indian'},
+  {n:'Grilled Fish + Brown Rice + Salad',        d:'Turmeric-chilli fish pan-grilled, served with brown rice and a large mixed green salad.',                      cal:480,p:38,c:46,f:12,m:'RC',cu:'Indian'},
+  {n:'Lamb Chops + Roasted Veg',                d:'Rosemary-garlic lamb chops grilled to medium, served with roasted peppers, zucchini and mint-yogurt dip.',     cal:560,p:42,c:16,f:30,m:'C',cu:'Indian'},
+  {n:'Chicken Seekh Kebab (4) + Salad + Raita', d:'4 grilled chicken seekh kebabs + large onion-tomato salad + ½ cup mint raita + lemon & chaat masala.',        cal:480,p:44,c:16,f:20,m:'RC',cu:'Indian'},
+  {n:'Goan Fish Curry + ½ Cup Rice + Salad',    d:'Coconut-based Goan fish curry + ½ cup steamed rice + cucumber salad + fresh lemon wedge.',                     cal:500,p:34,c:44,f:18,m:'RC',cu:'Indian'},
  ]
 }
 };
@@ -1721,6 +1734,7 @@ dinner:{
 let dayIdx=new Date().getDay(), mode='R', picks={};
 let checked={};
 let bevChecked=false;
+let selectedCuisines = []; // empty = All cuisines
 
 const isVegDay=d=>VEG_DAYS.includes(d);
 // Default diet based on day: Mon(1) & Thu(4) = veg, all others = non-veg
@@ -1796,15 +1810,20 @@ document.getElementById('bevName').addEventListener('click',swapBev);
 function pool(t){
   const custom=getCustomMeals();
   const ratings=getRatings();
+  function cuisineFilter(arr){
+    if(!selectedCuisines.length) return arr; // All cuisines
+    const filtered=arr.filter(m=>m.cu&&selectedCuisines.includes(m.cu));
+    return filtered.length>=2?filtered:arr; // fallback to full if too few
+  }
   if(vegOn()){
-    const base=[...DB[t].veg,...custom];
+    const base=cuisineFilter([...DB[t].veg,...custom]);
     const f=base.filter(m=>m.m.includes(mode));
     return applyRatings(f.length?f:base, ratings);
   } else {
-    const nv=DB[t].nonveg.filter(m=>m.m.includes(mode));
+    const nv=cuisineFilter(DB[t].nonveg).filter(m=>m.m.includes(mode));
     if(nv.length>=4) return applyRatings(nv, ratings);
-    const all=[...DB[t].nonveg,...DB[t].veg].filter(m=>m.m.includes(mode));
-    return applyRatings(all.length?all:[...DB[t].nonveg,...DB[t].veg], ratings);
+    const all=cuisineFilter([...DB[t].nonveg,...DB[t].veg]).filter(m=>m.m.includes(mode));
+    return applyRatings(all.length?all:cuisineFilter([...DB[t].nonveg,...DB[t].veg]), ratings);
   }
 }
 
@@ -1911,6 +1930,67 @@ function syncDietButtons(){
   nBtn.className='diet-btn'+(diet==='nv'?' nv-on':'');
   if(lbl) lbl.style.display='none';
 }
+
+const CUISINES = [
+  {id:'Indian',   icon:'🍛'},
+  {id:'Chinese',  icon:'🥡'},
+  {id:'Japanese', icon:'🍱'},
+  {id:'Thai',     icon:'🌶'},
+  {id:'Korean',   icon:'🥢'},
+  {id:'Mexican',  icon:'🌮'},
+  {id:'Italian',  icon:'🍝'},
+  {id:'Mediterranean', icon:'🫒'},
+  {id:'American', icon:'🍔'},
+];
+
+function loadSavedCuisines(){
+  try { return JSON.parse(localStorage.getItem('eatright_cuisines')||'[]'); } catch(e){ return []; }
+}
+function saveCuisines(){
+  localStorage.setItem('eatright_cuisines', JSON.stringify(selectedCuisines));
+}
+
+function renderCuisineChips(){
+  const wrap = document.getElementById('cuisineChips');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  // "All" chip
+  const allBtn = document.createElement('button');
+  allBtn.className = 'cuisine-chip' + (selectedCuisines.length===0?' on':'');
+  allBtn.textContent = '🍽 All';
+  allBtn.onclick = function(){
+    selectedCuisines = [];
+    saveCuisines();
+    renderCuisineChips();
+    shuffleAll();
+  };
+  wrap.appendChild(allBtn);
+  // Individual cuisine chips
+  CUISINES.forEach(function(c){
+    const btn = document.createElement('button');
+    const on = selectedCuisines.includes(c.id);
+    btn.className = 'cuisine-chip' + (on?' on':'');
+    btn.textContent = c.icon+' '+c.id;
+    btn.onclick = function(){
+      if(selectedCuisines.includes(c.id)){
+        selectedCuisines = selectedCuisines.filter(x=>x!==c.id);
+      } else {
+        selectedCuisines.push(c.id);
+      }
+      // If nothing selected, revert to All
+      if(selectedCuisines.length===0||selectedCuisines.length===CUISINES.length){
+        selectedCuisines=[];
+      }
+      saveCuisines();
+      renderCuisineChips();
+      shuffleAll();
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+// Init cuisine from saved prefs
+selectedCuisines = loadSavedCuisines();
 
 // ── RENDER ──
 function render(){
@@ -2434,6 +2514,7 @@ window.toggleCheck=toggleCheck;window.setBevCat=setBevCat;window.toggleBevCheck=
 window.logDay=logDay;window.openLog=openLog;window.closeLog=closeLog;
 window.panelBgClick=panelBgClick;window.deleteEntry=deleteEntry;window.exportLog=exportLog;
 seed();render();
+renderCuisineChips();
 
 
 // ═══════════════════════════════════════════════════════════════
