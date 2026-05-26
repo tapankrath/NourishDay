@@ -187,46 +187,51 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 .card-name{font-size:19px;font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:5px;letter-spacing:-.5px}
 .card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.6;margin-top:3px}
 /* ── CARD FOOTER: macros row ── */
-.card-macros{
+.card-bottom{
   display:flex;align-items:center;
-  padding:7px 12px;
   border-top:1px solid var(--ink4);
   background:var(--deep);
 }
+.card-macros{
+  display:flex;align-items:center;
+  padding:6px 10px;
+  flex:1;
+}
 .mac{
   flex:1;text-align:center;
-  font-size:9px;font-weight:700;color:var(--ink3);
+  font-size:8.5px;font-weight:700;color:var(--ink3);
   letter-spacing:.04em;text-transform:uppercase;
   display:flex;flex-direction:column;align-items:center;gap:1px;
 }
-.mac strong{font-size:13px;font-weight:900;color:var(--ink);letter-spacing:-.3px;line-height:1}
+.mac strong{font-size:12px;font-weight:900;color:var(--ink);letter-spacing:-.3px;line-height:1}
 .mac+.mac{border-left:1px solid var(--ink4)}
 
 /* ── CARD ACTION BAR: recipe · swap · rate · check ── */
 .card-actions{
   display:flex;align-items:center;
-  padding:6px 10px;gap:5px;
-  border-top:1px solid var(--ink4);
+  padding:4px 8px;gap:4px;
+  border-left:1px solid var(--ink4);
+  flex-shrink:0;
 }
 .swap-btn{
   flex:1;min-width:0;
   background:var(--deep);
   border:1.5px solid var(--border2);
   color:var(--accent2);
-  font-size:10.5px;font-weight:900;
-  padding:7px 8px;border-radius:9px;cursor:pointer;
+  font-size:10px;font-weight:900;
+  padding:6px 6px;border-radius:9px;cursor:pointer;
   font-family:Plus Jakarta Sans,sans-serif;
-  letter-spacing:.03em;text-transform:uppercase;
+  letter-spacing:.02em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:4px;
   transition:all .14s;white-space:nowrap;
 }
 .swap-btn:active{transform:scale(.96);background:var(--border)}
 
-.rate-wrap{display:flex;gap:4px;flex-shrink:0}
+.rate-wrap{display:flex;gap:3px;flex-shrink:0}
 .rate-btn{
-  width:32px;height:32px;border-radius:8px;
+  width:28px;height:28px;border-radius:7px;
   border:1.5px solid var(--ink4);background:var(--deep);
-  font-size:14px;cursor:pointer;
+  font-size:13px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:all .14s;opacity:.5;
 }
@@ -854,12 +859,12 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 
 /* Recipe button on card */
 .recipe-btn{
-  flex:1;min-width:0;background:var(--deep);border:1.5px solid var(--border2);
-  color:var(--ink3);font-size:10.5px;font-weight:900;
-  padding:7px 8px;border-radius:9px;cursor:pointer;
-  font-family:Plus Jakarta Sans,sans-serif;letter-spacing:.03em;text-transform:uppercase;
-  display:flex;align-items:center;justify-content:center;gap:4px;
-  transition:all .14s;white-space:nowrap;
+  width:28px;height:28px;flex-shrink:0;
+  background:var(--deep);border:1.5px solid var(--border2);
+  color:var(--ink3);font-size:14px;
+  padding:0;border-radius:8px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .14s;
 }
 .recipe-btn:active{transform:scale(.96);background:var(--border)}
 .recipe-btn:hover{color:var(--accent2);border-color:var(--accent2)}
@@ -1810,10 +1815,11 @@ document.getElementById('bevName').addEventListener('click',swapBev);
 function pool(t){
   const custom=getCustomMeals();
   const ratings=getRatings();
+  // Cuisine filter only meaningful for lunch & dinner (breakfast/snacks are universal)
   function cuisineFilter(arr){
-    if(!selectedCuisines.length) return arr; // All cuisines
+    if(!selectedCuisines.length || t==='breakfast' || t==='snacks') return arr;
     const filtered=arr.filter(m=>m.cu&&selectedCuisines.includes(m.cu));
-    return filtered.length>=2?filtered:arr; // fallback to full if too few
+    return filtered.length>=1?filtered:arr; // fallback if too few
   }
   if(vegOn()){
     const base=cuisineFilter([...DB[t].veg,...custom]);
@@ -1861,7 +1867,8 @@ function pickDiff(t, cur){
   const p=pool(t);
   if(p.length<2) return p[0];
 
-  if(t==='lunch'||t==='dinner'){
+  if((t==='lunch'||t==='dinner') && selectedCuisines.length===0){
+    // Only apply Indian bias when no specific cuisine is selected
     const indian=p.filter(m=>isIndian(m.n)&&m.n!==cur?.n);
     const other=p.filter(m=>!isIndian(m.n)&&m.n!==cur?.n);
     if(indian.length>=1 && other.length>=1){
@@ -1881,7 +1888,8 @@ function seed(){
   TYPES.forEach((t,i)=>{
     const p=pool(t); // already has ratings applied
     let candidate;
-    if(t==='lunch'||t==='dinner'){
+    if((t==='lunch'||t==='dinner') && selectedCuisines.length===0){
+      // Only apply Indian bias when no specific cuisine is selected
       const indian=p.filter(m=>isIndian(m.n));
       const other=p.filter(m=>!isIndian(m.n));
       const useIndian=((base+i*73)%100)<55 && indian.length>0;
@@ -2049,18 +2057,20 @@ function render(){
       <div class="card-name">${m.n}</div>
       <div class="card-desc">${m.d} <span class="card-tags-inline">${tags}<span class="tag t-prep">Prep: ${getPrepTime(m.n)}</span></span></div>
     </div>
-    <div class="card-macros">
-      <div class="mac"><strong>${m.p}g</strong>Protein</div>
-      <div class="mac"><strong>${m.c}g</strong>Carbs</div>
-      <div class="mac"><strong>${m.f}g</strong>Fat</div>
-    </div>
-    <div class="card-actions">
-      <button class="swap-btn" onclick="swap('${t}')">⟳ Swap Meal</button>
-      <div class="rate-wrap">
-        <button class="rate-btn up${ratings[m.n]===1?' on':''}" onclick="rateMeal('${m.n}',${ratings[m.n]===1?0:1})" title="Like this meal">👍</button>
-        <button class="rate-btn dn${ratings[m.n]===-1?' on':''}" onclick="rateMeal('${m.n}',${ratings[m.n]===-1?0:-1})" title="Dislike this meal">👎</button>
+    <div class="card-bottom">
+      <div class="card-macros">
+        <div class="mac"><strong>${m.p}g</strong>Protein</div>
+        <div class="mac"><strong>${m.c}g</strong>Carbs</div>
+        <div class="mac"><strong>${m.f}g</strong>Fat</div>
       </div>
-      <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')" title="Mark as eaten"></button>
+      <div class="card-actions">
+        <button class="swap-btn" onclick="swap('${t}')">⟳ Swap</button>
+        <div class="rate-wrap">
+          <button class="rate-btn up${ratings[m.n]===1?' on':''}" onclick="rateMeal('${m.n}',${ratings[m.n]===1?0:1})" title="Like">👍</button>
+          <button class="rate-btn dn${ratings[m.n]===-1?' on':''}" onclick="rateMeal('${m.n}',${ratings[m.n]===-1?0:-1})" title="Dislike">👎</button>
+        </div>
+        <button class="check-btn${isDone?' done':''}" onclick="toggleCheck('${t}')" title="Mark as eaten"></button>
+      </div>
     </div>
 
   </div>
@@ -3241,9 +3251,9 @@ render = function() {
     if(actions && !actions.querySelector('.recipe-btn')) {
       const btn = document.createElement('button');
       btn.className = 'recipe-btn';
-      btn.innerHTML = '📖 Recipe';
+      btn.innerHTML = '📖';
+      btn.title = 'Recipe';
       btn.onclick = () => openRecipe(t);
-      // insert before swap btn
       actions.insertBefore(btn, actions.firstChild);
     }
   });
@@ -3257,17 +3267,22 @@ loadWeekPlan();
 window.pool = function(t) {
   const custom = getCustomMeals();
   const ratings = getRatings();
+  function cuisineFilter(arr){
+    if(!selectedCuisines.length || t==='breakfast' || t==='snacks') return arr;
+    const filtered = arr.filter(m => m.cu && selectedCuisines.includes(m.cu));
+    return filtered.length >= 1 ? filtered : arr;
+  }
   if(vegOn()){
-    const base = [...DB[t].veg, ...custom];
+    const base = cuisineFilter([...DB[t].veg, ...custom]);
     const f = base.filter(m => m.m.includes(mode));
     const p = applyRatings(f.length ? f : base, ratings);
     if(activeRegion === 'all') return p;
     const regional = p.filter(m => matchesRegion(m));
     return regional.length >= 2 ? regional : p;
   } else {
-    const nv = DB[t].nonveg.filter(m => m.m.includes(mode));
-    const allMeals = nv.length >= 4 ? nv : [...DB[t].nonveg, ...DB[t].veg].filter(m => m.m.includes(mode));
-    const p = applyRatings(allMeals.length ? allMeals : [...DB[t].nonveg, ...DB[t].veg], ratings);
+    const nv = cuisineFilter(DB[t].nonveg).filter(m => m.m.includes(mode));
+    const allMeals = nv.length >= 4 ? nv : cuisineFilter([...DB[t].nonveg, ...DB[t].veg]).filter(m => m.m.includes(mode));
+    const p = applyRatings(allMeals.length ? allMeals : cuisineFilter([...DB[t].nonveg, ...DB[t].veg]), ratings);
     if(activeRegion === 'all') return p;
     const regional = p.filter(m => matchesRegion(m));
     return regional.length >= 2 ? regional : p;
