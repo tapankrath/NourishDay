@@ -567,8 +567,36 @@ $('rBack').addEventListener('click', ()=> show('home'));
 $('dBack').addEventListener('click', ()=> (!dishFromDirectSearch && lastRestaurants) ? show('restaurants') : show('home'));
 $('dAgain').addEventListener('click', ()=>{ $('placeInput').value=''; show('home'); });
 $('locateBtn').addEventListener('click', useLocation);
-$('searchBtn').addEventListener('click', ()=>{ const v=$('placeInput').value.trim(); if(v) getDishes({name:v, directSearch:true}); });
-$('placeInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ const v=e.target.value.trim(); if(v) getDishes({name:v, directSearch:true}); }});
+$('searchBtn').addEventListener('click', ()=>{ const v=$('placeInput').value.trim(); if(v) searchByNameWithLocation(v); });
+$('placeInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ const v=e.target.value.trim(); if(v) searchByNameWithLocation(v); }});
+
+/* Option B: grab GPS area silently, then call getDishes with location context */
+function searchByNameWithLocation(name){
+  if(!navigator.geolocation){
+    getDishes({name, directSearch:true});
+    return;
+  }
+  // Show loading immediately so it feels snappy
+  show('loading');
+  $('loadMain').textContent = `Looking up ${name}…`;
+  runSteps();
+  navigator.geolocation.getCurrentPosition(
+    async pos => {
+      try {
+        const area = await reverseGeocode(pos.coords.latitude, pos.coords.longitude);
+        console.log('[searchByNameWithLocation] area:', area);
+        getDishes({name, area: area||'', directSearch:true, skipLoadingShow:true});
+      } catch(e) {
+        getDishes({name, directSearch:true, skipLoadingShow:true});
+      }
+    },
+    _err => {
+      // GPS failed/denied — just search by name only
+      getDishes({name, directSearch:true, skipLoadingShow:true});
+    },
+    {enableHighAccuracy:false, timeout:5000, maximumAge:60000}
+  );
+}
 
 /* ---- cuisine chips (multi-select) ---- */
 let selectedCuisines = [];           // e.g. ["Italian","Thai"]
@@ -825,9 +853,13 @@ async function getDishes(opts){
     renderDishes(dishCache[opts.name]);
     return;
   }
-  show('loading');
-  $('loadMain').textContent = opts.name ? `Looking up ${opts.name}…` : 'Loading dishes…';
-  runSteps();
+  if(!opts.skipLoadingShow){
+    show('loading');
+    $('loadMain').textContent = opts.name ? `Looking up ${opts.name}…` : 'Loading dishes…';
+    runSteps();
+  } else {
+    $('loadMain').textContent = opts.name ? `Looking up ${opts.name}…` : 'Loading dishes…';
+  }
   try{
     const r = await fetchDishesForRestaurant(opts.name || '', opts.area || '');
     stopSteps();
