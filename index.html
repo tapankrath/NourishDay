@@ -980,25 +980,29 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
     </div>
     <button class="profile-btn" id="profileBtn" onclick="openProfile()">👤 Profile</button>
   </div>
-  <!-- Row 2: Day nav + Mode tabs + Veg/Allergy all on one line -->
-  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+  <!-- Row 2: Day nav + Mode tabs -->
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
     <div class="day-nav" style="flex-shrink:0">
       <button class="day-arrow" onclick="chgDay(-1)">‹</button>
       <div class="day-lbl" id="dayLbl"></div>
       <div class="veg-dot" id="vegDot"></div>
       <button class="day-arrow" onclick="chgDay(1)">›</button>
     </div>
-    <div class="mode-tabs" style="flex:1;margin:0;min-width:0">
+    <div class="mode-tabs" style="flex:1;margin:0">
       <button class="mode-tab on" id="tabR" onclick="setMode('R')">Reg</button>
       <button class="mode-tab"    id="tabD" onclick="setMode('D')">Low-GI</button>
       <button class="mode-tab"    id="tabC" onclick="setMode('C')">Treat</button>
     </div>
-    <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')" style="flex-shrink:0;padding:5px 8px;font-size:10px">🌿 Veg</button>
-    <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')"  style="flex-shrink:0;padding:5px 8px;font-size:10px">🍗 Non-Veg</button>
-    <div style="flex-shrink:0;display:flex;align-items:center;gap:3px">
+  </div>
+  <!-- Row 3: Veg/NonVeg + Allergy -->
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+    <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
+    <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:3px;flex-shrink:0">
       <div class="allergy-chips" id="allergyChips"><span class="allergy-none" style="font-size:9px">No allergy</span></div>
       <div class="allergy-dropdown-wrap">
-        <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)" style="padding:3px 6px;font-size:10px">🚫＋</button>
+        <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">🚫＋</button>
         <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
       </div>
     </div>
