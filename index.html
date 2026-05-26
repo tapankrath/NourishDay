@@ -67,27 +67,27 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
   background:var(--night);
   box-shadow:0 2px 12px rgba(31,26,23,.08);
 }
-.hdr{background:var(--night);padding:10px 14px 0;position:relative}
+.hdr{background:var(--night);padding:6px 12px 0;position:relative}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.15;}
 
-.logo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.logo-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
 .logo{display:flex;align-items:center;gap:9px;min-width:0;flex-shrink:1}
 .logo-mark{
-  width:36px;height:36px;background:linear-gradient(145deg,#ff4d3d,#e63320);border-radius:10px;
+  width:30px;height:30px;background:linear-gradient(145deg,#ff4d3d,#e63320);border-radius:8px;
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
   box-shadow:0 2px 14px rgba(255,77,61,.40);
 }
-.logo-mark svg{width:20px;height:20px}
+.logo-mark svg{width:17px;height:17px}
 .logo-text{min-width:0}
-.logo-name{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1;font-family:Bricolage Grotesque,sans-serif}
+.logo-name{font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1;font-family:Bricolage Grotesque,sans-serif}
 
 .mode-tabs-row{padding:0 0 8px}
 
 .profile-btn{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:6px 12px;border-radius:8px;border:1.5px solid var(--border2);
+  padding:4px 9px;border-radius:7px;border:1.5px solid var(--border2);
   background:none;color:var(--accent2);font-family:Plus Jakarta Sans,sans-serif;
-  font-size:11px;font-weight:900;cursor:pointer;white-space:nowrap;
+  font-size:10px;font-weight:900;cursor:pointer;white-space:nowrap;
   letter-spacing:.03em;transition:all .15s;flex-shrink:0;line-height:1.2;
 }
 .profile-btn:hover{background:var(--accent-dim)}
@@ -97,8 +97,8 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 
 .mode-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4);width:100%}
 .mode-tab{
-  flex:1;padding:6px 2px;border-radius:7px;border:none;cursor:pointer;
-  font-size:9.5px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
+  flex:1;padding:4px 2px;border-radius:6px;border:none;cursor:pointer;
+  font-size:9px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
   color:var(--ink3);background:none;transition:all .18s;
   white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;text-align:center;
 }
@@ -106,51 +106,51 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 
 .subnav{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 10px}
 .diet-row{display:flex;gap:5px}
-/* Diet toggle — pill style */
+/* Diet toggle — compact pill */
 .diet-toggle{
   display:flex;background:rgba(255,255,255,.05);
-  border:1.5px solid var(--ink4);border-radius:30px;
+  border:1.5px solid var(--ink4);border-radius:20px;
   padding:2px;gap:0;flex-shrink:0;
 }
 .diet-btn{
-  padding:4px 12px;border-radius:26px;border:none;
-  cursor:pointer;font-size:10.5px;font-weight:900;
+  padding:3px 8px;border-radius:16px;border:none;
+  cursor:pointer;font-size:9.5px;font-weight:900;
   font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);background:none;
-  transition:all .18s;letter-spacing:.04em;text-transform:uppercase;
-  line-height:1.4;white-space:nowrap;
+  transition:all .18s;letter-spacing:.03em;text-transform:uppercase;
+  line-height:1.3;white-space:nowrap;
 }
-.diet-btn.veg-on{background:#1faa6b;color:#fff;box-shadow:0 1px 8px rgba(31,170,107,.35)}
-.diet-btn.nv-on{background:#f2a93b;color:#fff;box-shadow:0 1px 8px rgba(242,169,59,.32)}
+.diet-btn.veg-on{background:#1faa6b;color:#fff;box-shadow:0 1px 6px rgba(31,170,107,.3)}
+.diet-btn.nv-on{background:#f2a93b;color:#fff;box-shadow:0 1px 6px rgba(242,169,59,.28)}
 
 .day-nav{display:flex;align-items:center;gap:6px}
 .day-arrow{
-  width:28px;height:28px;border-radius:7px;border:1.5px solid var(--border2);
-  background:none;color:var(--accent2);cursor:pointer;font-size:17px;
+  width:24px;height:24px;border-radius:6px;border:1.5px solid var(--border2);
+  background:none;color:var(--accent2);cursor:pointer;font-size:15px;
   display:flex;align-items:center;justify-content:center;transition:all .14s;
 }
 .day-arrow:active{background:var(--border);transform:scale(.9)}
-.day-lbl{font-size:15px;font-weight:900;color:var(--ink);min-width:82px;text-align:center;letter-spacing:-.2px}
+.day-lbl{font-size:13px;font-weight:900;color:var(--ink);min-width:72px;text-align:center;letter-spacing:-.2px}
 .veg-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 5px var(--teal);display:none;flex-shrink:0;margin-left:-3px}
 
 .stats-zone{background:var(--deep);border-top:1px solid var(--ink4);border-bottom:1px solid var(--ink4)}
-.stats{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;padding:10px 14px 8px}
+.stats{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr 1px 1fr;padding:5px 10px 4px}
 .stats-sep{background:var(--ink4);margin:3px 0}
-.stat{padding:2px 6px;text-align:center}
-.stat-val{font-size:22px;font-weight:900;color:var(--ink);display:block;letter-spacing:-.8px;line-height:1}
+.stat{padding:1px 4px;text-align:center}
+.stat-val{font-size:17px;font-weight:900;color:var(--ink);display:block;letter-spacing:-.5px;line-height:1}
 .stat-val.hi{color:var(--accent2)}
-.stat-lbl{font-size:8px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-top:2px;display:block}
+.stat-lbl{font-size:7.5px;font-weight:800;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-top:1px;display:block}
 
-.cal-bar-zone{background:var(--deep);padding:0 14px 10px}
-.cal-bar-track{height:4px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
+.cal-bar-zone{background:var(--deep);padding:0 10px 5px}
+.cal-bar-track{height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
 .cal-bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
 
-.body{padding:10px 12px 0}
+.body{padding:6px 10px 0}
 .shuffle-btn{
-  width:100%;padding:12px;background:var(--accent);border:none;border-radius:12px;
+  width:100%;padding:9px;background:var(--accent);border:none;border-radius:10px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
-  font-family:Plus Jakarta Sans,sans-serif;font-size:11.5px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:10.5px;font-weight:900;
   color:#fff;letter-spacing:.04em;text-transform:uppercase;
-  box-shadow:0 3px 16px rgba(255,77,61,.28);transition:all .16s;margin-bottom:10px;
+  box-shadow:0 2px 12px rgba(255,77,61,.25);transition:all .16s;margin-bottom:8px;
 }
 .shuffle-btn:active{transform:scale(.97) translateY(1px)}
 .s-ico{font-size:17px;display:inline-block;transition:transform .4s}
@@ -160,10 +160,10 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
   margin-bottom:10px;
 }
 .cuisine-chip{
-  padding:4px 10px;border-radius:20px;border:1.5px solid var(--border2);
+  padding:3px 7px;border-radius:14px;border:1px solid var(--border2);
   background:none;color:var(--ink3);font-family:Plus Jakarta Sans,sans-serif;
-  font-size:10px;font-weight:700;cursor:pointer;transition:all .15s;
-  white-space:nowrap;letter-spacing:.02em;
+  font-size:9px;font-weight:700;cursor:pointer;transition:all .15s;
+  white-space:nowrap;letter-spacing:.01em;flex-shrink:0;
 }
 .cuisine-chip.on{
   background:var(--accent);color:#fff;border-color:var(--accent);
@@ -175,9 +175,9 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
   margin-left:2px;
 }
 .mode-note{
-  font-size:10.5px;font-weight:700;color:var(--ink3);text-align:center;
-  margin-bottom:10px;background:var(--ink4);border-radius:7px;
-  padding:6px 12px;border:1px solid var(--border);
+  font-size:10px;font-weight:700;color:var(--ink3);text-align:center;
+  margin-bottom:6px;background:var(--ink4);border-radius:6px;
+  padding:4px 10px;border:1px solid var(--border);
 }
 
 .meals{display:flex;flex-direction:column;gap:9px}
@@ -387,11 +387,11 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 
 /* ── INSIGHT BAR ── */
 .insight-bar{
-  margin:0 0 10px;padding:8px 12px;
-  background:var(--ink4);border-radius:10px;
+  margin:0 0 8px;padding:6px 10px;
+  background:var(--ink4);border-radius:8px;
   border:1px solid var(--border);
-  font-size:11px;font-weight:700;color:var(--ink2);
-  display:flex;align-items:center;gap:7px;line-height:1.4;
+  font-size:10.5px;font-weight:700;color:var(--ink2);
+  display:flex;align-items:center;gap:6px;line-height:1.35;
 }
 .insight-icon{font-size:16px;flex-shrink:0}
 
@@ -967,12 +967,12 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 /* ── STICKY FILTER ZONE ── */
 .sticky-filters{
   position:sticky;
-  top:var(--stickyHdrH,140px);
+  top:var(--stickyHdrH,120px);
   z-index:40;
   background:var(--night);
-  padding:8px 12px 6px;
+  padding:5px 10px 4px;
   border-bottom:1px solid var(--ink4);
-  box-shadow:0 3px 12px rgba(31,26,23,.07);
+  box-shadow:0 2px 8px rgba(31,26,23,.06);
 }
 
 </style>
@@ -1004,7 +1004,7 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
     <button class="profile-btn" id="profileBtn" onclick="openProfile()">👤 Profile</button>
   </div>
   <!-- Row 2: Day nav + Mode tabs on same line -->
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+  <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
     <div class="day-nav" style="flex-shrink:0">
       <button class="day-arrow" onclick="chgDay(-1)">‹</button>
       <div class="day-lbl" id="dayLbl"></div>
@@ -1036,29 +1036,28 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 </div><!-- /sticky-hdr -->
 
 <div class="sticky-filters" id="stickyFilters">
-  <div style="display:flex;gap:8px;margin-bottom:8px">
-    <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0">
-      <span class="s-ico">⟳</span> Shuffle Meals
+  <!-- Row 1: Shuffle + Veg toggle + Allergy — all on one line -->
+  <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px">
+    <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0;padding:7px 6px;font-size:10px;border-radius:8px;gap:4px">
+      <span class="s-ico" style="font-size:13px">⟳</span> Shuffle
     </button>
-    <button class="shuffle-btn" onclick="openNearby()" style="flex:1;margin-bottom:0">
-      📍 Eat Out? Nearby
+    <button class="shuffle-btn" onclick="openNearby()" style="flex:1;margin-bottom:0;padding:7px 6px;font-size:10px;border-radius:8px;gap:4px">
+      📍 Eat Out
     </button>
-  </div>
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap">
-    <div class="diet-toggle">
+    <div class="diet-toggle" style="flex-shrink:0">
       <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
-      <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 Non-Veg</button>
+      <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 NV</button>
     </div>
-    <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;margin-left:auto">
-      <div class="allergy-chips" id="allergyChips" style="justify-content:flex-end"><span class="allergy-none" style="font-size:10px;color:var(--ink3);font-style:italic">No allergies</span></div>
+    <div style="display:flex;align-items:center;gap:3px;flex-shrink:0">
+      <div class="allergy-chips" id="allergyChips" style="justify-content:flex-end;max-width:72px;overflow:hidden"><span class="allergy-none" style="font-size:9px;color:var(--ink3);font-style:italic;white-space:nowrap">No allergy</span></div>
       <div class="allergy-dropdown-wrap">
-        <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)">🚫 ＋</button>
+        <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)" style="padding:3px 7px;font-size:9px">🚫+</button>
         <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
       </div>
     </div>
   </div>
-  <!-- Cuisine filter chips -->
-  <div id="cuisineChips" style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;justify-content:center"></div>
+  <!-- Row 2: Cuisine chips — single scrollable line, no wrap -->
+  <div id="cuisineChips" style="display:flex;flex-wrap:wrap;gap:3px;justify-content:center;padding-bottom:1px"></div>
 </div><!-- /sticky-filters -->
 
 <div class="body">
@@ -1969,7 +1968,7 @@ const CUISINES = [
   {id:'Korean',   icon:'🥢'},
   {id:'Mexican',  icon:'🌮'},
   {id:'Italian',  icon:'🍝'},
-  {id:'Mediterranean', icon:'🫒'},
+  {id:'Mediter.',      icon:'🫒'},
   {id:'American', icon:'🍔'},
 ];
 
@@ -1987,7 +1986,7 @@ function renderCuisineChips(){
   // "All" chip
   const allBtn = document.createElement('button');
   allBtn.className = 'cuisine-chip' + (selectedCuisines.length===0?' on':'');
-  allBtn.textContent = '🍽 All';
+  allBtn.textContent = 'All';
   allBtn.onclick = function(){
     selectedCuisines = [];
     saveCuisines();
@@ -2000,7 +1999,7 @@ function renderCuisineChips(){
     const btn = document.createElement('button');
     const on = selectedCuisines.includes(c.id);
     btn.className = 'cuisine-chip' + (on?' on':'');
-    btn.textContent = c.icon+' '+c.id;
+    btn.textContent = c.id;
     btn.onclick = function(){
       if(selectedCuisines.includes(c.id)){
         selectedCuisines = selectedCuisines.filter(x=>x!==c.id);
