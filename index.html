@@ -97,10 +97,10 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 
 .mode-tabs{display:flex;background:rgba(255,255,255,.04);border-radius:9px;padding:3px;gap:2px;border:1px solid var(--ink4);width:100%}
 .mode-tab{
-  flex:1;padding:4px 2px;border-radius:6px;border:none;cursor:pointer;
-  font-size:9px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
+  flex:1;padding:6px 2px;border-radius:6px;border:none;cursor:pointer;
+  font-size:10px;font-weight:900;font-family:Plus Jakarta Sans,sans-serif;
   color:var(--ink3);background:none;transition:all .18s;
-  white-space:nowrap;letter-spacing:.04em;text-transform:uppercase;text-align:center;
+  white-space:nowrap;letter-spacing:.03em;text-transform:uppercase;text-align:center;
 }
 .mode-tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(255,77,61,.30)}
 
@@ -113,8 +113,8 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
   padding:2px;gap:0;flex-shrink:0;
 }
 .diet-btn{
-  padding:3px 8px;border-radius:16px;border:none;
-  cursor:pointer;font-size:9.5px;font-weight:900;
+  padding:5px 11px;border-radius:16px;border:none;
+  cursor:pointer;font-size:10.5px;font-weight:900;
   font-family:Plus Jakarta Sans,sans-serif;color:var(--ink3);background:none;
   transition:all .18s;letter-spacing:.03em;text-transform:uppercase;
   line-height:1.3;white-space:nowrap;
@@ -145,29 +145,43 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 .cal-bar-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
 
 .body{padding:6px 10px 0}
+.ctrl-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
 .shuffle-btn{
-  width:100%;padding:9px;background:var(--accent);border:none;border-radius:10px;
+  width:100%;padding:10px;background:var(--accent);border:none;border-radius:10px;
   cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
-  font-family:Plus Jakarta Sans,sans-serif;font-size:10.5px;font-weight:900;
+  font-family:Plus Jakarta Sans,sans-serif;font-size:11.5px;font-weight:900;
   color:#fff;letter-spacing:.04em;text-transform:uppercase;
-  box-shadow:0 2px 12px rgba(255,77,61,.25);transition:all .16s;margin-bottom:8px;
+  box-shadow:0 2px 12px rgba(255,77,61,.25);transition:all .16s;margin-bottom:0;
 }
 .shuffle-btn:active{transform:scale(.97) translateY(1px)}
-.s-ico{font-size:17px;display:inline-block;transition:transform .4s}
+.s-ico{font-size:15px;display:inline-block;transition:transform .4s}
 .shuffle-btn:active .s-ico{transform:rotate(180deg)}
 .diet-toggle-row{
   display:flex;align-items:center;gap:8px;
   margin-bottom:10px;
 }
+.cuisine-scroll{
+  display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;
+  padding:1px 2px 8px;margin:0 -2px;
+  scrollbar-width:none;-ms-overflow-style:none;
+  -webkit-overflow-scrolling:touch;
+}
+.cuisine-scroll::-webkit-scrollbar{display:none}
 .cuisine-chip{
-  padding:3px 7px;border-radius:14px;border:1px solid var(--border2);
+  padding:6px 12px;border-radius:14px;border:1px solid var(--border2);
   background:none;color:var(--ink3);font-family:Plus Jakarta Sans,sans-serif;
-  font-size:9px;font-weight:700;cursor:pointer;transition:all .15s;
+  font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;
   white-space:nowrap;letter-spacing:.01em;flex-shrink:0;
 }
 .cuisine-chip.on{
   background:var(--accent);color:#fff;border-color:var(--accent);
   box-shadow:0 2px 8px rgba(255,77,61,.25);
+}
+@media(min-width:680px){
+  .ctrl-wrap{flex-direction:row;align-items:center;gap:10px;margin-bottom:10px}
+  .ctrl-row1{flex:1}
+  .ctrl-row2{flex-shrink:0}
+  .cuisine-scroll{flex-wrap:wrap;overflow-x:visible;justify-content:center}
 }
 .diet-auto-lbl{
   font-size:10px;font-weight:700;
@@ -180,7 +194,7 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
   padding:4px 10px;border:1px solid var(--border);
 }
 
-.meals{display:flex;flex-direction:column;gap:9px}
+.meals{display:flex;flex-direction:column;gap:12px}
 .card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;transition:transform .13s}
 .card:active{transform:scale(.99)}
 .card-inner{display:flex;min-height:0}
@@ -195,38 +209,36 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 .card-desc{font-size:11.5px;font-weight:600;color:var(--ink2);line-height:1.6;margin-top:3px}
 /* ── CARD FOOTER: macros row ── */
 .card-bottom{
-  display:flex;align-items:center;
+  display:flex;flex-direction:column;align-items:stretch;
   border-top:1px solid var(--ink4);
   background:var(--deep);
 }
 .card-macros{
   display:flex;align-items:center;
-  padding:6px 10px;
-  flex:1;
+  padding:8px 12px 7px;
+  border-bottom:1px solid var(--ink4);
 }
 .mac{
   flex:1;text-align:center;
-  font-size:8.5px;font-weight:700;color:var(--ink3);
+  font-size:9.5px;font-weight:700;color:var(--ink3);
   letter-spacing:.04em;text-transform:uppercase;
-  display:flex;flex-direction:column;align-items:center;gap:1px;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
 }
-.mac strong{font-size:12px;font-weight:900;color:var(--ink);letter-spacing:-.3px;line-height:1}
+.mac strong{font-size:13.5px;font-weight:900;color:var(--ink);letter-spacing:-.3px;line-height:1}
 .mac+.mac{border-left:1px solid var(--ink4)}
 
 /* ── CARD ACTION BAR: recipe · swap · rate · check ── */
 .card-actions{
-  display:flex;align-items:center;
-  padding:4px 8px;gap:4px;
-  border-left:1px solid var(--ink4);
-  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 10px;gap:6px;
 }
 .swap-btn{
   flex:1;min-width:0;
   background:var(--deep);
   border:1.5px solid var(--border2);
   color:var(--accent2);
-  font-size:10px;font-weight:900;
-  padding:6px 6px;border-radius:9px;cursor:pointer;
+  font-size:11px;font-weight:900;
+  padding:8px 8px;border-radius:9px;cursor:pointer;
   font-family:Plus Jakarta Sans,sans-serif;
   letter-spacing:.02em;text-transform:uppercase;
   display:flex;align-items:center;justify-content:center;gap:4px;
@@ -234,11 +246,11 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 }
 .swap-btn:active{transform:scale(.96);background:var(--border)}
 
-.rate-wrap{display:flex;gap:3px;flex-shrink:0}
+.rate-wrap{display:flex;gap:5px;flex-shrink:0}
 .rate-btn{
-  width:28px;height:28px;border-radius:7px;
+  width:32px;height:32px;border-radius:8px;
   border:1.5px solid var(--ink4);background:var(--deep);
-  font-size:13px;cursor:pointer;
+  font-size:14px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   transition:all .14s;opacity:.5;
 }
@@ -246,6 +258,12 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 .rate-btn.up.on{border-color:rgba(31,170,107,.4);background:rgba(31,170,107,.1)}
 .rate-btn.dn.on{border-color:rgba(242,169,59,.4);background:rgba(242,169,59,.1)}
 .rate-btn:active{transform:scale(.88)}
+
+@media(min-width:680px){
+  .card-bottom{flex-direction:row;align-items:center}
+  .card-macros{border-bottom:none;flex:1}
+  .card-actions{border-left:1px solid var(--ink4);flex-shrink:0}
+}
 
 /* Tags row */
 .card-tags{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
@@ -286,11 +304,11 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 .card.checked{border-color:rgba(31,170,107,.35)}
 
 .check-btn{
-  flex-shrink:0;width:28px;height:28px;border-radius:7px;
+  flex-shrink:0;width:32px;height:32px;border-radius:8px;
   border:2px solid var(--ink2);
   background:transparent;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .18s;margin-left:2px;font-size:0;
+  transition:all .18s;margin-left:0;font-size:0;
 }
 .check-btn.done{
   background:var(--teal);border-color:var(--teal);
@@ -1036,28 +1054,33 @@ html,body{background:var(--bg);font-family:'Plus Jakarta Sans',system-ui,sans-se
 </div><!-- /sticky-hdr -->
 
 <div class="sticky-filters" id="stickyFilters">
-  <!-- Row 1: Shuffle + Veg toggle + Allergy — all on one line -->
-  <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px">
-    <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0;padding:7px 6px;font-size:10px;border-radius:8px;gap:4px">
-      <span class="s-ico" style="font-size:13px">⟳</span> Shuffle
+ <div class="ctrl-wrap">
+  <!-- Row 1: Shuffle + Eat Out -->
+  <div class="ctrl-row1" style="display:flex;align-items:center;gap:6px">
+    <button class="shuffle-btn" onclick="shuffleAll()" style="flex:1;margin-bottom:0">
+      <span class="s-ico">⟳</span> Shuffle
     </button>
-    <button class="shuffle-btn" onclick="openNearby()" style="flex:1;margin-bottom:0;padding:7px 6px;font-size:10px;border-radius:8px;gap:4px">
+    <button class="shuffle-btn" onclick="openNearby()" style="flex:1;margin-bottom:0">
       📍 Eat Out
     </button>
+  </div>
+  <!-- Row 2: Veg toggle + Allergy -->
+  <div class="ctrl-row2" style="display:flex;align-items:center;justify-content:space-between;gap:8px">
     <div class="diet-toggle" style="flex-shrink:0">
       <button class="diet-btn" id="btnVeg" onclick="setDiet('veg')">🌿 Veg</button>
       <button class="diet-btn" id="btnNv"  onclick="setDiet('nv')">🍗 NV</button>
     </div>
-    <div style="display:flex;align-items:center;gap:3px;flex-shrink:0">
-      <div class="allergy-chips" id="allergyChips" style="justify-content:flex-end;max-width:72px;overflow:hidden"><span class="allergy-none" style="font-size:9px;color:var(--ink3);font-style:italic;white-space:nowrap">No allergy</span></div>
+    <div style="display:flex;align-items:center;gap:5px;min-width:0">
+      <div class="allergy-chips" id="allergyChips" style="justify-content:flex-end;overflow:hidden"><span class="allergy-none" style="font-size:10px;color:var(--ink3);font-style:italic;white-space:nowrap">No allergy</span></div>
       <div class="allergy-dropdown-wrap">
-        <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)" style="padding:3px 7px;font-size:9px">🚫+</button>
+        <button class="allergy-add-btn" onclick="toggleAllergyDropdown(event)" style="padding:4px 8px;font-size:10px;flex-shrink:0">🚫+</button>
         <div class="allergy-dropdown hidden" id="allergyDropdown"></div>
       </div>
     </div>
   </div>
-  <!-- Row 2: Cuisine chips — single scrollable line, no wrap -->
-  <div id="cuisineChips" style="display:flex;flex-wrap:wrap;gap:3px;justify-content:center;padding-bottom:1px"></div>
+ </div>
+  <!-- Row 3: Cuisine chips — horizontal scroll, single line -->
+  <div id="cuisineChips" class="cuisine-scroll"></div>
 </div><!-- /sticky-filters -->
 
 <div class="body">
